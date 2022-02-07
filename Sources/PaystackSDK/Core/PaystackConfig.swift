@@ -1,6 +1,6 @@
 import Foundation
 
 public struct PaystackConfig {
-    var apiKey: String
-    var version: String = "2.0"
+    public var apiKey: String
+    public var version: String = "2.0"
 }

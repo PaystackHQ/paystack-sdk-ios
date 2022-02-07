@@ -1,9 +1,9 @@
 import XCTest
 @testable import Paystack
 
-@testable import Paystack_Transactions
+@testable import Paystack_Checkout
 
-class TransactionsTests: PSTestCase {
+class CheckoutTests: PSTestCase {
     
     let apiKey = "testsk_Example"
     
@@ -15,15 +15,15 @@ class TransactionsTests: PSTestCase {
             .setKey(apiKey)
             .build()
     }
-    
-    func testVerifyAccessCode() throws {
+ 
+    func testRequestInline() throws {
         mockServiceExecutor
-            .expectURL("https://api.paystack.co/transaction/verify_access_code/12345")
+            .expectURL("https://api.paystack.co/checkout/request_inline?firstname=Justin&lastname=Guedes&key=\(apiKey)")
             .expectMethod(.get)
             .expectHeader("Authorization", "Bearer \(apiKey)")
-            .andReturn(json: "VerifyAccessCode")
+            .andReturn(json: "RequestInline")
         
-        _ = try serviceUnderTest.verifyAccessCode(12345).sync()
+        _ = try serviceUnderTest.requestInline([.firstname("Justin"),
+                                                .lastname("Guedes")]).sync()
     }
-    
 }

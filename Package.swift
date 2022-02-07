@@ -11,7 +11,10 @@ let package = Package(
             targets: ["Paystack"]),
         .library(
             name: "PaystackSDK/Transactions",
-            targets: ["Paystack/Transactions"])
+            targets: ["Paystack/Transactions"]),
+        .library(
+            name: "PaystackSDK/Checkout",
+            targets: ["Paystack/Checkout"])
     ],
     dependencies: [],
     targets: [
@@ -23,20 +26,16 @@ let package = Package(
             name: "Paystack/Transactions",
             dependencies: ["Paystack"],
             path: "Sources/PaystackSDK/API/Transactions"),
+        .target(
+            name: "Paystack/Checkout",
+            dependencies: ["Paystack"],
+            path: "Sources/PaystackSDK/API/Checkout"),
         .testTarget(
             name: "PaystackSDKTests",
-            dependencies: ["Paystack", "Paystack/Transactions"],
+            dependencies: ["Paystack", "Paystack/Transactions", "Paystack/Checkout"],
             resources: [
-                .copy("API/Transactions/Resources/ChargeAuthorization.json"),
-                .copy("API/Transactions/Resources/CheckAuthorization.json"),
-                .copy("API/Transactions/Resources/ExportTransactions.json"),
-                .copy("API/Transactions/Resources/FetchTransaction.json"),
-                .copy("API/Transactions/Resources/InitializeTransaction.json"),
-                .copy("API/Transactions/Resources/ListTransactions.json"),
-                .copy("API/Transactions/Resources/PartialDebit.json"),
-                .copy("API/Transactions/Resources/TransactionTotals.json"),
-                .copy("API/Transactions/Resources/VerifyTransaction.json"),
-                .copy("API/Transactions/Resources/ViewTransactionTimeline.json"),
+                .copy("API/Transactions/Resources/VerifyAccessCode.json"),
+                .copy("API/Checkout/Resources/RequestInline.json")
             ])
     ]
 )
