@@ -1,6 +1,6 @@
 {
   "status": true,
-  "message": "Transaction retrieved",
+  "message": "Request Inline",
   "data": {
     "id": 292584114,
     "domain": "test",

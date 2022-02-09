@@ -2,7 +2,7 @@ import Foundation
 
 public class Paystack {
     
-    public var config: PaystackConfig
+    public let config: PaystackConfig
     
     init(config: PaystackConfig) {
         self.config = config
