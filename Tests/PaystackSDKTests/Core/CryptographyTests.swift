@@ -72,7 +72,6 @@ final class CryptographyTests: XCTestCase {
     }
 
     func testAttemptToEncryptTextWithPublicKeyThatIsNotBase64ThrowsError() {
-        //
         let clearText = "Hello World"
         XCTAssertThrowsError(try serviceUnderTest.encrypt(text: clearText, publicKey: "ABC")) { error in
             XCTAssertEqual(error as? CryptographyError, CryptographyError.invalidBase64String)
