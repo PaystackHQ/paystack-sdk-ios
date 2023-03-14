@@ -32,8 +32,8 @@ jobs:
         xcode-version: latest-stable
     - name: Build
       run: swift build -v
-#     - name: Run tests
-#       run: swift test -v
+    - name: Run tests
+      run: swift test -v
       
   Lint_Pod:
     if: ${{ false }}  # Disabling until we can test if the public cocoapods spec works
