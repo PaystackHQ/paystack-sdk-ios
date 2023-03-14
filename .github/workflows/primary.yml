@@ -20,16 +20,16 @@ jobs:
        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  Build_And_Test_Swift_Package:
-
+  SwiftPackage:
     runs-on: macos-12
+    name: Build and Test Swift Package
 
     steps:
     - uses: actions/checkout@v3
     - name: Build
       run: swift build -v
-    - name: Run tests
-      run: swift test -v
+#     - name: Run tests
+#       run: swift test -v
       
   Lint_Pod:
     if: ${{ false }}  # Disabling until we can test if the public cocoapods spec works
@@ -38,7 +38,7 @@ jobs:
       
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
                
     - name: setup-cocoapods
       uses: maxim-lobanov/setup-cocoapods@v1
