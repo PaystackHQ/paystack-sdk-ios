@@ -1,0 +1,15 @@
+use_frameworks!
+
+platform :ios, '13.0'
+
+target 'paystack-sdk-ios_Example' do
+  pod 'Paystack', :path => '../'
+  pod 'PaystackTransactions', :path => '../'
+  pod 'PaystackCheckout', :path => '../'
+
+  target 'paystack-sdk-ios_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

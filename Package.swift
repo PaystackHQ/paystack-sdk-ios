@@ -4,17 +4,17 @@ import PackageDescription
 
 let package = Package(
     name: "PaystackSDK",
-    platforms: [.iOS(.v12), .macOS(.v10_15)],
+    platforms: [.iOS(.v13), .macOS(.v10_15)],
     products: [
         .library(
             name: "PaystackSDK",
             targets: ["Paystack"]),
         .library(
-            name: "PaystackSDK/Transactions",
-            targets: ["Paystack/Transactions"]),
+            name: "PaystackSDKTransactions",
+            targets: ["PaystackTransactions"]),
         .library(
-            name: "PaystackSDK/Checkout",
-            targets: ["Paystack/Checkout"])
+            name: "PaystackSDKCheckout",
+            targets: ["PaystackCheckout"])
     ],
     dependencies: [],
     targets: [
@@ -23,16 +23,16 @@ let package = Package(
             dependencies: [],
             path: "Sources/PaystackSDK/Core"),
         .target(
-            name: "Paystack/Transactions",
+            name: "PaystackTransactions",
             dependencies: ["Paystack"],
             path: "Sources/PaystackSDK/API/Transactions"),
         .target(
-            name: "Paystack/Checkout",
+            name: "PaystackCheckout",
             dependencies: ["Paystack"],
             path: "Sources/PaystackSDK/API/Checkout"),
         .testTarget(
             name: "PaystackSDKTests",
-            dependencies: ["Paystack", "Paystack/Transactions", "Paystack/Checkout"],
+            dependencies: ["Paystack", "PaystackTransactions", "PaystackCheckout"],
             resources: [
                 .copy("API/Transactions/Resources/VerifyAccessCode.json"),
                 .copy("API/Checkout/Resources/RequestInline.json")
