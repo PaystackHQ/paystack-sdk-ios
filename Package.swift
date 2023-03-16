@@ -4,7 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "PaystackSDK",
-    platforms: [.iOS(.v13), .macOS(.v10_15)],
+    platforms: [.iOS(.v12), .macOS(.v10_15)],
     products: [
         .library(
             name: "PaystackSDK",
