@@ -10,11 +10,11 @@ let package = Package(
             name: "PaystackSDK",
             targets: ["Paystack"]),
         .library(
-            name: "PaystackSDK/Transactions",
-            targets: ["Paystack/Transactions"]),
+            name: "Transactions",
+            targets: ["Transactions"]),
         .library(
-            name: "PaystackSDK/Checkout",
-            targets: ["Paystack/Checkout"])
+            name: "Checkout",
+            targets: ["Checkout"])
     ],
     dependencies: [],
     targets: [
@@ -23,16 +23,16 @@ let package = Package(
             dependencies: [],
             path: "Sources/PaystackSDK/Core"),
         .target(
-            name: "Paystack/Transactions",
+            name: "Transactions",
             dependencies: ["Paystack"],
             path: "Sources/PaystackSDK/API/Transactions"),
         .target(
-            name: "Paystack/Checkout",
+            name: "Checkout",
             dependencies: ["Paystack"],
             path: "Sources/PaystackSDK/API/Checkout"),
         .testTarget(
             name: "PaystackSDKTests",
-            dependencies: ["Paystack", "Paystack/Transactions", "Paystack/Checkout"],
+            dependencies: ["Paystack", "Transactions", "Checkout"],
             resources: [
                 .copy("API/Transactions/Resources/VerifyAccessCode.json"),
                 .copy("API/Checkout/Resources/RequestInline.json")

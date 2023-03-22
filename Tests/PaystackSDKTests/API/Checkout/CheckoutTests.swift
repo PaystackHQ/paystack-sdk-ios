@@ -1,6 +1,6 @@
 import XCTest
 @testable import Paystack
-@testable import PaystackCheckout
+@testable import Checkout
 
 class CheckoutTests: PSTestCase {
     

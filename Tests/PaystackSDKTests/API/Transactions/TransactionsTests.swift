@@ -1,6 +1,6 @@
 import XCTest
 @testable import Paystack
-@testable import PaystackTransactions
+@testable import Transactions
 
 class TransactionsTests: PSTestCase {
     
