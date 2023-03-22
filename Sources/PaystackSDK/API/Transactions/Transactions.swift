@@ -1,5 +1,5 @@
 import Foundation
-import Paystack
+import PaystackSDK
 
 /// The Transactions API allows you create and manage payments on your integration.
 public extension Paystack {

@@ -1,5 +1,5 @@
 import XCTest
-@testable import Paystack
+@testable import PaystackSDK
 
 final class CryptographyTests: XCTestCase {
     var serviceUnderTest: Cryptography!

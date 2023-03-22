@@ -1,5 +1,5 @@
 import XCTest
-@testable import Paystack
+@testable import PaystackSDK
 
 @testable import Paystack_Transactions
 
