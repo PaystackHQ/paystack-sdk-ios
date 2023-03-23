@@ -1,28 +1,16 @@
 PODS:
-  - Paystack (0.1.0)
-  - PaystackCheckout (0.1.0):
-    - Paystack
-  - PaystackTransactions (0.1.0):
-    - Paystack
+  - PaystackSDK (0.1.0)
 
 DEPENDENCIES:
-  - Paystack (from `../`)
-  - PaystackCheckout (from `../`)
-  - PaystackTransactions (from `../`)
+  - PaystackSDK (from `../`)
 
 EXTERNAL SOURCES:
-  Paystack:
-    :path: "../"
-  PaystackCheckout:
-    :path: "../"
-  PaystackTransactions:
+  PaystackSDK:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Paystack: 70813ce41f25f1afcee57bd05f70dc482d541fb9
-  PaystackCheckout: f063924cec98e93206ff74a1510d2b4055740c51
-  PaystackTransactions: 7cc0f876c38ba4d89e2c1f7344c0bf64fe64db49
+  PaystackSDK: 21dce345469e55923de1ba1c7b6f9f0c06e472ec
 
-PODFILE CHECKSUM: f114d238643b2a3184afc8ccc5288de40eb31d38
+PODFILE CHECKSUM: 37b1806e357be9f9a927d608f2aec8115f5ff4ad
 
 COCOAPODS: 1.11.3

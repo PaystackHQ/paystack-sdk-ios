@@ -1,6 +1,6 @@
 import Foundation
 
-@testable import Paystack
+@testable import PaystackSDK
 
 class MockServiceExecutor: ServiceExecutor {
     

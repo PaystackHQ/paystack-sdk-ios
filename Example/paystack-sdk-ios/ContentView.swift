@@ -1,5 +1,5 @@
 import SwiftUI
-import Paystack
+import PaystackSDK
 
 struct ContentView: View {
     var body: some View {
