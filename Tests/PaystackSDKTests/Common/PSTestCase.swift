@@ -1,6 +1,6 @@
 import XCTest
 
-@testable import Paystack
+@testable import PaystackSDK
 
 class PSTestCase: XCTestCase {
     
