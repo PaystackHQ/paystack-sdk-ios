@@ -1,5 +1,5 @@
 import Foundation
-import Paystack
+import PaystackSDK
 
 public enum RequestInlineQuery {
     case email(String)
