@@ -8,7 +8,10 @@ let package = Package(
     products: [
         .library(
             name: "PaystackSDK",
-            targets: ["PaystackSDK"])
+            targets: ["PaystackSDK"]),
+        .library(
+            name: "PaystackUI",
+            targets: ["PaystackUI"])
     ],
     dependencies: [],
     targets: [
@@ -16,9 +19,13 @@ let package = Package(
             name: "PaystackSDK",
             dependencies: [],
             path: "Sources/PaystackSDK"),
+        .target(
+            name: "PaystackUI",
+            dependencies: ["PaystackSDK"],
+            path: "Sources/PaystackUI"),
         .testTarget(
             name: "PaystackSDKTests",
-            dependencies: ["PaystackSDK"],
+            dependencies: ["PaystackSDK", "PaystackUI"],
             resources: [
                 .copy("API/Transactions/Resources/VerifyAccessCode.json"),
                 .copy("API/Checkout/Resources/RequestInline.json")

@@ -1,12 +1,12 @@
 
 Pod::Spec.new do |s|
-  s.name             = 'PaystackSDK'
+  s.name             = 'PaystackUI'
   s.version          = '0.1.0'
-  s.summary          = 'The Paystack Public iOS SDK'
+  s.summary          = 'The UI Flows build upon the Paystack Public iOS SDK'
 
 # TODO: Add correct descriptions
 
-  s.description      = "This is an iOS library used to access Paystack APIs, etc."
+  s.description      = "This is an iOS library used to access Paystack provided UI Flows that interact with our APIs"
 
   s.homepage         = 'https://github.com/PaystackHQ/paystack-sdk-ios'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
@@ -18,6 +18,8 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '12.0'
   s.swift_versions = '5.7'
-  s.source_files = 'Sources/PaystackSDK/**/*.{h,m,swift}'
+  s.source_files = 'Sources/PaystackUI/**/*.{h,m,swift}'
+
+  s.dependency 'PaystackSDK'
  
 end

@@ -1,16 +1,22 @@
 PODS:
   - PaystackSDK (0.1.0)
+  - PaystackUI (0.1.0):
+    - PaystackSDK
 
 DEPENDENCIES:
   - PaystackSDK (from `../`)
+  - PaystackUI (from `../`)
 
 EXTERNAL SOURCES:
   PaystackSDK:
     :path: "../"
+  PaystackUI:
+    :path: "../"
 
 SPEC CHECKSUMS:
   PaystackSDK: 21dce345469e55923de1ba1c7b6f9f0c06e472ec
+  PaystackUI: 9279083933563c71e7bff415208a3e34b8f3607a
 
-PODFILE CHECKSUM: 37b1806e357be9f9a927d608f2aec8115f5ff4ad
+PODFILE CHECKSUM: b96acafe4b2728349ca7484f68ce04ade29f4de4
 
 COCOAPODS: 1.11.3
