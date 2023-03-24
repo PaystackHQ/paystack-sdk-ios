@@ -10,7 +10,6 @@ Pod::Spec.new do |s|
 
   s.homepage         = 'https://github.com/PaystackHQ/paystack-sdk-ios'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
-  # TODO: Determine if we want to change the license type
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Paystack Mobile' => 'hello@paystack.com' }
   s.source           = { :git => 'https://github.com/PaystackHQ/paystack-sdk-ios.git', :tag => s.version.to_s }
