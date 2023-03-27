@@ -34,5 +34,22 @@ jobs:
       run: swift build -v
     - name: Run tests
       run: swift test -v
+      
+  PodLinting:
+    runs-on: macos-12
+    name: Lint Podspec
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: setup-cocoapods
+      uses: maxim-lobanov/setup-cocoapods@v1
+      with:
+        version: 1.10.1
+    
+    - name: Run pod lint for Paystack Core
+      run: rm -rf ~/.cocoapods && pod lib lint PaystackCore.podspec --allow-warnings
+    
 
   # TODO: Add sonar here once the project is added
