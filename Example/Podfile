@@ -4,7 +4,7 @@ platform :ios, '13.0'
 
 target 'paystack-sdk-ios' do
 
-  pod 'PaystackSDK', :path => '../'
+  pod 'PaystackCore', :path => '../'
   pod 'PaystackUI', :path => '../'
 
 end

@@ -19,6 +19,6 @@ Pod::Spec.new do |s|
   s.swift_versions = '5.7'
   s.source_files = 'Sources/PaystackUI/**/*.{h,m,swift}'
 
-  s.dependency 'PaystackSDK'
+  s.dependency 'PaystackCore'
  
 end

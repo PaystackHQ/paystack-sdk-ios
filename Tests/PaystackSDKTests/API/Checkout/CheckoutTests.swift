@@ -1,5 +1,5 @@
 import XCTest
-@testable import PaystackSDK
+@testable import PaystackCore
 
 class CheckoutTests: PSTestCase {
     
