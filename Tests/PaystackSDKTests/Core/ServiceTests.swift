@@ -1,5 +1,5 @@
 import XCTest
-import PaystackSDK
+import PaystackCore
 
 class ServiceTests: PSTestCase {
     

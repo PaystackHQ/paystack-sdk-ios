@@ -1,0 +1,22 @@
+PODS:
+  - PaystackCore (0.1.0)
+  - PaystackUI (0.1.0):
+    - PaystackCore
+
+DEPENDENCIES:
+  - PaystackCore (from `../`)
+  - PaystackUI (from `../`)
+
+EXTERNAL SOURCES:
+  PaystackCore:
+    :path: "../"
+  PaystackUI:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  PaystackCore: 56dd0891c842b8901d1805d5389fabfa5a824b98
+  PaystackUI: 0c6a186cec17a420534a425501e80ef535550100
+
+PODFILE CHECKSUM: 48555c9a021b85b5db9e68136d78911259fa50e1
+
+COCOAPODS: 1.11.3

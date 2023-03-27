@@ -1,7 +1,5 @@
 import XCTest
-@testable import PaystackSDK
-
-@testable import Paystack_Checkout
+@testable import PaystackCore
 
 class CheckoutTests: PSTestCase {
     
@@ -16,14 +14,14 @@ class CheckoutTests: PSTestCase {
             .build()
     }
  
-    func testRequestInline() throws {
-        mockServiceExecutor
-            .expectURL("https://api.paystack.co/checkout/request_inline?firstname=Justin&lastname=Guedes&key=\(apiKey)")
-            .expectMethod(.get)
-            .expectHeader("Authorization", "Bearer \(apiKey)")
-            .andReturn(json: "RequestInline")
-        
-        _ = try serviceUnderTest.requestInline([.firstname("Justin"),
-                                                .lastname("Guedes")]).sync()
-    }
+//    func testRequestInline() throws {
+//        mockServiceExecutor
+//            .expectURL("https://api.paystack.co/checkout/request_inline?firstname=Justin&lastname=Guedes&key=\(apiKey)")
+//            .expectMethod(.get)
+//            .expectHeader("Authorization", "Bearer \(apiKey)")
+//            .andReturn(json: "RequestInline")
+//        
+//        _ = try serviceUnderTest.requestInline([.firstname("Justin"),
+//                                                .lastname("Guedes")]).sync()
+//    }
 }

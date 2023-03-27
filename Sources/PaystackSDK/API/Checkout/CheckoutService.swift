@@ -1,5 +1,4 @@
 import Foundation
-import PaystackSDK
 
 protocol CheckoutService: PaystackService {
     func getRequestInline(_ queries: [RequestInlineQuery]) -> Service<TransactionResponse>
