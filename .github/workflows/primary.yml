@@ -49,7 +49,7 @@ jobs:
         version: 1.10.1
     
     - name: Run pod lint for Paystack Core
-      run: rm -rf ~/.cocoapods && pod lib lint PaystackCore.podspec --allow-warnings
+      run: pod lib lint PaystackCore.podspec --allow-warnings
     
 
   # TODO: Add sonar here once the project is added
