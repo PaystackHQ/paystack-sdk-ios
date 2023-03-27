@@ -46,7 +46,7 @@ jobs:
     - name: setup-cocoapods
       uses: maxim-lobanov/setup-cocoapods@v1
       with:
-        version: 1.10.1
+        version: 1.11.3
     
     - name: Run pod lint for Paystack Core
       run: pod lib lint PaystackCore.podspec --allow-warnings --verbose
