@@ -4,4 +4,11 @@
 /*.xcodeproj
 xcuserdata/
 DerivedData/
+Example/Pods/*
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+
+# User data:
+Example/paystack-sdk-ios.xcodeproj/xcuserdata
+Example/paystack-sdk-ios.xcworkspace/xcshareddata
+Example/paystack-sdk-ios.xcworkspace/xcuserdata
+Example/paystack-sdk-ios.xcworkspace/contents.xcworkspacedata

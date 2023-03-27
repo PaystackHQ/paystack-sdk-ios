@@ -1,5 +1,4 @@
 import Foundation
-import PaystackSDK
 
 protocol TransactionService: PaystackService {
     func getVerifyAccessCode(_ id: Int) -> Service<TransactionResponse>
