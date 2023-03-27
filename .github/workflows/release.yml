@@ -13,86 +13,25 @@ on:
         - major
       body:
         description: Description for Release
-      beta:
-        type: boolean
-        default: false
-        description: Beta
-      prerelease:
-        type: boolean
-        default: false
-        description: Pre-Release
-      draft:
-        type: boolean
-        default: false
-        description: Draft
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: Determine Version Part
-      run: |
-        mode=${{ github.event.inputs.release }}
-        part=2 # Default to patch part
-        if [ "$mode" == 'major' ]; then
-          part=0
-        elif [ "$mode" == 'minor' ]; then
-          part=1
-        fi
-        echo "part=$part" >> $GITHUB_ENV
-        
-    - name: Get Latest Tags
-      run: git fetch --tags
-      
     - name: Increment Latest Version
       run: |
-        part=${{ env.part }}
-        
-        # Get latest sorted tag from git
-        version=($(git tag | (grep -s -E '^[0-9]+[.][0-9]+[.][0-9]+' || true) | sort -V | tail -1))
-        
-        # If no tag was found then default to 0.0.0
-        if [ -z $version ]; then version="0.0.0"; fi
-        
-        # Split version into individual parts
-        array=($(echo $version | tr . '\n'))
-        
-        for index in ${!array[@]}; do
-          # Ensure we remove any '-beta' from the version parts
-          array[$index]=$(echo "${array[$index]}" | tr -dc '0-9')
-          # Find selected part and increment value
-          if [ $index -eq $part ]; then
-            value=array[$index]
-            value=$((value+1))
-            array[$index]=$value
-          fi
-        done
-          
-        # Reset other version parts if needed
-        if [ $part -lt 2 ]; then array[2]=0; fi
-        if [ $part -lt 1 ]; then array[1]=0; fi
-        
-        # Append beta to the end of the version if beta release
-        if [ ${{ github.event.inputs.beta }} == 'true' ]; then array[2]="${array[2]}-beta"; fi
-        
-        # Set the new version
-        newVersion=$(echo $(IFS=. ; echo "${array[*]}"))
-        echo "newVersion=${newVersion}" >> $GITHUB_ENV
-      shell: bash
-      
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        mode=${{ github.event.inputs.release }}
+        sh Versioning/update_version.sh $mode ${{ github.event.inputs.body }}
+ 
+    - name: Open Pull Request
+      uses: peter-evans/create-pull-request@v4
       with:
-        tag_name: ${{ env.newVersion }}
-        release_name: ${{ env.newVersion }}
-        body: ${{ github.event.inputs.body }}
-        draft: ${{ github.event.inputs.draft }}
-        prerelease: ${{ github.event.inputs.prerelease }}
-        
-    # TODO: Update version in podspec and push podspec to trunk
+        commit-message: Updated versions in podspec and plist for release
+        title: Updating SDK Version
+        body: This is an automated PR to update the versions of the app prior to release. Note that merging this PR will automatically trigger a release. 
+        base: main
+        branch: release/update-versions
+        delete-branch: true
