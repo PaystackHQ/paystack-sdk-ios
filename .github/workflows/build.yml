@@ -1,0 +1,36 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    name: Build and Test Swift Package
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      run: swift build -v
+    - name: Run tests
+      run: swift test -v
+
+  PodLinting:
+    runs-on: macos-12
+    name: Lint Podspec
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: setup-cocoapods
+      uses: maxim-lobanov/setup-cocoapods@v1
+      with:
+        version: 1.11.3
+    
+    - name: Run pod lint for Paystack Core
+      run: pod lib lint PaystackCore.podspec --allow-warnings
+    
+
+  # TODO: Add sonar here once the project is added
