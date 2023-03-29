@@ -1,0 +1,37 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        type: choice
+        required: true
+        description: What version part would you like bump?
+        options:
+        - patch
+        - minor
+        - major
+      body:
+        description: Description for Release
+
+jobs:
+  release:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Increment Latest Version
+      run: |
+        mode=${{ github.event.inputs.release }}
+        sh Versioning/update_version.sh $mode ${{ github.event.inputs.body }}
+ 
+    - name: Open Pull Request
+      uses: peter-evans/create-pull-request@v4
+      with:
+        commit-message: Updated versions in podspec and plist for release
+        title: Updating SDK Version
+        body: This is an automated PR to update the versions of the app prior to release. Note that merging this PR will automatically trigger a release. 
+        base: main
+        branch: release/update-versions
+        delete-branch: true
