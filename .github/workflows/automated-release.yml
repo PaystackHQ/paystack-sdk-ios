@@ -1,0 +1,45 @@
+name: AutomatedRelease
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  release:
+    if: github.event.pull_request.merged == true && github.head_ref == 'release/update-versions' 
+    runs-on: macos-12
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Get version information
+      run: |
+        version=$(/usr/libexec/PlistBuddy -c "Print Version" ./Versioning/versions.plist)
+        echo "version=${version}" >> $GITHUB_ENV
+        body=$(/usr/libexec/PlistBuddy -c "Print Description" ./Versioning/versions.plist)
+        echo "body=${body}" >> $GITHUB_ENV
+      
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.version }}
+        release_name: ${{ env.version }}
+        body: ${{ env.body }}
+
+    - name: Install Cocoapods
+      run: gem install cocoapods
+      
+    - name: Deploy to Cocoapods
+      run: |
+        set -eo pipefail
+        pod lib lint PaystackCore.podspec --allow-warnings
+        pod trunk push PaystackCore.podspec --allow-warnings
+        pod lib lint PaystackUI.podspec --allow-warnings
+        pod trunk push PaystackUI.podspec --allow-warnings
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
