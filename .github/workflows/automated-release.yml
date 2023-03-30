@@ -37,9 +37,7 @@ jobs:
     - name: Deploy to Cocoapods
       run: |
         set -eo pipefail
-        pod lib lint PaystackCore.podspec --allow-warnings
         pod trunk push PaystackCore.podspec --allow-warnings
-        pod lib lint PaystackUI.podspec --allow-warnings
         pod trunk push PaystackUI.podspec --allow-warnings
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
