@@ -6,7 +6,7 @@ public extension Paystack {
     }
 
     /// Continues the Charge flow by authenticating a user
-    /// - Parameter authenticationType: The type of authentication with the associated payload provided. Requires a reference to the charge
+    /// - Parameter authenticationType: The type of authentication with the associated payload with reference provided.
     /// - Returns: A ``Service`` with the results of the authentication
     func authenticateCharge(_ authenticationType: AuthenticationType) -> Service<ChargeAuthenticationResponse> {
         switch authenticationType {
