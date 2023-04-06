@@ -28,7 +28,8 @@ let package = Package(
             dependencies: ["PaystackCore", "PaystackUI"],
             resources: [
                 .copy("API/Transactions/Resources/VerifyAccessCode.json"),
-                .copy("API/Checkout/Resources/RequestInline.json")
+                .copy("API/Checkout/Resources/RequestInline.json"),
+                .copy("API/Charge/Resources/ChargeAuthenticationResponse.json")
             ])
     ]
 )
