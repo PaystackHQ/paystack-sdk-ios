@@ -1,5 +1,5 @@
 import XCTest
-import PaystackCore
+@testable import PaystackCore
 
 class URLRequestBuilderTests: XCTestCase {
     
@@ -114,5 +114,17 @@ class URLRequestBuilderTests: XCTestCase {
             .build()
         
         XCTAssertEqual(["Authorization": "Bearer Example"], result.allHTTPHeaderFields)
+    }
+
+    func testAddLoggingBuildsURLRequestWithLoggingHeaders() throws {
+        let result = try builder
+            .setMethod(.get)
+            .addLoggingHeaders()
+            .build()
+
+        XCTAssertNotNil(result.value(forHTTPHeaderField: "x-platform"))
+        XCTAssertNotNil(result.value(forHTTPHeaderField: "sdk-version"))
+        XCTAssertNotNil(result.value(forHTTPHeaderField: "platform-version"))
+        XCTAssertNotNil(result.value(forHTTPHeaderField: "device"))
     }
 }
