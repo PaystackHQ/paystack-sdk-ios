@@ -2,16 +2,16 @@ import XCTest
 @testable import PaystackCore
 
 class URLRequestBuilderTests: XCTestCase {
-    
+
     let testEndpoint: String = "https://api.paystack.co"
-    
+
     var builder: URLRequestBuilder!
-    
+
     override func setUpWithError() throws {
         try super.setUpWithError()
         builder = URLRequestBuilder(endpoint: testEndpoint)
     }
-    
+
     func testSetMethodBuildsURLRequestWithMethod() throws {
         let result = try builder
             .setMethod(.delete)
@@ -19,11 +19,11 @@ class URLRequestBuilderTests: XCTestCase {
         
         XCTAssertEqual("DELETE", result.httpMethod)
     }
-    
+
     func testBuildThrowsErrorWhenMethodNotProvided() throws {
         XCTAssertThrowsError(try builder.build())
     }
-    
+
     func testSetHeadersBuildsURLRequestWithHeaders() throws {
         let result = try builder
             .setMethod(.get)
@@ -32,7 +32,7 @@ class URLRequestBuilderTests: XCTestCase {
         
         XCTAssertEqual(["test": "example"], result.allHTTPHeaderFields)
     }
-    
+
     func testAddHeaderBuildsURLRequestWithHeaderAppended() throws {
         let result = try builder
             .setMethod(.get)
@@ -41,7 +41,7 @@ class URLRequestBuilderTests: XCTestCase {
         
         XCTAssertEqual(["test": "example"], result.allHTTPHeaderFields)
     }
-    
+
     func testSetPathBuildsURLRequestWithPathAppendedToEndpoint() throws {
         let result = try builder
             .setMethod(.get)
@@ -50,7 +50,7 @@ class URLRequestBuilderTests: XCTestCase {
         
         XCTAssertEqual("\(testEndpoint)/test", result.url?.absoluteString)
     }
-    
+
     func testSetQueryItemsBuildsURLRequestWithQueryItems() throws {
         let result = try builder
             .setMethod(.get)
@@ -59,7 +59,7 @@ class URLRequestBuilderTests: XCTestCase {
         
         XCTAssertEqual("\(testEndpoint)?test=example", result.url?.absoluteString)
     }
-    
+
     func testSetQueryItemsUsingTuplesBuildsURLRequestWithQueryItems() throws {
         let result = try builder
             .setMethod(.get)
@@ -68,7 +68,7 @@ class URLRequestBuilderTests: XCTestCase {
         
         XCTAssertEqual("\(testEndpoint)?test=example", result.url?.absoluteString)
     }
-    
+
     func testAddQueryItemBuildsURLRequestWithQueryItems() throws {
         let result = try builder
             .setMethod(.get)
@@ -77,7 +77,7 @@ class URLRequestBuilderTests: XCTestCase {
         
         XCTAssertEqual("\(testEndpoint)?test=example", result.url?.absoluteString)
     }
-    
+
     func testSetEncodableBodyBuildsURLRequestWithBody() throws {
         let result = try builder
             .setMethod(.post)
@@ -87,32 +87,32 @@ class URLRequestBuilderTests: XCTestCase {
         let encoded = try JSONEncoder().encode("test")
         XCTAssertEqual(encoded, result.httpBody)
     }
-    
+
     func testSetEncodableBodyBuildsURLRequestWithContentTypeSetToJSON() throws {
         let result = try builder
             .setMethod(.post)
             .setBody("test")
             .build()
-        
+
         XCTAssertEqual(["Content-Type": "application/json"], result.allHTTPHeaderFields)
     }
-    
+
     func testSetBodyBuildsURLRequestWithBody() throws {
         let data = try JSONEncoder().encode("test")
         let result = try builder
             .setMethod(.post)
             .setBody(data)
             .build()
-        
+
         XCTAssertEqual(data, result.httpBody)
     }
-    
+
     func testAddBearerAuthorizationBuildsURLRequestWithAuthHeader() throws {
         let result = try builder
             .setMethod(.post)
             .addBearerAuthorization("Example")
             .build()
-        
+
         XCTAssertEqual(["Authorization": "Bearer Example"], result.allHTTPHeaderFields)
     }
 

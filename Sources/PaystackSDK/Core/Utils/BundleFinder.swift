@@ -15,7 +15,7 @@ extension Foundation.Bundle {
             // Bundle should be present here when the package is linked into a framework.
             Bundle(for: BundleFinder.self).resourceURL,
             // For command-line tools.
-            Bundle.main.bundleURL,
+            Bundle.main.bundleURL
         ]
         for candidate in candidates {
             let bundlePath = candidate?.appendingPathComponent(bundleName + ".bundle")
