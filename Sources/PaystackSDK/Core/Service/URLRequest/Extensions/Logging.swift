@@ -1,8 +1,29 @@
 import Foundation
+
+#if canImport(UIKit)
 import UIKit
+#endif
+
+#if canImport(IOKit)
+import IOKit
+#endif
+
+
 
 // MARK: - Logging
 extension URLRequestBuilder {
+    private static let operatingSystem: String = {
+        #if os(iOS)
+            #if targetEnvironment(macCatalyst)
+            return "macOS - Catalyst"
+            #else
+            return "iOS"
+            #endif
+        #else
+        return "macOS"
+        #endif
+    }()
+
     func addLoggingHeaders() -> Self {
         return addPlatformHeader()
             .addSDKVersionHeader()
@@ -10,8 +31,9 @@ extension URLRequestBuilder {
             .addDeviceModelHeader()
     }
 
+    // TODO: Confirm if we want to do this or to hardcode it as iOSSDK regardless
     private func addPlatformHeader() -> Self {
-        return addHeader("x-platform", "iOSSDK")
+        return addHeader("x-platform", "\(Self.operatingSystem)SDK")
     }
 
     private func addSDKVersionHeader() -> Self {
@@ -28,15 +50,42 @@ extension URLRequestBuilder {
     }
 
     private func addPlatformVersionHeader() -> Self {
-        let iosVersion = UIDevice.current.systemVersion
-        return addHeader("platform-version", iosVersion)
+        let osVersion = ProcessInfo().operatingSystemVersion
+        let osVersionString = "\(osVersion.majorVersion).\(osVersion.minorVersion)"
+        return addHeader("platform-version", "\(Self.operatingSystem) \(osVersionString)")
     }
 
     private func addDeviceModelHeader() -> Self {
-        return addHeader("device", UIDevice.modelName)
+        guard let modelName = getDeviceModel() else {
+            return self
+        }
+        return addHeader("device", modelName)
     }
+
+    private func getDeviceModel() -> String? {
+        #if canImport(UIKit)
+        return UIDevice.modelName
+        #elseif canImport(IOKit)
+        return getModelIdentifier()
+        #endif
+    }
+
+    #if canImport(IOKit)
+    func getModelIdentifier() -> String? {
+        let service = IOServiceGetMatchingService(kIOMasterPortDefault,
+                                                  IOServiceMatching("IOPlatformExpertDevice"))
+        var modelIdentifier: String?
+        if let modelData = IORegistryEntryCreateCFProperty(service, "model" as CFString, kCFAllocatorDefault, 0).takeRetainedValue() as? Data {
+            modelIdentifier = String(data: modelData, encoding: .utf8)?.trimmingCharacters(in: .controlCharacters)
+        }
+
+        IOObjectRelease(service)
+        return modelIdentifier
+    }
+    #endif
 }
 
+#if canImport(UIKit)
 private extension UIDevice {
     static let modelName: String = {
         var systemInfo = utsname()
@@ -49,3 +98,4 @@ private extension UIDevice {
         return identifier
     }()
 }
+#endif
