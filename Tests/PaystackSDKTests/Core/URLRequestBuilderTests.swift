@@ -123,8 +123,8 @@ class URLRequestBuilderTests: XCTestCase {
             .build()
 
         XCTAssertNotNil(result.value(forHTTPHeaderField: "x-platform"))
-        XCTAssertNotNil(result.value(forHTTPHeaderField: "sdk-version"))
-        XCTAssertNotNil(result.value(forHTTPHeaderField: "platform-version"))
-        XCTAssertNotNil(result.value(forHTTPHeaderField: "device"))
+        XCTAssertNotNil(result.value(forHTTPHeaderField: "x-sdk-version"))
+        XCTAssertNotNil(result.value(forHTTPHeaderField: "x-platform-version"))
+        XCTAssertNotNil(result.value(forHTTPHeaderField: "x-device"))
     }
 }

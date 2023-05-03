@@ -44,20 +44,20 @@ extension URLRequestBuilder {
             return self
         }
 
-        return addHeader("sdk-version", versionNumber)
+        return addHeader("x-sdk-version", versionNumber)
     }
 
     private func addPlatformVersionHeader() -> Self {
         let osVersion = ProcessInfo().operatingSystemVersion
         let osVersionString = "\(osVersion.majorVersion).\(osVersion.minorVersion)"
-        return addHeader("platform-version", "\(Self.operatingSystem) \(osVersionString)")
+        return addHeader("x-platform-version", "\(Self.operatingSystem) \(osVersionString)")
     }
 
     private func addDeviceModelHeader() -> Self {
         guard let modelName = getDeviceModel() else {
             return self
         }
-        return addHeader("device", modelName)
+        return addHeader("x-device", modelName)
     }
 
     private func getDeviceModel() -> String? {
