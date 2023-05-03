@@ -8,7 +8,7 @@ extension Foundation.Bundle {
         #if SWIFT_PACKAGE
         return Bundle.module
         #else
-        let bundleName = "PaystackSDK_PaystackCore s"
+        let bundleName = "PaystackSDK_PaystackCore"
         let candidates = [
             // Bundle should be present here when the package is linked into an App.
             Bundle.main.resourceURL,
