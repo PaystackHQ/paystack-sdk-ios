@@ -4,7 +4,7 @@ public protocol URLRequestBuilderHelper {
     var endpoint: String { get }
     var bearerToken: String { get }
     var paystackUserAgentVersion: String { get }
-    
+
     func get() -> URLRequestBuilder
     func get(_ path: String) -> URLRequestBuilder
     func post<T: Encodable>(_ path: String, _ body: T) -> URLRequestBuilder

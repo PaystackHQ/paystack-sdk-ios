@@ -16,7 +16,7 @@ class URLRequestBuilderTests: XCTestCase {
         let result = try builder
             .setMethod(.delete)
             .build()
-        
+
         XCTAssertEqual("DELETE", result.httpMethod)
     }
 
@@ -29,7 +29,7 @@ class URLRequestBuilderTests: XCTestCase {
             .setMethod(.get)
             .setHeaders(["test": "example"])
             .build()
-        
+
         XCTAssertEqual(["test": "example"], result.allHTTPHeaderFields)
     }
 
@@ -38,7 +38,7 @@ class URLRequestBuilderTests: XCTestCase {
             .setMethod(.get)
             .addHeader("test", "example")
             .build()
-        
+
         XCTAssertEqual(["test": "example"], result.allHTTPHeaderFields)
     }
 
@@ -47,7 +47,7 @@ class URLRequestBuilderTests: XCTestCase {
             .setMethod(.get)
             .setPath("/test")
             .build()
-        
+
         XCTAssertEqual("\(testEndpoint)/test", result.url?.absoluteString)
     }
 
@@ -56,7 +56,7 @@ class URLRequestBuilderTests: XCTestCase {
             .setMethod(.get)
             .setQueryItems(["test": "example"])
             .build()
-        
+
         XCTAssertEqual("\(testEndpoint)?test=example", result.url?.absoluteString)
     }
 
@@ -65,7 +65,7 @@ class URLRequestBuilderTests: XCTestCase {
             .setMethod(.get)
             .setQueryItems([("test", "example")])
             .build()
-        
+
         XCTAssertEqual("\(testEndpoint)?test=example", result.url?.absoluteString)
     }
 
@@ -74,7 +74,7 @@ class URLRequestBuilderTests: XCTestCase {
             .setMethod(.get)
             .addQueryItem("test", "example")
             .build()
-        
+
         XCTAssertEqual("\(testEndpoint)?test=example", result.url?.absoluteString)
     }
 
@@ -83,7 +83,7 @@ class URLRequestBuilderTests: XCTestCase {
             .setMethod(.post)
             .setBody("test")
             .build()
-        
+
         let encoded = try JSONEncoder().encode("test")
         XCTAssertEqual(encoded, result.httpBody)
     }

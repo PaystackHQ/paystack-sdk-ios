@@ -9,7 +9,6 @@ import IOKit
 #endif
 
 
-
 // MARK: - Logging
 extension URLRequestBuilder {
     private static let operatingSystem: String = {
@@ -75,7 +74,8 @@ extension URLRequestBuilder {
         let service = IOServiceGetMatchingService(kIOMasterPortDefault,
                                                   IOServiceMatching("IOPlatformExpertDevice"))
         var modelIdentifier: String?
-        if let modelData = IORegistryEntryCreateCFProperty(service, "model" as CFString, kCFAllocatorDefault, 0).takeRetainedValue() as? Data {
+        if let modelData = IORegistryEntryCreateCFProperty(
+            service, "model" as CFString, kCFAllocatorDefault, 0).takeRetainedValue() as? Data {
             modelIdentifier = String(data: modelData, encoding: .utf8)?.trimmingCharacters(in: .controlCharacters)
         }
 
