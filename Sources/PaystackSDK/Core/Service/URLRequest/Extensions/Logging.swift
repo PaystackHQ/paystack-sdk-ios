@@ -8,7 +8,6 @@ import UIKit
 import IOKit
 #endif
 
-
 // MARK: - Logging
 extension URLRequestBuilder {
     private static let operatingSystem: String = {
