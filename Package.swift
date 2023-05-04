@@ -4,7 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "PaystackSDK",
-    platforms: [.iOS(.v12), .macOS(.v10_15)],
+    platforms: [.iOS(.v12), .macOS(.v11)],
     products: [
         .library(
             name: "PaystackCore",
@@ -18,7 +18,10 @@ let package = Package(
         .target(
             name: "PaystackCore",
             dependencies: [],
-            path: "Sources/PaystackSDK"),
+            path: "Sources/PaystackSDK",
+            resources: [
+                .process("Versioning/versions.plist")
+            ]),
         .target(
             name: "PaystackUI",
             dependencies: ["PaystackCore"],

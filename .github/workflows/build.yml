@@ -44,9 +44,9 @@ jobs:
 
     - name: Get version information
       run: |
-        version=$(/usr/libexec/PlistBuddy -c "Print Version" ./Versioning/versions.plist)
+        version=$(/usr/libexec/PlistBuddy -c "Print Version" ./Sources/PaystackSDK/Versioning/versions.plist)
         echo "version=${version}" >> $GITHUB_ENV
-        body=$(/usr/libexec/PlistBuddy -c "Print Description" ./Versioning/versions.plist)
+        body=$(/usr/libexec/PlistBuddy -c "Print Description" ./Sources/PaystackSDK/Versioning/versions.plist)
         echo "body=${body}" >> $GITHUB_ENV
 
     - name: Create Release
