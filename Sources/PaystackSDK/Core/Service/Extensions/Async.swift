@@ -49,8 +49,8 @@ extension Service {
         }
     }
 
-    func async(_ subscription: Subscription, _ callback: @escaping (T?, Error?) -> Void) {
-        subscription.startListeningForEvent { result in
+    func async(_ subscription: any Subscription, _ callback: @escaping (T?, Error?) -> Void) {
+        SubscriptionListenerProvider.listen(to: subscription) { result in
             switch result {
             case .success(let stringData):
                 let data = Data(stringData.utf8)

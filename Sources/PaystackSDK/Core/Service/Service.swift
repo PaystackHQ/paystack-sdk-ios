@@ -2,7 +2,7 @@ import Foundation
 
 public enum Service<T: Decodable> {
     case request(URLRequest)
-    case subscription(Subscription)
+    case subscription(any Subscription)
     case error(Error)
 }
 
@@ -16,11 +16,7 @@ extension Service {
         }
     }
 
-    init(_ subscriptionBuilder: any SubscriptionBuilder) {
-        do {
-            self = .subscription(try subscriptionBuilder.build())
-        } catch {
-            self = .error(error)
-        }
+    init(_ subscription: any Subscription) {
+        self = .subscription(subscription)
     }
 }

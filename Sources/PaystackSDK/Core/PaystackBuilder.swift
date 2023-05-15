@@ -14,9 +14,8 @@ public class PaystackBuilder {
             throw PaystackError.noAPIKey
         }
 
-        let subscriptionBuilder = PusherSubscriptionBuilder()
         let config = PaystackConfig(apiKey: apiKey)
-        return Paystack(config: config, subscriptionBuilder: subscriptionBuilder)
+        return Paystack(config: config)
     }
 }
 

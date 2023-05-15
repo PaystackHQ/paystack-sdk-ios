@@ -1,6 +1,7 @@
 import Foundation
 
 public enum SubscriptionError: Error {
-    case subscriptionDetailsNotProvided
+    case invalidSubscription
     case noData
+    case other(String)
 }

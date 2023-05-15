@@ -83,4 +83,16 @@ final class ChargeTests: PSTestCase {
         _ = try serviceUnderTest.authenticateCharge(.address(addressRequestBody)).sync()
     }
 
+    func testListenFor3DS() throws {
+        let transactionId = "1234"
+        let mockSubscription = PusherSubscription(channelName: "3DS_\(transactionId)",
+                                                  eventName: "response")
+
+        mockSubscriptionListener
+            .expectSubscription(mockSubscription)
+            .andReturnString(fromJson: "ChargeAuthenticationResponse")
+
+        _ = try serviceUnderTest.listenFor3DSResponse(for: transactionId).sync()
+    }
+
 }
