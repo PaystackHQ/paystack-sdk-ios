@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/PaystackHQ/paystack-sdk-ios.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/paystack'
 
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '13.0'
   s.swift_versions = '5.7'
   s.source_files = 'Sources/PaystackUI/**/*.{h,m,swift}'
 

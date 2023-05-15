@@ -6,6 +6,8 @@ public extension Service {
         switch self {
         case .request(let request):
             async(request, callback)
+        case .subscription(let subscription):
+            async(subscription, callback)
         case .error(let error):
             callback(nil, error)
         }
@@ -46,7 +48,23 @@ extension Service {
             return callback(nil, error ?? PaystackError.technical)
         }
     }
-    
+
+    func async(_ subscription: Subscription, _ callback: @escaping (T?, Error?) -> Void) {
+        subscription.startListeningForEvent { result in
+            switch result {
+            case .success(let stringData):
+                let data = Data(stringData.utf8)
+                do {
+                    return callback(try JSONDecoder.decoder.decode(T.self, from: data), nil)
+                } catch {
+                    callback(nil, error)
+                }
+            case .failure(let error):
+                callback(nil, error)
+            }
+        }
+    }
+
     func message(from data: Data) -> String {
         if let response = try? JSONDecoder.decoder.decode(ErrorResponse.self, from: data) {
             return response.message

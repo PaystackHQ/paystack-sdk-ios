@@ -22,4 +22,16 @@ public extension Paystack {
             return service.postSubmitAddress(addressPayload)
         }
     }
+
+    /// Listens for a response after presenting a 3DS URL in a webview for authentication
+    /// - Parameter transactionId:The ID of the current transaction that is being authenticated
+    /// - Returns: A ``Service`` with the results of the authentication
+    func listenFor3DSResponse(for transactionId: String) -> Service<ChargeAuthenticationResponse> {
+        let channelName = "3DS_\(transactionId)"
+        let subscriptionBuilder = subscriptionBuilder
+            .provideSubscriptionDetails((channelName: channelName,
+                                         eventName: "response"))
+        return Service(subscriptionBuilder)
+    }
+
 }
