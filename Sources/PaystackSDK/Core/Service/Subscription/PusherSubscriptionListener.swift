@@ -6,8 +6,8 @@ struct PusherSubscriptionListener: SubscriptionListener {
     let pusher: Pusher
 
     init() {
-        // TODO: Retrieve from plist or elsewhere
-        let myTestKey = "c559a9d0aeb0136973a9"
+        // TODO: Store and retrieve from PLIST
+        let myTestKey = "MY_TEST_KEY"
         let options = PusherClientOptions(
           host: .cluster("eu")
         )

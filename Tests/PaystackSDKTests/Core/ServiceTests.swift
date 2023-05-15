@@ -1,5 +1,5 @@
 import XCTest
-import PaystackCore
+@testable import PaystackCore
 
 class ServiceTests: PSTestCase {
     
@@ -203,6 +203,54 @@ extension ServiceTests {
         wait(for: [asyncExpectation], timeout: 1)
     }
     
+}
+// MARK: Subscription Service Tests
+@available(iOS 13.0, *)
+extension ServiceTests {
+
+    func testAsyncListensForDataWhenInitializedAsASubscription() throws {
+        let mockSubscription = PusherSubscription(channelName: "test-channel",
+                                                  eventName: "test-event")
+        service = .subscription(mockSubscription)
+        let expectedString = "example"
+
+        let data = try JSONEncoder().encode(expectedString)
+        let dataString = String(data: data, encoding: .utf8) ?? ""
+
+        mockSubscriptionListener
+            .expectSubscription(mockSubscription)
+            .andReturnString(dataString)
+
+
+        let asyncExpectation = expectation(description: "callback")
+        service.async { result, error in
+            XCTAssertEqual(result, expectedString)
+            asyncExpectation.fulfill()
+        }
+
+        wait(for: [asyncExpectation], timeout: 1)
+    }
+
+    func testAsyncReturnsErrorWhenInitializedAsASubscription() throws {
+        let mockSubscription = PusherSubscription(channelName: "test-channel",
+                                                  eventName: "test-event")
+        service = .subscription(mockSubscription)
+        let expectedError: SubscriptionError = .other("Test")
+
+        mockSubscriptionListener
+            .expectSubscription(mockSubscription)
+            .andReturnError(expectedError)
+
+
+        let asyncExpectation = expectation(description: "callback")
+        service.async { result, error in
+            XCTAssertEqual(error as? SubscriptionError, expectedError)
+            asyncExpectation.fulfill()
+        }
+
+        wait(for: [asyncExpectation], timeout: 1)
+    }
+
 }
 
 private struct ErrorResponse: Encodable {
