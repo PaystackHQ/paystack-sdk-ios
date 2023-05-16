@@ -77,7 +77,7 @@ extension ServiceTests {
         mockServiceExecutor.data = try JSONEncoder().encode(error)
         Task {
             do {
-                let _ = try await service.async()
+                _ = try await service.async()
                 XCTFail("Service did not throw error for await/async")
             } catch {
                 XCTAssertEqual(PaystackError.response(code: 500, message: "example"), error as? PaystackError)
@@ -239,7 +239,6 @@ extension ServiceTests {
         mockSubscriptionListener
             .expectSubscription(mockSubscription)
             .andReturnError(expectedError)
-
 
         let asyncExpectation = expectation(description: "callback")
         service.async { _, error in
