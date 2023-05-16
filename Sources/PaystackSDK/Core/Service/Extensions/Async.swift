@@ -85,4 +85,3 @@ extension Int {
 private struct ErrorResponse: Error, Decodable {
     public var message: String
 }
-

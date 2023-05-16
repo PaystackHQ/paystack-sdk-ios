@@ -93,7 +93,7 @@ extension ServiceTests {
         mockServiceExecutor.error = PaystackError.technical
         Task {
             do {
-                let _ = try await service.async()
+                _ = try await service.async()
                 XCTFail("Service did not throw error for await/async")
             } catch {
                 XCTAssertEqual(PaystackError.technical, error as? PaystackError)
@@ -122,7 +122,7 @@ extension ServiceTests {
         mockServiceExecutor.data = try JSONEncoder().encode(error)
 
         do {
-            let _ = try service.sync()
+            _ = try service.sync()
             XCTFail("Service did not throw error for await/async")
         } catch {
             XCTAssertEqual(PaystackError.response(code: 500, message: "example"), error as? PaystackError)
@@ -132,7 +132,7 @@ extension ServiceTests {
     func testSyncWithAwaitReturnsError() throws {
         mockServiceExecutor.error = PaystackError.technical
         do {
-            let _ = try service.sync()
+            _ = try service.sync()
             XCTFail("Service did not throw error for await/async")
         } catch {
             XCTAssertEqual(PaystackError.technical, error as? PaystackError)
@@ -149,7 +149,7 @@ extension ServiceTests {
         let asyncExpectation = expectation(description: "callback")
         mockServiceExecutor.data = try JSONEncoder().encode("example")
 
-        let _ = service.publisher()
+        _ = service.publisher()
             .sink { _ in
                 // Do nothing
             } receiveValue: {
@@ -165,7 +165,7 @@ extension ServiceTests {
         let error = ErrorResponse(message: "example")
         mockServiceExecutor.data = try JSONEncoder().encode(error)
 
-        let _ = service.publisher()
+        _ = service.publisher()
             .sink { completion in
                 switch completion {
                 case .failure(let error):
@@ -186,7 +186,7 @@ extension ServiceTests {
         let asyncExpectation = expectation(description: "callback")
         mockServiceExecutor.error = PaystackError.technical
 
-        let _ = service.publisher()
+        _ = service.publisher()
             .sink { completion in
                 switch completion {
                 case .failure(let error):
@@ -221,9 +221,8 @@ extension ServiceTests {
             .expectSubscription(mockSubscription)
             .andReturnString(dataString)
 
-
         let asyncExpectation = expectation(description: "callback")
-        service.async { result, error in
+        service.async { result, _ in
             XCTAssertEqual(result, expectedString)
             asyncExpectation.fulfill()
         }
@@ -243,7 +242,7 @@ extension ServiceTests {
 
 
         let asyncExpectation = expectation(description: "callback")
-        service.async { result, error in
+        service.async { _, error in
             XCTAssertEqual(error as? SubscriptionError, expectedError)
             asyncExpectation.fulfill()
         }
@@ -256,4 +255,3 @@ extension ServiceTests {
 private struct ErrorResponse: Encodable {
     var message: String
 }
-
