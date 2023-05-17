@@ -28,7 +28,7 @@ public extension Paystack {
     /// - Returns: A ``Service`` with the results of the authentication
     func listenFor3DSResponse(for transactionId: String) -> Service<ChargeAuthenticationResponse> {
         let channelName = "3DS_\(transactionId)"
-        let subscription = PusherSubscription(channelName: channelName, eventName: "response")
+        let subscription: any Subscription = PusherSubscription(channelName: channelName, eventName: "response")
         return Service(subscription)
     }
 
