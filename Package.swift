@@ -4,7 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "PaystackSDK",
-    platforms: [.iOS(.v12), .macOS(.v11)],
+    platforms: [.iOS(.v13), .macOS(.v11)],
     products: [
         .library(
             name: "PaystackCore",
@@ -13,11 +13,11 @@ let package = Package(
             name: "PaystackUI",
             targets: ["PaystackUI"])
     ],
-    dependencies: [],
+    dependencies: [.package(url: "https://github.com/pusher/pusher-websocket-swift.git", from: "10.1.0")],
     targets: [
         .target(
             name: "PaystackCore",
-            dependencies: [],
+            dependencies: [.product(name: "PusherSwift", package: "pusher-websocket-swift")],
             path: "Sources/PaystackSDK",
             resources: [
                 .process("Versioning/versions.plist")
