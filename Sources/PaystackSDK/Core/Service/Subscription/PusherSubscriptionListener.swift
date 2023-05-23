@@ -29,13 +29,12 @@ struct PusherSubscriptionListener: SubscriptionListener {
     }
 
     private func bindConnectionEvents(to channel: PusherChannel) {
-        channel.bind(eventName: "pusher:subscription_succeeded", eventCallback: { event in
-            // TODO: Add proper logging
-            print(event.eventName)
+        Log.info("Pusher subscription initiated to %@", arguments: channel.name)
+        channel.bind(eventName: "pusher:subscription_succeeded", eventCallback: { _ in
+            Log.info("Pusher subscription succeeded to %@", arguments: channel.name)
         })
-        channel.bind(eventName: "pusher:subscription_error", eventCallback: { event in
-            // TODO: Add proper logging
-            print(event.eventName)
+        channel.bind(eventName: "pusher:subscription_error", eventCallback: { _ in
+            Log.error("Pusher subscription failed to %@", arguments: channel.name)
         })
     }
 
