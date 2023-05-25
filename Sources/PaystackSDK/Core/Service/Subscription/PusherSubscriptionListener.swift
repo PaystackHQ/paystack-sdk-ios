@@ -6,12 +6,22 @@ struct PusherSubscriptionListener: SubscriptionListener {
     let pusher: Pusher
 
     init() {
-        // TODO: Store and retrieve from PLIST
-        let myTestKey = "MY_TEST_KEY"
         let options = PusherClientOptions(
           host: .cluster("eu")
         )
-        self.pusher = Pusher(withAppKey: myTestKey, options: options)
+        self.pusher = Pusher(withAppKey: PusherSubscriptionListener.apiKey, options: options)
+    }
+
+    static private var apiKey: String {
+        guard let secretsUrl = Bundle.current.url(forResource: "secrets",
+                                                  withExtension: "plist"),
+              let data = try? Data(contentsOf: secretsUrl),
+              let plist = try? PropertyListSerialization.propertyList(
+                from: data, format: nil) as? [String: String],
+                let apiKey = plist["PUSHER_API_KEY"] else {
+            return ""
+        }
+        return apiKey
     }
 
     func listen(to subscription: any Subscription,
