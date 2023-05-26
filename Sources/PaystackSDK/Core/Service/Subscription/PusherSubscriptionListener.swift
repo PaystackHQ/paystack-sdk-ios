@@ -19,6 +19,7 @@ struct PusherSubscriptionListener: SubscriptionListener {
               let plist = try? PropertyListSerialization.propertyList(
                 from: data, format: nil) as? [String: String],
                 let apiKey = plist["PUSHER_API_KEY"] else {
+            Log.error("API key not provided to pusher instance")
             return ""
         }
         return apiKey
