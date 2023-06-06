@@ -5,6 +5,7 @@ import os
 public final class Log {
 
     private static var logger = OSLog(subsystem: "com.paystack.ios_sdk", category: "main")
+    static var loggingEnabled = false
 
     /// Logs a message with the `default` type
     /// - Parameters:
@@ -12,6 +13,7 @@ public final class Log {
     ///   - arguments: If message is a constant string, do not specify arguments.
     ///     If message is a format string, pass the expected number of arguments in the order that they appear in the string.
     public class func `default`(_ message: StaticString, arguments: CVarArg...) {
+        guard loggingEnabled else { return }
         os_log(message, log: logger, type: .default, arguments)
     }
 
@@ -21,6 +23,7 @@ public final class Log {
     ///   - arguments: If message is a constant string, do not specify arguments.
     ///     If message is a format string, pass the expected number of arguments in the order that they appear in the string.
     public class func info(_ message: StaticString, arguments: CVarArg...) {
+        guard loggingEnabled else { return }
         os_log(message, log: logger, type: .info, arguments)
     }
 
@@ -30,6 +33,7 @@ public final class Log {
     ///   - arguments: If message is a constant string, do not specify arguments.
     ///     If message is a format string, pass the expected number of arguments in the order that they appear in the string.
     public class func debug(_ message: StaticString, arguments: CVarArg...) {
+        guard loggingEnabled else { return }
         os_log(message, log: logger, type: .debug, arguments)
     }
 
@@ -39,6 +43,7 @@ public final class Log {
     ///   - arguments: If message is a constant string, do not specify arguments.
     ///     If message is a format string, pass the expected number of arguments in the order that they appear in the string.
     public class func error(_ message: StaticString, arguments: CVarArg...) {
+        guard loggingEnabled else { return }
         os_log(message, log: logger, type: .error, arguments)
     }
 
@@ -48,6 +53,7 @@ public final class Log {
     ///   - arguments: If message is a constant string, do not specify arguments.
     ///     If message is a format string, pass the expected number of arguments in the order that they appear in the string.
     public class func fault(_ message: StaticString, arguments: CVarArg...) {
+        guard loggingEnabled else { return }
         os_log(message, log: logger, type: .fault, arguments)
     }
 
