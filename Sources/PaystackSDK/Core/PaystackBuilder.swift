@@ -20,7 +20,7 @@ public class PaystackBuilder {
             throw PaystackError.noAPIKey
         }
 
-        Log.loggingEnabled = loggingEnabled
+        Logger.loggingEnabled = loggingEnabled
 
         let config = PaystackConfig(apiKey: apiKey)
         return Paystack(config: config)

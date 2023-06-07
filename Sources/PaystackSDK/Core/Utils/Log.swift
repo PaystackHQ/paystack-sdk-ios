@@ -2,7 +2,7 @@ import Foundation
 import os
 
 // Note: We are currently forced to use os_log since we are supporting iOS 13. When we eventually drop support, we should change this to use the new iOS 14 Logger API.
-public final class Log {
+public final class Logger {
 
     private static var logger = OSLog(subsystem: "com.paystack.ios_sdk", category: "main")
     static var loggingEnabled = false
