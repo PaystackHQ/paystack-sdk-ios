@@ -2,8 +2,8 @@ import Foundation
 
 public class PaystackBuilder {
 
-    var apiKey: String?
-    var loggingEnabled = false
+    private var apiKey: String?
+    private var loggingEnabled = false
 
     public func setKey(_ apiKey: String) -> Self {
         self.apiKey = apiKey
