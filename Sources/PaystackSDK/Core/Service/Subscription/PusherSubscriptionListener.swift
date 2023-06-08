@@ -19,7 +19,7 @@ struct PusherSubscriptionListener: SubscriptionListener {
               let plist = try? PropertyListSerialization.propertyList(
                 from: data, format: nil) as? [String: String],
                 let apiKey = plist["PUSHER_API_KEY"] else {
-            Log.error("API key not provided to pusher instance")
+            Logger.error("API key not provided to pusher instance")
             return ""
         }
         return apiKey
@@ -40,12 +40,12 @@ struct PusherSubscriptionListener: SubscriptionListener {
     }
 
     private func bindConnectionEvents(to channel: PusherChannel) {
-        Log.info("Pusher subscription initiated to %@", arguments: channel.name)
+        Logger.info("Pusher subscription initiated to %@", arguments: channel.name)
         channel.bind(eventName: "pusher:subscription_succeeded", eventCallback: { _ in
-            Log.info("Pusher subscription succeeded to %@", arguments: channel.name)
+            Logger.info("Pusher subscription succeeded to %@", arguments: channel.name)
         })
         channel.bind(eventName: "pusher:subscription_error", eventCallback: { _ in
-            Log.error("Pusher subscription failed to %@", arguments: channel.name)
+            Logger.error("Pusher subscription failed to %@", arguments: channel.name)
         })
     }
 
