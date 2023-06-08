@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SubmitOtpRequest: Codable {
-    public var otp: String
-    public var reference: String
+struct SubmitOtpRequest: Codable {
+    var otp: String
+    var reference: String
 }

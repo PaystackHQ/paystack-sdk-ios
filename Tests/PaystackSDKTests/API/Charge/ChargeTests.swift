@@ -24,7 +24,7 @@ final class ChargeTests: PSTestCase {
             .expectBody(otpRequestBody)
             .andReturn(json: "ChargeAuthenticationResponse")
 
-        _ = try serviceUnderTest.authenticateCharge(.otp(otpRequestBody)).sync()
+        _ = try serviceUnderTest.authenticateCharge(withOtp: "12345", reference: "abcde").sync()
     }
 
     func testAuthenticateChargeWithPinAuthentication() throws {
@@ -37,7 +37,7 @@ final class ChargeTests: PSTestCase {
             .expectBody(pinRequestBody)
             .andReturn(json: "ChargeAuthenticationResponse")
 
-        _ = try serviceUnderTest.authenticateCharge(.pin(pinRequestBody)).sync()
+        _ = try serviceUnderTest.authenticateCharge(withPin: "1234", reference: "abcde").sync()
     }
 
     func testAuthenticateChargeWithPhoneAuthentication() throws {
@@ -50,7 +50,7 @@ final class ChargeTests: PSTestCase {
             .expectBody(phoneRequestBody)
             .andReturn(json: "ChargeAuthenticationResponse")
 
-        _ = try serviceUnderTest.authenticateCharge(.phone(phoneRequestBody)).sync()
+        _ = try serviceUnderTest.authenticateCharge(withPhone: "0111234567", reference: "abcde").sync()
     }
 
     func testAuthenticateChargeWithBirthdayAuthentication() throws {
@@ -63,14 +63,13 @@ final class ChargeTests: PSTestCase {
             .expectBody(birthdayRequestBody)
             .andReturn(json: "ChargeAuthenticationResponse")
 
-        _ = try serviceUnderTest.authenticateCharge(.birthday(birthdayRequestBody)).sync()
+        _ = try serviceUnderTest.authenticateCharge(withBirthday: "1990-01-01", reference: "abcde").sync()
     }
 
     func testAuthenticateChargeWithAddressAuthentication() throws {
-        let addressRequestBody = SubmitAddressRequest(address: "123 Road",
-                                                      city: "Johannesburg",
-                                                      state: "Gauteng",
-                                                      zipCode: "1234",
+        let address = Address(address: "123 Road", city: "Johannesburg",
+                              state: "Gauteng", zipCode: "1234")
+        let addressRequestBody = SubmitAddressRequest(address: address,
                                                       reference: "abcde")
 
         mockServiceExecutor
@@ -80,7 +79,7 @@ final class ChargeTests: PSTestCase {
             .expectBody(addressRequestBody)
             .andReturn(json: "ChargeAuthenticationResponse")
 
-        _ = try serviceUnderTest.authenticateCharge(.address(addressRequestBody)).sync()
+        _ = try serviceUnderTest.authenticateCharge(withAddress: address, reference: "abcde").sync()
     }
 
     func testListenFor3DS() throws {
