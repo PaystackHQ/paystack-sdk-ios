@@ -23,9 +23,7 @@ struct NavigationalButton<Content: View, Destination: View, Result>: View {
         Button(action: startFlow) {
             content
         }
-        .sheet(isPresented: $chargeCardContainer.showChargeCardFlow) {
-            destination
-        }
+        .paymentSheet(isPresented: $chargeCardContainer.showChargeCardFlow) { destination }
         .environmentObject(chargeCardContainer)
     }
 

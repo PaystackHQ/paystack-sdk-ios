@@ -1,0 +1,22 @@
+import SwiftUI
+
+extension View {
+
+    func paymentSheet<Content: View>(isPresented: Binding<Bool>,
+                                     @ViewBuilder content: @escaping () -> Content) -> some View {
+        sheet(isPresented: isPresented) {
+            content()
+                .preventSheetSwipeDismissal()
+                .setSheetHeight()
+        }
+    }
+
+    func setSheetHeight() -> some View {
+        if #available(iOS 16, *) {
+            return presentationDetents([.fraction(0.85)])
+        } else {
+            // We are maintaining the full modal height on older versions
+            return self
+        }
+    }
+}
