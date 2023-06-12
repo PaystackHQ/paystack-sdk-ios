@@ -1,11 +1,19 @@
 import Foundation
 
-public struct SubmitAddressRequest: Codable {
-    public var address: String
-    public var city: String
-    public var state: String
-    public var zipCode: String
-    public var reference: String
+struct SubmitAddressRequest: Codable {
+    var address: String
+    var city: String
+    var state: String
+    var zipCode: String
+    var reference: String
+
+    init(address: Address, reference: String) {
+        self.address = address.address
+        self.city = address.city
+        self.state = address.state
+        self.zipCode = address.zipCode
+        self.reference = reference
+    }
 
     enum CodingKeys: String, CodingKey {
         case address, city, state, reference

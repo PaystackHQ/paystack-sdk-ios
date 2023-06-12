@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SubmitPinRequest: Codable {
-    public var pin: String
-    public var reference: String
+struct SubmitPinRequest: Codable {
+    var pin: String
+    var reference: String
 }
