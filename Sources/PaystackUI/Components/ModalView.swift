@@ -1,8 +1,9 @@
 import SwiftUI
 
+#if os(iOS)
 class ModalHostingController<Content: View>: UIHostingController<Content>, UIAdaptivePresentationControllerDelegate {
     var canDismissSheet = true
-    var onDismissalAttempt: (() -> ())?
+    var onDismissalAttempt: (() -> Void)?
 
     override func willMove(toParent parent: UIViewController?) {
         super.willMove(toParent: parent)
@@ -22,7 +23,7 @@ class ModalHostingController<Content: View>: UIHostingController<Content>, UIAda
 struct ModalView<T: View>: UIViewControllerRepresentable {
     let view: T
     let canDismissSheet: Bool
-    let onDismissalAttempt: (() -> ())?
+    let onDismissalAttempt: (() -> Void)?
 
     func makeUIViewController(context: Context) -> ModalHostingController<T> {
         let controller = ModalHostingController(rootView: view)
@@ -40,10 +41,12 @@ struct ModalView<T: View>: UIViewControllerRepresentable {
         uiViewController.onDismissalAttempt = onDismissalAttempt
     }
 }
+#endif
 
 extension View {
 
     func preventSheetSwipeDismissal() -> some View {
+        #if os(iOS)
         if #available(iOS 15, *) {
             return interactiveDismissDisabled()
         } else {
@@ -53,6 +56,9 @@ extension View {
                 onDismissalAttempt: nil
             ).edgesIgnoringSafeArea(.all)
         }
+        #else
+        return self
+        #endif
     }
 
 }

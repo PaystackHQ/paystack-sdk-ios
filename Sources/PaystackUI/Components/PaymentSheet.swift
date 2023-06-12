@@ -12,7 +12,7 @@ extension View {
     }
 
     func setSheetHeight() -> some View {
-        if #available(iOS 16, *) {
+        if #available(iOS 16, macOS 13.0, *) {
             return presentationDetents([.fraction(0.85)])
         } else {
             // We are maintaining the full modal height on older versions
