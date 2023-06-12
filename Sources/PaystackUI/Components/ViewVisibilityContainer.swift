@@ -25,7 +25,6 @@ class ViewVisibilityContainer<Result>: ObservableObject {
     }
     #endif
 
-
     func completeAndDismiss(with result: Result) {
         onComplete(result)
         #if os(iOS)
