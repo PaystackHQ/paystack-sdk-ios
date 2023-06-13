@@ -4,7 +4,7 @@ import SwiftUI
 struct NavigationalButton<Content: View, Destination: View, Result>: View {
 
     @StateObject
-    var chargeCardContainer: ViewVisibilityContainer<Result>
+    var visibilityContainer: ViewVisibilityContainer<Result>
 
     @ViewBuilder
     var content: Content
@@ -14,7 +14,7 @@ struct NavigationalButton<Content: View, Destination: View, Result>: View {
     init(onComplete: @escaping (Result) -> Void,
          destination: Destination,
          @ViewBuilder content: () -> Content) {
-        self._chargeCardContainer = StateObject(wrappedValue: ViewVisibilityContainer(onComplete: onComplete))
+        self._visibilityContainer = StateObject(wrappedValue: ViewVisibilityContainer(onComplete: onComplete))
         self.content = content()
         self.destination = destination
     }
@@ -23,11 +23,11 @@ struct NavigationalButton<Content: View, Destination: View, Result>: View {
         Button(action: startFlow) {
             content
         }
-        .paymentSheet(isPresented: $chargeCardContainer.showChargeCardFlow) { destination }
-        .environmentObject(chargeCardContainer)
+        .paymentSheet(isPresented: $visibilityContainer.showModal) { destination }
+        .environmentObject(visibilityContainer)
     }
 
     func startFlow() {
-        chargeCardContainer.showChargeCardFlow = true
+        visibilityContainer.showModal = true
     }
 }

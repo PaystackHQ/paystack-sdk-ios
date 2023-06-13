@@ -3,24 +3,24 @@ import SwiftUI
 class ViewVisibilityContainer<Result>: ObservableObject {
 
     @Published
-    var showChargeCardFlow: Bool
+    var showModal: Bool
 
     var onComplete: (Result) -> Void
 
     #if os(iOS)
     var parentViewController: UIViewController?
 
-    init(showChargeCardFlow: Bool = false,
+    init(showModal: Bool = false,
          onComplete: @escaping (Result) -> Void,
          parentViewController: UIViewController? = nil) {
-        self.showChargeCardFlow = showChargeCardFlow
+        self.showModal = showModal
         self.onComplete = onComplete
         self.parentViewController = parentViewController
     }
     #else
-    init(showChargeCardFlow: Bool = false,
+    init(showModal: Bool = false,
          onComplete: @escaping (Result) -> Void) {
-        self.showChargeCardFlow = showChargeCardFlow
+        self.showModal = showModal
         self.onComplete = onComplete
     }
     #endif
@@ -31,10 +31,10 @@ class ViewVisibilityContainer<Result>: ObservableObject {
         if let parentViewController = parentViewController {
             parentViewController.dismiss(animated: true)
         } else {
-            showChargeCardFlow = false
+            showModal = false
         }
         #else
-        showChargeCardFlow = false
+        showModal = false
         #endif
     }
 }
