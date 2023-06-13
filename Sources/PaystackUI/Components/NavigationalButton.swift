@@ -1,17 +1,17 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
-struct NavigationalButton<Content: View, Destination: View, Result>: View {
+struct NavigationalButton<Content: View, Destination: View>: View {
 
     @StateObject
-    var visibilityContainer: ViewVisibilityContainer<Result>
+    var visibilityContainer: ViewVisibilityContainer
 
     @ViewBuilder
     var content: Content
 
     var destination: Destination
 
-    init(onComplete: @escaping (Result) -> Void,
+    init(onComplete: @escaping (TransactionResult) -> Void,
          destination: Destination,
          @ViewBuilder content: () -> Content) {
         self._visibilityContainer = StateObject(wrappedValue: ViewVisibilityContainer(onComplete: onComplete))

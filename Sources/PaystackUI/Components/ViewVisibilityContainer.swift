@@ -1,17 +1,17 @@
 import SwiftUI
 
-class ViewVisibilityContainer<Result>: ObservableObject {
+class ViewVisibilityContainer: ObservableObject {
 
     @Published
     var showModal: Bool
 
-    var onComplete: (Result) -> Void
+    var onComplete: (TransactionResult) -> Void
 
     #if os(iOS)
     var parentViewController: UIViewController?
 
     init(showModal: Bool = false,
-         onComplete: @escaping (Result) -> Void,
+         onComplete: @escaping (TransactionResult) -> Void,
          parentViewController: UIViewController? = nil) {
         self.showModal = showModal
         self.onComplete = onComplete
@@ -19,13 +19,13 @@ class ViewVisibilityContainer<Result>: ObservableObject {
     }
     #else
     init(showModal: Bool = false,
-         onComplete: @escaping (Result) -> Void) {
+         onComplete: @escaping (TransactionResult) -> Void) {
         self.showModal = showModal
         self.onComplete = onComplete
     }
     #endif
 
-    func completeAndDismiss(with result: Result) {
+    func completeAndDismiss(with result: TransactionResult) {
         onComplete(result)
         #if os(iOS)
         if let parentViewController = parentViewController {
