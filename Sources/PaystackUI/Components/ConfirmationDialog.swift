@@ -42,20 +42,18 @@ extension View {
     }
     #endif
 
-
     private func legacyMacOSDialog(title: String, isPresented: Binding<Bool>,
                                    confirmationText: String,
                                    onConfirmation: @escaping () -> Void) -> some View {
         alert(isPresented: isPresented) {
-                Alert(
-                    title: Text(title),
-                    primaryButton: .cancel(),
-                    secondaryButton: .destructive(
-                        Text(confirmationText),
-                        action: onConfirmation
-                    )
+            Alert(
+                title: Text(title),
+                primaryButton: .cancel(),
+                secondaryButton: .destructive(
+                    Text(confirmationText),
+                    action: onConfirmation
                 )
-            }
+            )
+        }
     }
-
 }
