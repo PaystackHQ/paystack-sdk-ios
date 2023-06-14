@@ -5,6 +5,9 @@ class ViewVisibilityContainer: ObservableObject {
     @Published
     var showModal: Bool
 
+    @Published
+    var showCancellationConfirmation: Bool = false
+
     var onComplete: (TransactionResult) -> Void
 
     #if os(iOS)
@@ -27,6 +30,19 @@ class ViewVisibilityContainer: ObservableObject {
 
     func completeAndDismiss(with result: TransactionResult) {
         onComplete(result)
+        #if os(iOS)
+        if let parentViewController = parentViewController {
+            parentViewController.dismiss(animated: true)
+        } else {
+            showModal = false
+        }
+        #else
+        showModal = false
+        #endif
+    }
+
+    func cancelAndDismiss() {
+        onComplete(.cancelled)
         #if os(iOS)
         if let parentViewController = parentViewController {
             parentViewController.dismiss(animated: true)
