@@ -7,7 +7,7 @@ extension View {
                             confirmationText: String,
                             onConfirmation: @escaping () -> Void) -> some View {
         if #available(iOS 15, macOS 12.0, *) {
-            return confirmationDialog(title, isPresented: isPresented) {
+            return confirmationDialog(title, isPresented: isPresented, titleVisibility: .visible) {
                 Button(confirmationText, role: .destructive, action: onConfirmation)
                 Button("Cancel", role: .cancel) {}
             }
