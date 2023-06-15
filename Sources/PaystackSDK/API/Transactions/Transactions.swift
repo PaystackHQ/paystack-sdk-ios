@@ -7,8 +7,8 @@ public extension Paystack {
         return TransactionServiceImplementation(config: config)
     }
     
-    func verifyAccessCode(_ id: Int) -> Service<TransactionResponse> {
-        return service.getVerifyAccessCode(id)
+    func verifyAccessCode(_ code: String) -> Service<VerifyAccessCodeResponse> {
+        return service.getVerifyAccessCode(code)
     }
     
 }
