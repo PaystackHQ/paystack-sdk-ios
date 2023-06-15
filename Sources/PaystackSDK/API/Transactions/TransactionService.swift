@@ -5,16 +5,16 @@ protocol TransactionService: PaystackService {
 }
 
 struct TransactionServiceImplementation: TransactionService {
-    
+
     var config: PaystackConfig
-    
+
     var parentPath: String {
         return "transaction"
     }
-    
+
     func getVerifyAccessCode(_ code: String) -> Service<VerifyAccessCodeResponse> {
         return get("/verify_access_code/\(code)")
             .asService()
     }
-    
+
 }
