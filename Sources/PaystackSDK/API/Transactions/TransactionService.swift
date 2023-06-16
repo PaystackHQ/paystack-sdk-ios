@@ -1,20 +1,20 @@
 import Foundation
 
 protocol TransactionService: PaystackService {
-    func getVerifyAccessCode(_ id: Int) -> Service<TransactionResponse>
+    func getVerifyAccessCode(_ code: String) -> Service<VerifyAccessCodeResponse>
 }
 
 struct TransactionServiceImplementation: TransactionService {
-    
+
     var config: PaystackConfig
-    
+
     var parentPath: String {
         return "transaction"
     }
-    
-    func getVerifyAccessCode(_ id: Int) -> Service<TransactionResponse> {
-        return get("/verify_access_code/\(id)")
+
+    func getVerifyAccessCode(_ code: String) -> Service<VerifyAccessCodeResponse> {
+        return get("/verify_access_code/\(code)")
             .asService()
     }
-    
+
 }
