@@ -26,13 +26,4 @@ public struct VerifyAccessCodeData: Decodable {
         self.channels = channels
         self.channelOptions = channelOptions
     }
-
-    enum CodingKeys: String, CodingKey {
-        case email, amount, reference, domain,
-             currency, channels
-        case accessCode = "access_code"
-        case merchantLogo = "merchant_logo"
-        case merchantName = "merchant_name"
-        case channelOptions = "channel_options"
-    }
 }

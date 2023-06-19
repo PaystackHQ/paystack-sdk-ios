@@ -14,14 +14,14 @@ class TransactionsTests: PSTestCase {
             .build()
     }
     
-//    func testVerifyAccessCode() throws {
-//        mockServiceExecutor
-//            .expectURL("https://api.paystack.co/transaction/verify_access_code/12345")
-//            .expectMethod(.get)
-//            .expectHeader("Authorization", "Bearer \(apiKey)")
-//            .andReturn(json: "VerifyAccessCode")
-//
-//        _ = try serviceUnderTest.verifyAccessCode(12345).sync()
-//    }
+    func testVerifyAccessCode() async throws {
+        mockServiceExecutor
+            .expectURL("https://api.paystack.co/transaction/verify_access_code/access_code_test")
+            .expectMethod(.get)
+            .expectHeader("Authorization", "Bearer \(apiKey)")
+            .andReturn(json: "VerifyAccessCode")
+
+        _ = try await serviceUnderTest.verifyAccessCode("access_code_test").async()
+    }
     
 }
