@@ -5,6 +5,7 @@ struct VerifyAccessCode: Equatable {
     var currency: String
     // TODO: Use enum once we see example responses
     var paymentChannels: [String]
+    var domain: Domain
 }
 
 extension VerifyAccessCode {
@@ -12,7 +13,8 @@ extension VerifyAccessCode {
     static func from(_ response: VerifyAccessCodeResponse) -> Self {
         VerifyAccessCode(amount: response.data.amount,
                          currency: response.data.currency,
-                         paymentChannels: response.data.channels)
+                         paymentChannels: response.data.channels,
+                         domain: response.data.domain)
     }
 
 }

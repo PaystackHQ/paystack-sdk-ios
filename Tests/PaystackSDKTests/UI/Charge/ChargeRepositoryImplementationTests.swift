@@ -24,7 +24,8 @@ final class ChargeRepositoryImplementationTests: PSTestCase {
         let result = try await serviceUnderTest.verifyAccessCode("access_code_test")
         let expectedResult = VerifyAccessCode(amount: 10000,
                                               currency: "NGN",
-                                              paymentChannels: ["card", "qr", "ussd"])
+                                              paymentChannels: ["card", "qr", "ussd"],
+                                              domain: .test)
 
         XCTAssertEqual(result, expectedResult)
     }

@@ -14,7 +14,7 @@ final class ChargeViewModelTests: PSTestCase {
 
     func testVerifyAccessCodeSetsViewStateAsCardDetailsWhenSuccessful() async {
         let expectedVerifyAccessCodeResponse = VerifyAccessCode(amount: 100, currency: "USD",
-                                                                paymentChannels: ["card"])
+                                                                paymentChannels: ["card"], domain: .test)
         mockRepo.expectedVerifyAccessCode = expectedVerifyAccessCodeResponse
         await serviceUnderTest.verifyAccessCodeAndProceedWithCard()
         XCTAssertEqual(serviceUnderTest.transactionState, .cardDetails(expectedVerifyAccessCodeResponse))
