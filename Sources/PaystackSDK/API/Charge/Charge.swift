@@ -10,7 +10,7 @@ public extension Paystack {
     ///   - otp: The OTP sent to the user's device
     ///   - reference: The reference of the current transaction
     /// - Returns: A ``Service`` with the results of the authentication
-    func authenticateCharge(withOtp otp: String, reference: String) -> Service<ChargeAuthenticationResponse> {
+    func authenticateCharge(withOtp otp: String, reference: String) -> Service<ChargeResponse> {
         let request = SubmitOtpRequest(otp: otp, reference: reference)
         return service.postSubmitOtp(request)
     }
@@ -20,7 +20,7 @@ public extension Paystack {
     ///   - pin: The user's card pin
     ///   - reference: The reference of the current transaction
     /// - Returns: A ``Service`` with the results of the authentication
-    func authenticateCharge(withPin pin: String, reference: String) -> Service<ChargeAuthenticationResponse> {
+    func authenticateCharge(withPin pin: String, reference: String) -> Service<ChargeResponse> {
         let request = SubmitPinRequest(pin: pin, reference: reference)
         return service.postSubmitPin(request)
     }
@@ -31,7 +31,7 @@ public extension Paystack {
     ///   - reference: The reference of the current transaction
     /// - Returns: A ``Service`` with the results of the authentication
     func authenticateCharge(withPhone phone: String,
-                            reference: String) -> Service<ChargeAuthenticationResponse> {
+                            reference: String) -> Service<ChargeResponse> {
         let request = SubmitPhoneRequest(phone: phone, reference: reference)
         return service.postSubmitPhone(request)
     }
@@ -42,7 +42,7 @@ public extension Paystack {
     ///   - reference: The reference of the current transaction
     /// - Returns: A ``Service`` with the results of the authentication
     func authenticateCharge(withBirthday birthday: String,
-                            reference: String) -> Service<ChargeAuthenticationResponse> {
+                            reference: String) -> Service<ChargeResponse> {
         let request = SubmitBirthdayRequest(birthday: birthday, reference: reference)
         return service.postSubmitBirthday(request)
     }
@@ -53,7 +53,7 @@ public extension Paystack {
     ///   - reference: The reference of the current transaction
     /// - Returns: A ``Service`` with the results of the authentication
     func authenticateCharge(withAddress address: Address,
-                            reference: String) -> Service<ChargeAuthenticationResponse> {
+                            reference: String) -> Service<ChargeResponse> {
         let request = SubmitAddressRequest(address: address, reference: reference)
         return service.postSubmitAddress(request)
     }
@@ -61,7 +61,7 @@ public extension Paystack {
     /// Listens for a response after presenting a 3DS URL in a webview for authentication
     /// - Parameter transactionId:The ID of the current transaction that is being authenticated
     /// - Returns: A ``Service`` with the results of the authentication
-    func listenFor3DSResponse(for transactionId: String) -> Service<ChargeAuthenticationResponse> {
+    func listenFor3DSResponse(for transactionId: String) -> Service<ChargeResponse> {
         let channelName = "3DS_\(transactionId)"
         let subscription: any Subscription = PusherSubscription(channelName: channelName, eventName: "response")
         return Service(subscription)
