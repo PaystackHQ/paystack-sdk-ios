@@ -1,6 +1,8 @@
 import SwiftUI
 import Combine
 
+#if os(iOS)
+
 @available(iOS 14.0, *)
 public struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
 
@@ -59,8 +61,62 @@ public struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
         }
         .form(title)
     }
-
 }
+
+#else
+public struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
+
+    var title: String
+    var placeholder: String
+    var maxLength: Int?
+    var accessoryView: Accessory?
+
+    @Binding
+    var text: String
+
+    public init(title: String,
+                placeholder: String,
+                text: Binding<String>,
+                maxLength: Int? = nil,
+                accessoryView: Accessory?) {
+        self.title = title
+        self.placeholder = placeholder
+        self.maxLength = maxLength
+        self.accessoryView = accessoryView
+        self._text = text
+    }
+
+    public init(title: String,
+                placeholder: String,
+                text: Binding<String>,
+                maxLength: Int? = nil) where Accessory == EmptyView {
+        self.title = title
+        self.placeholder = placeholder
+        self.maxLength = maxLength
+        self.accessoryView = nil
+        self._text = text
+    }
+
+    public var body: some View {
+        HStack {
+            TextField(placeholder, text: _text)
+
+            if let accessory = accessoryView {
+                accessory
+                    .padding(16)
+            }
+        }
+        .textFieldStyle(.form)
+        .focusedBorderColor()
+        .onReceive(Just(text)) { value in
+            if let maxLength = maxLength, value.count > maxLength {
+                text.removeLast()
+            }
+        }
+        .form(title)
+    }
+}
+#endif
 
 @available(iOS 14.0, *)
 struct TextFieldFormInputView_Previews: PreviewProvider {
