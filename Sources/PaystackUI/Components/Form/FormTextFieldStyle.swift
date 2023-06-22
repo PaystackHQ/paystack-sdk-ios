@@ -12,15 +12,11 @@ public struct FormTextFieldStyle: TextFieldStyle {
             .foregroundColor(.black)
             .font(.body)
     }
-
 }
-
-
 
 public extension TextFieldStyle where Self == FormTextFieldStyle {
 
     static var form: Self {
         return .init()
     }
-
 }
