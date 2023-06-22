@@ -6,6 +6,7 @@ public struct FormTextFieldStyle: TextFieldStyle {
 
     public init() {}
 
+    // swiftlint:disable:next identifier_name
     public func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
             .padding(16)
