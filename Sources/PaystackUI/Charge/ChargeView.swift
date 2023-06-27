@@ -22,7 +22,7 @@ struct ChargeView: View {
             case .error:
                 Text("TODO")
             case .cardDetails(let verifyAccessCode):
-                Text("TODO")
+               CardDetailsView(transactionDetails: verifyAccessCode)
             }
         }
         .task(viewModel.verifyAccessCodeAndProceedWithCard)
