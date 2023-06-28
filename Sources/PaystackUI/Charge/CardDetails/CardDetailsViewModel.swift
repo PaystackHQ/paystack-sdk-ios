@@ -10,7 +10,6 @@ class CardDetailsViewModel: ObservableObject {
     var cardType: CardType = .unknown
 
     var transactionDetails: VerifyAccessCode
-    var subscriptions = Set<AnyCancellable>()
 
     init(transactionDetails: VerifyAccessCode) {
         self.transactionDetails = transactionDetails
@@ -24,11 +23,9 @@ class CardDetailsViewModel: ObservableObject {
         false
     }
 
-    func setUpListeners() {
-        $cardNumber
-            .removeDuplicates()
-            .sink { self.cardType = CardType.fromNumber($0) }
-            .store(in: &subscriptions)
+    func formatAndSetCardNumber(_ cardNumber: String) {
+        self.cardType = CardType.fromNumber(cardNumber)
+        self.cardNumber = cardType.formatAndGroup(cardNumber: cardNumber)
     }
 
     func submitCardDetails(onComplete: @escaping () -> Void) {

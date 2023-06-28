@@ -6,7 +6,7 @@ struct CardDetailsView: View {
     @StateObject
     var viewModel: CardDetailsViewModel
 
-    private let cardNumberMaximumLength = 20
+    private let cardNumberMaximumLength = 24
 
     init(transactionDetails: VerifyAccessCode) {
         self._viewModel = StateObject(
@@ -25,15 +25,13 @@ struct CardDetailsView: View {
                 cardNumber
             }
         }
-        .onAppear(perform: viewModel.setUpListeners)
     }
 
     @ViewBuilder
     var cardNumber: some FormInputItemView {
-        // TODO: Format card number in the next PR
         let cardNumberBinding = Binding(
             get: { viewModel.cardNumber },
-            set: { viewModel.cardNumber = $0 }
+            set: { viewModel.formatAndSetCardNumber($0) }
         )
 
         TextFieldFormInputView(title: "Card Number",
