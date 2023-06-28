@@ -14,11 +14,11 @@ struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
     var text: String
 
     init(title: String,
-                placeholder: String,
-                text: Binding<String>,
-                keyboardType: KeyboardType = .asciiCapable,
-                maxLength: Int? = nil,
-                accessoryView: Accessory?) {
+         placeholder: String,
+         text: Binding<String>,
+         keyboardType: KeyboardType = .asciiCapable,
+         maxLength: Int? = nil,
+         accessoryView: Accessory?) {
         self.title = title
         self.placeholder = placeholder
         self.keyboardType = keyboardType
@@ -28,10 +28,10 @@ struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
     }
 
     init(title: String,
-                placeholder: String,
-                text: Binding<String>,
-                keyboardType: KeyboardType = .asciiCapable,
-                maxLength: Int? = nil) where Accessory == EmptyView {
+         placeholder: String,
+         text: Binding<String>,
+         keyboardType: KeyboardType = .asciiCapable,
+         maxLength: Int? = nil) where Accessory == EmptyView {
         self.title = title
         self.placeholder = placeholder
         self.keyboardType = keyboardType
