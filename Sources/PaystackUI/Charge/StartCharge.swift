@@ -29,7 +29,6 @@ public extension Paystack {
 
         }
 
-
     #if os(iOS)
     /// Starts the charge flow on a view controller provided
     /// - Parameters:

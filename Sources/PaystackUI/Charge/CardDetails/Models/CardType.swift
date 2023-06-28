@@ -24,11 +24,11 @@ extension CardType {
     func formatAndGroup(cardNumber: String) -> String {
         switch self {
         case .amex:
-            return splitIntoChunks(cardNumber: cardNumber, chunkSizes: [4,6,5])
+            return splitIntoChunks(cardNumber: cardNumber, chunkSizes: [4, 6, 5])
         case .diners:
-            return splitIntoChunks(cardNumber: cardNumber, chunkSizes: [4,6,4])
+            return splitIntoChunks(cardNumber: cardNumber, chunkSizes: [4, 6, 4])
         default:
-            return splitIntoChunks(cardNumber: cardNumber, chunkSizes: [4,4,4,4])
+            return splitIntoChunks(cardNumber: cardNumber, chunkSizes: [4, 4, 4, 4])
         }
     }
 
