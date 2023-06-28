@@ -98,4 +98,16 @@ final class CardTypeTests: XCTestCase {
             .formatAndGroup(cardNumber: " "), "")
     }
 
+    func testMaximumCvvDigitsForAmexCards() {
+        let amexCardNumber = "341234567890123"
+        let cardType = CardType.fromNumber(amexCardNumber)
+        XCTAssertEqual(cardType.maximumCvvDigits, 4)
+    }
+
+    func maximumCvvDigitsForAnyOtherCard() {
+        let cardNumber = "4123456789012345"
+        let cardType = CardType.fromNumber(cardNumber)
+        XCTAssertEqual(cardType.maximumCvvDigits, 3)
+    }
+
 }

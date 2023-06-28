@@ -16,7 +16,6 @@ struct TitleFormInputView<Content: View>: FormInputItemViewModifier {
 
             content
         }
-        .padding(16)
     }
 
 }
