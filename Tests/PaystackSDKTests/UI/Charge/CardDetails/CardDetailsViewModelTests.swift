@@ -12,10 +12,10 @@ final class CardDetailsViewModelTests: XCTestCase {
         serviceUnderTest = CardDetailsViewModel(transactionDetails: mockVerifyAccessCodeResponse)
     }
 
-    func testWhenCardNumberChangesThatCardTypeUpdatesToReflectCorrectType() {
-        serviceUnderTest.setUpListeners()
+    func testWhenCardNumberChangesThatCardTypeUpdatesToReflectCorrectTypeAndFormatsCorrectly() {
         let mastercardCardNumber = "5366282937473838"
-        serviceUnderTest.cardNumber = mastercardCardNumber
+        serviceUnderTest.formatAndSetCardNumber(mastercardCardNumber)
+        XCTAssertEqual(serviceUnderTest.cardNumber, "5366 2829 3747 3838")
         XCTAssertEqual(serviceUnderTest.cardType, .mastercard)
     }
 

@@ -48,4 +48,46 @@ final class CardTypeTests: XCTestCase {
         XCTAssertEqual(CardType.fromNumber("123456"), .unknown)
     }
 
+    func testFormatsAmexCardsCorrectly() {
+        let numberWhilstTyping = "34123456789"
+        XCTAssertEqual(CardType.fromNumber(numberWhilstTyping)
+            .formatAndGroup(cardNumber: numberWhilstTyping), "3412 345678 9")
+
+        let completedCardNumber = "341234567890123"
+        XCTAssertEqual(CardType.fromNumber(completedCardNumber)
+            .formatAndGroup(cardNumber: completedCardNumber), "3412 345678 90123")
+
+        let cardNumberWithExtraDigits = "34123456789012345"
+        XCTAssertEqual(CardType.fromNumber(cardNumberWithExtraDigits)
+            .formatAndGroup(cardNumber: cardNumberWithExtraDigits), "3412 345678 90123 45")
+    }
+
+    func testFormatsDinersCardsCorrectly() {
+        let numberWhilstTyping = "30023456789"
+        XCTAssertEqual(CardType.fromNumber(numberWhilstTyping)
+            .formatAndGroup(cardNumber: numberWhilstTyping), "3002 345678 9")
+
+        let completedCardNumber = "30023456789012"
+        XCTAssertEqual(CardType.fromNumber(completedCardNumber)
+            .formatAndGroup(cardNumber: completedCardNumber), "3002 345678 9012")
+
+        let cardNumberWithExtraDigits = "30023456789012345"
+        XCTAssertEqual(CardType.fromNumber(cardNumberWithExtraDigits)
+            .formatAndGroup(cardNumber: cardNumberWithExtraDigits), "3002 345678 9012 345")
+    }
+
+    func testFormatsStandardCardsCorrectly() {
+        let numberWhilstTyping = "400234567"
+        XCTAssertEqual(CardType.fromNumber(numberWhilstTyping)
+            .formatAndGroup(cardNumber: numberWhilstTyping), "4002 3456 7")
+
+        let completedCardNumber = "4002345678901234"
+        XCTAssertEqual(CardType.fromNumber(completedCardNumber)
+            .formatAndGroup(cardNumber: completedCardNumber), "4002 3456 7890 1234")
+
+        let cardNumberWithExtraDigits = "400234567890123456"
+        XCTAssertEqual(CardType.fromNumber(cardNumberWithExtraDigits)
+            .formatAndGroup(cardNumber: cardNumberWithExtraDigits), "4002 3456 7890 1234 56")
+    }
+
 }
