@@ -90,4 +90,12 @@ final class CardTypeTests: XCTestCase {
             .formatAndGroup(cardNumber: cardNumberWithExtraDigits), "4002 3456 7890 1234 56")
     }
 
+    func testFormattingEmptyStrings() {
+        XCTAssertEqual(CardType.fromNumber("")
+            .formatAndGroup(cardNumber: ""), "")
+
+        XCTAssertEqual(CardType.fromNumber(" ")
+            .formatAndGroup(cardNumber: " "), "")
+    }
+
 }
