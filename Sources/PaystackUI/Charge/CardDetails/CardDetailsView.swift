@@ -7,6 +7,7 @@ struct CardDetailsView: View {
     var viewModel: CardDetailsViewModel
 
     private let cardNumberMaximumLength = 24
+    private let expiryDateMaximumLength = 7
 
     init(transactionDetails: VerifyAccessCode) {
         self._viewModel = StateObject(
@@ -15,7 +16,7 @@ struct CardDetailsView: View {
     }
 
     var body: some View {
-        VStack {
+        VStack(spacing: 24) {
             Text("Enter your card details to pay")
                 .font(.headline)
 
@@ -23,8 +24,14 @@ struct CardDetailsView: View {
                       enabled: viewModel.isValid,
                       action: viewModel.submitCardDetails) {
                 cardNumber
+
+                HorizontallyGroupedFormInputItemView {
+                    expiryDate
+                    cvv
+                }
             }
         }
+        .padding(16)
     }
 
     @ViewBuilder
@@ -37,6 +44,7 @@ struct CardDetailsView: View {
         TextFieldFormInputView(title: "Card Number",
                                placeholder: "0000 0000 0000 0000",
                                text: cardNumberBinding,
+                               keyboardType: .numberPad,
                                maxLength: cardNumberMaximumLength,
                                accessoryView: cardImage)
     }
@@ -61,6 +69,28 @@ struct CardDetailsView: View {
         default:
             EmptyView()
         }
+    }
+
+    @ViewBuilder
+    var expiryDate: some FormInputItemView {
+        let expiryBinding = Binding(
+            get: { viewModel.cardExpiry },
+            set: { viewModel.formatAndSetCardExpiry($0) }
+        )
+
+        TextFieldFormInputView(title: "Card Expiry",
+                               placeholder: "MM / YY",
+                               text: expiryBinding,
+                               keyboardType: .numberPad,
+                               maxLength: expiryDateMaximumLength)
+    }
+
+    var cvv: some FormInputItemView {
+        TextFieldFormInputView(title: "CVV",
+                               placeholder: "123",
+                               text: $viewModel.cvv,
+                               keyboardType: .numberPad,
+                               maxLength: viewModel.maximumCvvDigits)
     }
 }
 

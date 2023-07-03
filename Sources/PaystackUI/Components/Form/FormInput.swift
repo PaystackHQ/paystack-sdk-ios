@@ -30,6 +30,7 @@ public struct FormInput<Content: View>: View {
                 .buttonStyle(PrimaryButtonStyle(showLoading: viewModel.showLoading))
                 .disabled(!buttonEnabled)
                 .padding(.horizontal, 16)
+                .padding(.top, 8)
         }
         .disabled(viewModel.showLoading)
     }
@@ -72,6 +73,7 @@ struct FormInput_Previews: PreviewProvider {
 
                 Text(status)
             }
+            .padding(16)
         }
 
     }

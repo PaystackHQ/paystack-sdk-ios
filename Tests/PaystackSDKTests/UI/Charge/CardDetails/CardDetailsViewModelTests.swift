@@ -19,4 +19,32 @@ final class CardDetailsViewModelTests: XCTestCase {
         XCTAssertEqual(serviceUnderTest.cardType, .mastercard)
     }
 
+    func testFormattingExpiryDateWhenThereIsOneDigitOrLessEnteredRemainsTheSame() {
+        serviceUnderTest.formatAndSetCardExpiry("")
+        XCTAssertEqual(serviceUnderTest.cardExpiry, "")
+        serviceUnderTest.formatAndSetCardExpiry("1")
+        XCTAssertEqual(serviceUnderTest.cardExpiry, "1")
+    }
+
+    func testFormattingExpiryDateWithTwoDigitsFormatsCorrectly() {
+        serviceUnderTest.formatAndSetCardExpiry("08")
+        XCTAssertEqual(serviceUnderTest.cardExpiry, "08 / ")
+    }
+
+    func testFormattingExpiryDateWithMoreThanTwoDigitsFormatsCorrectly() {
+        serviceUnderTest.formatAndSetCardExpiry("0825")
+        XCTAssertEqual(serviceUnderTest.cardExpiry, "08 / 25")
+    }
+
+    func testFormattingExpiryDateThatWasAlreadyFormattedFormatsCorrectly() {
+        serviceUnderTest.formatAndSetCardExpiry("08 / 2")
+        XCTAssertEqual(serviceUnderTest.cardExpiry, "08 / 2")
+    }
+
+    func testDeletingExpiryDateDoesNotForceFormatting() {
+        serviceUnderTest.cardExpiry = "08 / 2"
+        serviceUnderTest.formatAndSetCardExpiry("08 /")
+        XCTAssertEqual(serviceUnderTest.cardExpiry, "08 /")
+    }
+
 }

@@ -21,6 +21,19 @@ enum CardType {
 
 extension CardType {
 
+    var maximumCvvDigits: Int {
+        switch self {
+        case .amex:
+            return 4
+        default:
+            return 3
+        }
+    }
+}
+
+// MARK: - Formatting
+extension CardType {
+
     func formatAndGroup(cardNumber: String) -> String {
         switch self {
         case .amex:
