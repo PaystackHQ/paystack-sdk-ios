@@ -2,6 +2,7 @@ import SwiftUI
 import Combine
 
 @available(iOS 14.0, *)
+// TODO: Replace constants and colors from design system
 struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
 
     var title: String
@@ -13,17 +14,22 @@ struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
     @Binding
     var text: String
 
+    @Binding
+    var inErrorState: Bool
+
     init(title: String,
          placeholder: String,
          text: Binding<String>,
          keyboardType: KeyboardType = .asciiCapable,
          maxLength: Int? = nil,
+         inErrorState: Binding<Bool> = .constant(false),
          accessoryView: Accessory?) {
         self.title = title
         self.placeholder = placeholder
         self.keyboardType = keyboardType
         self.maxLength = maxLength
         self.accessoryView = accessoryView
+        self._inErrorState = inErrorState
         self._text = text
     }
 
@@ -31,12 +37,14 @@ struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
          placeholder: String,
          text: Binding<String>,
          keyboardType: KeyboardType = .asciiCapable,
-         maxLength: Int? = nil) where Accessory == EmptyView {
+         maxLength: Int? = nil,
+         inErrorState: Binding<Bool> = .constant(false)) where Accessory == EmptyView {
         self.title = title
         self.placeholder = placeholder
         self.keyboardType = keyboardType
         self.maxLength = maxLength
         self.accessoryView = nil
+        self._inErrorState = inErrorState
         self._text = text
     }
 
@@ -50,7 +58,7 @@ struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
             }
         }
         .textFieldStyle(.form)
-        .focusedBorderColor()
+        .focusedBorderColor(defaultColor: inErrorState ? .red : .gray)
         .keyboardType(keyboardType)
         .onReceive(Just(text)) { value in
             if let maxLength = maxLength, value.count > maxLength {

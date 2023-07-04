@@ -90,7 +90,9 @@ struct CardDetailsView: View {
                                placeholder: "123",
                                text: $viewModel.cvv,
                                keyboardType: .numberPad,
-                               maxLength: viewModel.maximumCvvDigits)
+                               maxLength: viewModel.maximumCvvDigits,
+                               inErrorState: $viewModel.showCvvError)
+        .minLength(viewModel.maximumCvvDigits, errorMessage: "Invalid CVV")
     }
 }
 
