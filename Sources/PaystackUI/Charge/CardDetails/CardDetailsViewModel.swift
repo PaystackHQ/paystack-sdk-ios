@@ -13,9 +13,6 @@ class CardDetailsViewModel: ObservableObject {
     var cardExpiry: String = ""
 
     @Published
-    var showCvvError: Bool = false
-
-    @Published
     var cardType: CardType = .unknown
 
     var transactionDetails: VerifyAccessCode
