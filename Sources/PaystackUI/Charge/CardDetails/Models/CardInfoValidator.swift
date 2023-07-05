@@ -23,7 +23,8 @@ extension CardInfoValidator {
             let sanitizedText = text.removingAllWhitespaces
             let cardType = CardType.fromNumber(sanitizedText)
             let regex = cardType.regularExpression
-            return sanitizedText.range(of: regex, options: .regularExpression) != nil && luhnCheck(number: sanitizedText)
+            return sanitizedText.range(of: regex, options: .regularExpression) != nil
+            && luhnCheck(number: sanitizedText)
         }
     }
 
