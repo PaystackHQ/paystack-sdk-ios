@@ -11,7 +11,7 @@ public struct HorizontallyGroupedFormInputItemView<Content: View>: FormInputItem
     }
 
     public var body: some View {
-        HStack(spacing: 16) {
+        HStack(alignment: .top, spacing: 16) {
             builder
         }
     }

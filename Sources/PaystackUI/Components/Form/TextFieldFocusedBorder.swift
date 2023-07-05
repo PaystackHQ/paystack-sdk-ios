@@ -4,14 +4,17 @@ import SwiftUI
 @available(iOS 15, macOS 12.0, *)
 struct TextFieldFocusedBorder: ViewModifier {
 
-    @FocusState private var isFocused: Bool
+    var defaultColor: Color
+
+    @FocusState
+    private var isFocused: Bool
 
     func body(content: Content) -> some View {
         content
             .focused($isFocused)
             .background(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .stroke(isFocused ?  Color.green : Color.gray, lineWidth: 1)
+                    .stroke(isFocused ?  Color.green : defaultColor, lineWidth: 1)
             )
     }
 }
@@ -19,13 +22,13 @@ struct TextFieldFocusedBorder: ViewModifier {
 extension View {
 
     @ViewBuilder
-    func focusedBorderColor() -> some View {
+    func focusedBorderColor(defaultColor: Color = .gray) -> some View {
         if #available(iOS 15, macOS 12.0, *) {
-            self.modifier(TextFieldFocusedBorder())
+            self.modifier(TextFieldFocusedBorder(defaultColor: defaultColor))
         } else {
             self.background(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .stroke(Color.gray, lineWidth: 1)
+                    .stroke(defaultColor, lineWidth: 1)
             )
         }
     }
