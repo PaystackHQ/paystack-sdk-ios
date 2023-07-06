@@ -9,6 +9,15 @@ struct CardDetailsView: View {
     private let cardNumberMaximumLength = 24
     private let expiryDateMaximumLength = 7
 
+    @State
+    private var showCvvError = false
+
+    @State
+    private var showCardNumberError = false
+
+    @State
+    private var showExpiryError = false
+
     init(transactionDetails: VerifyAccessCode) {
         self._viewModel = StateObject(
             wrappedValue: CardDetailsViewModel(
@@ -46,7 +55,9 @@ struct CardDetailsView: View {
                                text: cardNumberBinding,
                                keyboardType: .numberPad,
                                maxLength: cardNumberMaximumLength,
+                               inErrorState: $showCardNumberError,
                                accessoryView: cardImage)
+        .validateCardNumber(errorMessage: "Invalid Card Number")
     }
 
     @ViewBuilder
@@ -82,7 +93,9 @@ struct CardDetailsView: View {
                                placeholder: "MM / YY",
                                text: expiryBinding,
                                keyboardType: .numberPad,
-                               maxLength: expiryDateMaximumLength)
+                               maxLength: expiryDateMaximumLength,
+                               inErrorState: $showExpiryError)
+        .validateExpiry(errorMessage: "Invalid Card Expiry")
     }
 
     var cvv: some FormInputItemView {
@@ -91,7 +104,7 @@ struct CardDetailsView: View {
                                text: $viewModel.cvv,
                                keyboardType: .numberPad,
                                maxLength: viewModel.maximumCvvDigits,
-                               inErrorState: $viewModel.showCvvError)
+                               inErrorState: $showCvvError)
         .minLength(viewModel.maximumCvvDigits, errorMessage: "Invalid CVV")
     }
 }

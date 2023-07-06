@@ -59,6 +59,20 @@ extension TextFieldFormInputView {
         }
     }
 
+    func validateCardNumber(errorMessage: String) -> some FormInputItemView {
+        let validator = CardInfoValidator.cardNumber($text.wrappedValue, errorMessage: errorMessage)
+        return ValidationFormInputView(validator: validator, errorState: $inErrorState) {
+            self
+        }
+    }
+
+    func validateExpiry(errorMessage: String) -> some FormInputItemView {
+        let validator = CardInfoValidator.cardExpiry($text.wrappedValue, errorMessage: errorMessage)
+        return ValidationFormInputView(validator: validator, errorState: $inErrorState) {
+            self
+        }
+    }
+
     func multipleValidations(text: Binding<String>, inErrorState: Binding<Bool>,
                              validators: [FormValidator]) -> some FormInputItemView {
         return ValidationFormInputView(validators: validators, errorState: $inErrorState) {
