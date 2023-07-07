@@ -30,6 +30,17 @@ extension CardType {
         }
     }
 
+    var minimumDigits: Int {
+        switch self {
+        case .amex:
+            return 15
+        case .diners:
+            return 14
+        default:
+            return 16
+        }
+    }
+
     var regularExpression: String {
         switch self {
         case .amex:

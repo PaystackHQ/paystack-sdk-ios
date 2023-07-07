@@ -47,4 +47,29 @@ final class CardDetailsViewModelTests: XCTestCase {
         XCTAssertEqual(serviceUnderTest.cardExpiry, "08 /")
     }
 
+    func testFormIsInvalidIfNoDataIsEntered() {
+        XCTAssertFalse(serviceUnderTest.isValid)
+    }
+
+    func testFormIsInvalidWhenFieldsHaveDataButDoNotMatchLength() {
+        serviceUnderTest.cardExpiry = "01 / "
+        serviceUnderTest.cardNumber = "1234 5678 9"
+        serviceUnderTest.cvv = "12"
+        XCTAssertFalse(serviceUnderTest.isValid)
+    }
+
+    func testFormIsInvalidWhenOnlySomeFieldsMeetRequirements() {
+        serviceUnderTest.cardExpiry = "01 / 23"
+        serviceUnderTest.cardNumber = "1234 5678 9012 1234"
+        serviceUnderTest.cvv = "1"
+        XCTAssertFalse(serviceUnderTest.isValid)
+    }
+
+    func testFormIsValidWhenAllFieldsMatchRequirements() {
+        serviceUnderTest.cardExpiry = "01 / 23"
+        serviceUnderTest.cardNumber = "1234 5678 9012 1234"
+        serviceUnderTest.cvv = "123"
+        XCTAssertTrue(serviceUnderTest.isValid)
+    }
+
 }

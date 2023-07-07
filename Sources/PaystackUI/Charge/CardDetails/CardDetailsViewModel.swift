@@ -26,7 +26,9 @@ class CardDetailsViewModel: ObservableObject {
     }
 
     var isValid: Bool {
-        false
+        cvv.count == maximumCvvDigits &&
+        cardExpiry.count == 7 &&
+        cardNumber.removingAllWhitespaces.count >= cardType.minimumDigits
     }
 
     var maximumCvvDigits: Int {
