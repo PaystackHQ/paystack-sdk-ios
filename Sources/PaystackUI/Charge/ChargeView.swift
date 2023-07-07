@@ -7,6 +7,9 @@ struct ChargeView: View {
     @StateObject
     var viewModel: ChargeViewModel
 
+    @EnvironmentObject
+    var visibilityContainer: ViewVisibilityContainer
+
     init(accessCode: String, paystack: Paystack) {
         self._viewModel = StateObject(
             wrappedValue: ChargeViewModel(
@@ -26,5 +29,10 @@ struct ChargeView: View {
             }
         }
         .task(viewModel.verifyAccessCodeAndProceedWithCard)
+        .modalCancelButton(onCancelled: chargeCancelled)
+    }
+
+    func chargeCancelled() {
+        visibilityContainer.cancelAndDismiss()
     }
 }
