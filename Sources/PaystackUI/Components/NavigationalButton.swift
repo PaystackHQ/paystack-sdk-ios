@@ -23,22 +23,13 @@ struct NavigationalButton<Content: View, Destination: View>: View {
         Button(action: startFlow) {
             content
         }
-        .paymentSheet(isPresented: $visibilityContainer.showModal,
-                      onCloseTapped: closeButtonTapped) {
+        .paymentSheet(isPresented: $visibilityContainer.showModal) {
             destination
-                .confirmationDialog(title: "Do you want to abort this transaction?",
-                                    isPresented: $visibilityContainer.showCancellationConfirmation,
-                                    confirmationText: "Abort Transaction",
-                                    onConfirmation: visibilityContainer.cancelAndDismiss)
         }
         .environmentObject(visibilityContainer)
     }
 
     func startFlow() {
         visibilityContainer.showModal = true
-    }
-
-    func closeButtonTapped() {
-        visibilityContainer.showCancellationConfirmation = true
     }
 }

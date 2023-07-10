@@ -5,9 +5,6 @@ class ViewVisibilityContainer: ObservableObject {
     @Published
     var showModal: Bool
 
-    @Published
-    var showCancellationConfirmation: Bool = false
-
     var onComplete: (TransactionResult) -> Void
 
     #if os(iOS)
