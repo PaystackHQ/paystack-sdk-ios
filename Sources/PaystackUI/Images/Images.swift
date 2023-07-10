@@ -36,4 +36,9 @@ extension Image {
         Image("discoverLogo", bundle: .current)
             .frame(height: 16)
     }
+
+    static var paystackSecured: some View {
+        Image("paystackSecured", bundle: .current)
+            .resizable()
+    }
 }
