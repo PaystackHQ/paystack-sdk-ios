@@ -36,6 +36,6 @@ struct LoadingView_Previews: PreviewProvider {
 
             Spacer()
         }
-        
+
     }
 }
