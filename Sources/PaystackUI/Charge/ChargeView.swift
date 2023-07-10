@@ -20,13 +20,21 @@ struct ChargeView: View {
     var body: some View {
         VStack {
             switch viewModel.transactionState {
-            case .loading:
-                Text("TODO")
+            case .loading(let message):
+                LoadingView(message: message)
             case .error:
                 Text("TODO")
             case .cardDetails(let verifyAccessCode):
                CardDetailsView(transactionDetails: verifyAccessCode)
             }
+
+            if viewModel.displaySecuredByPaystack {
+                Image.paystackSecured
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 140)
+            }
+
+            Spacer()
         }
         .task(viewModel.verifyAccessCodeAndProceedWithCard)
         .modalCancelButton(onCancelled: chargeCancelled)
