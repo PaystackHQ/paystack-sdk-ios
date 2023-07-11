@@ -41,4 +41,8 @@ extension Image {
         Image("paystackSecured", bundle: .current)
             .resizable()
     }
+
+    static var successIcon: some View {
+        Image("successIcon", bundle: .current)
+    }
 }
