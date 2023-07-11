@@ -1,5 +1,6 @@
 import SwiftUI
 
+// TODO: Replace constants from Design System
 struct ChargeSuccessView: View {
 
     let amount: AmountCurrency

@@ -9,7 +9,7 @@ public extension Decimal {
     var doubleValue: Double {
         NSDecimalNumber(decimal: self).doubleValue
     }
-    
+
     var isWholeNumber: Bool {
         self.isZero || (self.isNormal && self.exponent >= 0)
     }
