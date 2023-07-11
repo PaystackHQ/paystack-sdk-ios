@@ -27,6 +27,15 @@ final class ChargeViewModelTests: PSTestCase {
         XCTAssertEqual(serviceUnderTest.transactionState, .error(MockError.general))
     }
 
+    func testSecuredByPaystackShouldBeHiddenForSpecifiedStates() {
+        serviceUnderTest.transactionState = .loading()
+        XCTAssertTrue(serviceUnderTest.displaySecuredByPaystack)
+
+        serviceUnderTest.transactionState = .success(amount: .init(
+            amount: 100, currency: "USD"), merchant: "Test")
+        XCTAssertFalse(serviceUnderTest.displaySecuredByPaystack)
+    }
+
     func testViewShouldBeCenteredForSpecifiedStates() {
         serviceUnderTest.transactionState = .loading()
         XCTAssertFalse(serviceUnderTest.centerView)

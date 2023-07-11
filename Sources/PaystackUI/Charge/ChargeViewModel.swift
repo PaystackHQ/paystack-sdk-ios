@@ -35,8 +35,12 @@ class ChargeViewModel: ObservableObject {
 extension ChargeViewModel {
 
     var displaySecuredByPaystack: Bool {
-        // TODO: This will change once we add states that don't display the secured logo
-        return true
+        switch transactionState {
+        case .success:
+            return false
+        default:
+            return true
+        }
     }
 
     var centerView: Bool {
