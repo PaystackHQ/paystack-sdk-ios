@@ -44,6 +44,15 @@ final class ChargeViewModelTests: PSTestCase {
             amount: 100, currency: "USD"), merchant: "Test")
         XCTAssertTrue(serviceUnderTest.centerView)
     }
+
+    func testCloseButtonConfirmationShouldNotBePresentOnCertainViews() {
+        serviceUnderTest.transactionState = .loading()
+        XCTAssertTrue(serviceUnderTest.displayCloseButtonConfirmation)
+
+        serviceUnderTest.transactionState = .success(amount: .init(
+            amount: 100, currency: "USD"), merchant: "Test")
+        XCTAssertFalse(serviceUnderTest.displaySecuredByPaystack)
+    }
 }
 
 extension ChargeState: Equatable {

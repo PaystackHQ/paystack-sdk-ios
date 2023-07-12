@@ -41,10 +41,16 @@ struct ChargeView: View {
             }
         }
         .task(viewModel.verifyAccessCodeAndProceedWithCard)
-        .modalCancelButton(onCancelled: chargeCancelled)
+        .modalCancelButton(showConfirmation: viewModel.displayCloseButtonConfirmation,
+                           onCancelled: chargeCancelled)
     }
 
     func chargeCancelled() {
-        visibilityContainer.cancelAndDismiss()
+        switch viewModel.transactionState {
+        case .success:
+            visibilityContainer.completeAndDismiss(with: .success)
+        default:
+            visibilityContainer.cancelAndDismiss()
+        }
     }
 }

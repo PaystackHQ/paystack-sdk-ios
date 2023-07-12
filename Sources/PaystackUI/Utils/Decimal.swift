@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Decimal {
+extension Decimal {
 
     var intValue: Int {
         NSDecimalNumber(decimal: self).intValue

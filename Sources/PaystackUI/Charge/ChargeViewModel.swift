@@ -51,4 +51,13 @@ extension ChargeViewModel {
             return false
         }
     }
+
+    var displayCloseButtonConfirmation: Bool {
+        switch transactionState {
+        case .success:
+            return false
+        default:
+            return true
+        }
+    }
 }
