@@ -18,10 +18,10 @@ struct CardDetailsView: View {
     @State
     private var showExpiryError = false
 
-    init(transactionDetails: VerifyAccessCode) {
+    init(amountDetails: AmountCurrency) {
         self._viewModel = StateObject(
             wrappedValue: CardDetailsViewModel(
-                transactionDetails: transactionDetails))
+                amountDetails: amountDetails))
     }
 
     var body: some View {
@@ -112,9 +112,7 @@ struct CardDetailsView: View {
 @available(iOS 14.0, *)
 struct CardDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        CardDetailsView(transactionDetails: .init(amount: 100,
-                                                  currency: "USD",
-                                                  paymentChannels: [],
-                                                  domain: .test))
+        CardDetailsView(amountDetails: .init(amount: 100,
+                                             currency: "USD"))
     }
 }

@@ -1,11 +1,16 @@
+import Foundation
 import PaystackCore
 
 struct VerifyAccessCode: Equatable {
-    var amount: Double
+    var amount: Decimal
     var currency: String
     // TODO: Use enum once we see example responses
     var paymentChannels: [String]
     var domain: Domain
+
+    var amountCurrency: AmountCurrency {
+        AmountCurrency(amount: amount, currency: currency)
+    }
 }
 
 extension VerifyAccessCode {

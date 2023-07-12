@@ -24,8 +24,10 @@ struct ChargeView: View {
                 LoadingView(message: message)
             case .error:
                 Text("TODO")
-            case .cardDetails(let verifyAccessCode):
-               CardDetailsView(transactionDetails: verifyAccessCode)
+            case .cardDetails(let amountInformation):
+               CardDetailsView(amountDetails: amountInformation)
+            case .success(let amount, let merchant):
+                ChargeSuccessView(amount: amount, merchant: merchant)
             }
 
             if viewModel.displaySecuredByPaystack {
@@ -34,7 +36,9 @@ struct ChargeView: View {
                     .frame(width: 140)
             }
 
-            Spacer()
+            if !viewModel.centerView {
+                Spacer()
+            }
         }
         .task(viewModel.verifyAccessCodeAndProceedWithCard)
         .modalCancelButton(onCancelled: chargeCancelled)

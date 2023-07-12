@@ -15,14 +15,14 @@ class CardDetailsViewModel: ObservableObject {
     @Published
     var cardType: CardType = .unknown
 
-    var transactionDetails: VerifyAccessCode
+    var amountDetails: AmountCurrency
 
-    init(transactionDetails: VerifyAccessCode) {
-        self.transactionDetails = transactionDetails
+    init(amountDetails: AmountCurrency) {
+        self.amountDetails = amountDetails
     }
 
     var buttonTitle: String {
-        "Pay \(transactionDetails.currency) \(transactionDetails.amount)"
+        "Pay \(amountDetails.description)"
     }
 
     var isValid: Bool {

@@ -4,12 +4,11 @@ import XCTest
 final class CardDetailsViewModelTests: XCTestCase {
 
     var serviceUnderTest: CardDetailsViewModel!
-    var mockVerifyAccessCodeResponse = VerifyAccessCode(amount: 100, currency: "USD",
-                                                        paymentChannels: ["card"], domain: .test)
+    var mockAmountCurrency = AmountCurrency(amount: 100, currency: "USD")
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        serviceUnderTest = CardDetailsViewModel(transactionDetails: mockVerifyAccessCodeResponse)
+        serviceUnderTest = CardDetailsViewModel(amountDetails: mockAmountCurrency)
     }
 
     func testWhenCardNumberChangesThatCardTypeUpdatesToReflectCorrectTypeAndFormatsCorrectly() {

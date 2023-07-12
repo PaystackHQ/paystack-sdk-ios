@@ -2,7 +2,7 @@ import Foundation
 
 public struct VerifyAccessCodeData: Decodable {
     public var email: String
-    public var amount: Double
+    public var amount: Decimal
     public var reference: String
     public var accessCode: String
     public var merchantLogo: String?
@@ -12,7 +12,7 @@ public struct VerifyAccessCodeData: Decodable {
     public var channels: [String]
     public var channelOptions: ChannelOptions
 
-    public init(email: String, amount: Double, reference: String, accessCode: String,
+    public init(email: String, amount: Decimal, reference: String, accessCode: String,
                 merchantLogo: String? = nil, merchantName: String, domain: Domain,
                 currency: String, channels: [String], channelOptions: ChannelOptions) {
         self.email = email
