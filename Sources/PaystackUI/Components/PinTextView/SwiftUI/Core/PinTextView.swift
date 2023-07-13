@@ -77,7 +77,7 @@ struct PinTextView: View {
     init(
         text: Binding<String>,
         slotsCount: Int = 4,
-        width: CGFloat = UIScreen.main.bounds.width * 0.65,
+        width: CGFloat = 50,
         height: CGFloat = 50,
         otpDefaultCharacter: String = "",
         otpBackgroundColor: UIColor = .clear,
@@ -124,7 +124,7 @@ struct PinTextView: View {
                 otpView
             }
         } //: ZStack
-        .frame(width: width, height: height)
+        .frame(width: totalWidth, height: height)
         .onChange(of: text) { newValue in
             guard enableClearOTP else { return }
             if newValue.isEmpty {
@@ -132,6 +132,11 @@ struct PinTextView: View {
             } //: condition
         } //: onChange
     } //: body
+
+    private var totalWidth: CGFloat {
+        let numberOfSlots = CGFloat(slotsCount)
+        return (width * numberOfSlots) + (8 * (numberOfSlots - 1))
+    }
 
     // MARK: - VIEWS
     //

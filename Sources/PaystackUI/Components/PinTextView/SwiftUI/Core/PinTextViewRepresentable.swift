@@ -28,18 +28,18 @@ struct PinTextViewRepresentable: UIViewRepresentable {
 
     init(
         text: Binding<String>,
-        slotsCount: Int = 6,
+        slotsCount: Int = 4,
         otpDefaultCharacter: String = "",
         otpBackgroundColor: UIColor = UIColor(red: 0.949, green: 0.949, blue: 0.949, alpha: 1),
         otpFilledBackgroundColor: UIColor = UIColor(red: 0.949, green: 0.949, blue: 0.949, alpha: 1),
-        otpCornerRaduis: CGFloat = 10,
-        otpDefaultBorderColor: UIColor = .clear,
-        otpFilledBorderColor: UIColor = .darkGray,
-        otpDefaultBorderWidth: CGFloat = 0,
+        otpCornerRaduis: CGFloat = 3,
+        otpDefaultBorderColor: UIColor = .gray,
+        otpFilledBorderColor: UIColor = .green,
+        otpDefaultBorderWidth: CGFloat = 1,
         otpFilledBorderWidth: CGFloat = 1,
         otpTextColor: UIColor = .black,
-        otpFontSize: CGFloat = 14,
-        otpFont: UIFont = UIFont.systemFont(ofSize: 14),
+        otpFontSize: CGFloat = 18,
+        otpFont: UIFont = UIFont.systemFont(ofSize: 18),
         isSecureTextEntry: Bool = false,
         onCommit: (() -> Void)? = nil
     ) {
