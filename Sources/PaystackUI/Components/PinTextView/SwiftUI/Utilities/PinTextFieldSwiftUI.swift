@@ -38,7 +38,7 @@ class PinTextFieldSwiftUI: PinTextField {
         self.otpFontSize = otpFontSize
         self.otpFont = otpFont
         self.isSecureTextEntry = isSecureTextEntry
-        
+
         configure(with: slotsCount)
     }
 

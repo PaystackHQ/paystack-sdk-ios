@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if os(iOS)
 struct PinTextViewRepresentable: UIViewRepresentable {
     @Binding private var text: String
     private let slotsCount: Int
@@ -24,7 +25,7 @@ struct PinTextViewRepresentable: UIViewRepresentable {
     private let isSecureTextEntry: Bool
     private let onCommit: (() -> Void)?
     private let textField: PinTextFieldSwiftUI
-        
+
     init(
         text: Binding<String>,
         slotsCount: Int = 6,
@@ -57,7 +58,7 @@ struct PinTextViewRepresentable: UIViewRepresentable {
         self.otpFont = otpFont
         self.isSecureTextEntry = isSecureTextEntry
         self.onCommit = onCommit
-        
+
         self.textField = PinTextFieldSwiftUI(
             slotsCount: slotsCount,
             otpDefaultCharacter: otpDefaultCharacter,
@@ -74,26 +75,26 @@ struct PinTextViewRepresentable: UIViewRepresentable {
             isSecureTextEntry: isSecureTextEntry
         )
     }
-    
+
     func makeCoordinator() -> Coordinator {
         Coordinator(text: $text, slotsCount: slotsCount, onCommit: onCommit)
     }
-    
+
     func makeUIView(context: Context) -> PinTextFieldSwiftUI {
         textField.delegate = context.coordinator
         return textField
     }
-    
+
     func updateUIView(_ uiView: PinTextFieldSwiftUI, context: Context) { }
-    
+
     class Coordinator: NSObject, UITextFieldDelegate {
-        
+
         @Binding private var text: String
-        
+
         private let slotsCount: Int
         private let onCommit: (() -> Void)?
-        
-        
+
+
         init(
             text: Binding<String>,
             slotsCount: Int,
@@ -102,26 +103,28 @@ struct PinTextViewRepresentable: UIViewRepresentable {
             self._text = text
             self.slotsCount = slotsCount
             self.onCommit = onCommit
-            
+
             super.init()
         }
-        
+
         func textFieldDidChangeSelection(_ textField: UITextField) {
             text = textField.text ?? ""
-            
+
             if textField.text?.count == slotsCount {
                 onCommit?()
             }
         }
-        
+
         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
             textField.resignFirstResponder()
             return true
         }
-        
-        func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+
+        func textField(_ textField: UITextField, shouldChangeCharactersIn
+                       range: NSRange, replacementString string: String) -> Bool {
             guard let characterCount = textField.text?.count else { return false }
             return characterCount < slotsCount || string.isEmpty
         }
     }
 }
+#endif
