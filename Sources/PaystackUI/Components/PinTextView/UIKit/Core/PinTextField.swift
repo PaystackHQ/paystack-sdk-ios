@@ -6,6 +6,7 @@
 //  Copyright © 2020 Abdelrhman Eliwa. All rights reserved.
 //
 
+#if os(iOS)
 import UIKit
 
 class PinTextField: UITextField {
@@ -44,7 +45,7 @@ class PinTextField: UITextField {
         recognizer.addTarget(self, action: #selector(becomeFirstResponder))
         return recognizer
     }()
-    
+
     // MARK: - METHODS
     //
     /// This func is used to configure the `PinTextTextField`, Usually you need to call this method into `viewDidLoad()`
@@ -53,7 +54,7 @@ class PinTextField: UITextField {
         guard isConfigured == false else { return }
         isConfigured.toggle()
         configureTextField()
-        
+
         let labelsStackView = createLabelsStackView(with: slotCount)
         addSubview(labelsStackView)
         addGestureRecognizer(tapRecognizer)
@@ -64,7 +65,7 @@ class PinTextField: UITextField {
             labelsStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
-    
+
     /// Use this func if you need to clear the `OTP` text and reset the `PinTextTextField` to the default state
     func clearOTP() {
         text = nil
@@ -99,7 +100,7 @@ private extension PinTextField {
         delegate = implementation
         implementation.implementationDelegate = self
     }
-    
+
     func createLabelsStackView(with count: Int) -> UIStackView {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -114,7 +115,7 @@ private extension PinTextField {
         }
         return stackView
     }
-    
+
     func createLabel() -> UILabel {
         let label = UILabel()
         label.backgroundColor = otpBackgroundColor
@@ -131,7 +132,7 @@ private extension PinTextField {
         label.text = otpDefaultCharacter
         return label
     }
-    
+
     @objc
     func textDidChange() {
         guard let text = self.text, text.count <= digitLabels.count else { return }
@@ -155,7 +156,7 @@ private extension PinTextField {
                 currentLabel.backgroundColor = otpBackgroundColor
             }
         }
-        
+
         if text.count == digitLabels.count {
             otpDelegate?.didUserFinishEnter(the: text)
         }
@@ -169,3 +170,4 @@ extension PinTextField: PinTextFieldImplementationProtocol {
         digitLabels.count
     }
 }
+#endif

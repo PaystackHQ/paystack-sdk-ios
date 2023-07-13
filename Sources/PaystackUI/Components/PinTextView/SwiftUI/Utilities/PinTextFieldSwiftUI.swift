@@ -5,6 +5,7 @@
 //  Created by Abdelrhman Eliwa on 01/06/2022.
 //
 
+#if os(iOS)
 import UIKit
 
 class PinTextFieldSwiftUI: PinTextField {
@@ -24,7 +25,7 @@ class PinTextFieldSwiftUI: PinTextField {
         isSecureTextEntry: Bool
     ) {
         super.init(frame: .init(origin: .zero, size: .init(width: UIScreen.main.bounds.width * 0.8, height: 40)))
-        
+
         self.otpDefaultCharacter = otpDefaultCharacter
         self.otpBackgroundColor = otpBackgroundColor
         self.otpFilledBackgroundColor = otpFilledBackgroundColor
@@ -40,8 +41,9 @@ class PinTextFieldSwiftUI: PinTextField {
         
         configure(with: slotsCount)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
+#endif

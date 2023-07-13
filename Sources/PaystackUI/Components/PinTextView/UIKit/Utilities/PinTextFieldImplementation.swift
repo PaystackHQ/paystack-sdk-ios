@@ -5,6 +5,7 @@
 //  Created by Abdelrhman Eliwa on 09/05/2021.
 //
 
+#if os(iOS)
 import UIKit
 
 class PinTextFieldImplementation: NSObject, UITextFieldDelegate {
@@ -19,3 +20,4 @@ class PinTextFieldImplementation: NSObject, UITextFieldDelegate {
         return characterCount < implementationDelegate?.digitalLabelsCount ?? 0 || string == ""
     }
 }
+#endif

@@ -5,6 +5,7 @@
 //  Created by Abdelrhman Eliwa on 01/06/2022.
 //
 
+#if os(iOS)
 import SwiftUI
 import Combine
 
@@ -50,7 +51,7 @@ struct PinTextView: View {
     private let enableClearOTP: Bool
     /// A Closure that fires when the OTP returned
     private var onCommit: (() -> Void)?
-    
+
     // MARK: - INIT
     //
     /// The Initializer of the `PinTextView`
@@ -112,7 +113,7 @@ struct PinTextView: View {
         self.enableClearOTP = enableClearOTP
         self.onCommit = onCommit
     }
-    
+
     // MARK: - BODY
     //
     var body: some View {
@@ -131,7 +132,7 @@ struct PinTextView: View {
             } //: condition
         } //: onChange
     } //: body
-    
+
     // MARK: - VIEWS
     //
     var otpView: some View {
@@ -154,3 +155,4 @@ struct PinTextView: View {
         )
     } //: otpView
 }
+#if os(iOS)
