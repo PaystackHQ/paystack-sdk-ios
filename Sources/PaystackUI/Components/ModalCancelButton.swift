@@ -18,20 +18,16 @@ struct ModalCancelButton: ViewModifier {
 
     func body(content: Content) -> some View {
         NavigationView {
-            if displayConfirmationDialog {
-                content
-                    .confirmationDialog(title: "Do you want to abort this transaction?",
-                                        isPresented: $confirmationDialogDisplayed,
-                                        confirmationText: "Abort Transaction",
-                                        onConfirmation: onCancellation)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            closeButton
-                        }
+            content
+                .confirmationDialog(title: "Do you want to abort this transaction?",
+                                    isPresented: $confirmationDialogDisplayed,
+                                    confirmationText: "Abort Transaction",
+                                    onConfirmation: onCancellation)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        closeButton
                     }
-            } else {
-                content
-            }
+                }
         }
 
     }
