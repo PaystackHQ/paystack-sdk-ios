@@ -155,4 +155,4 @@ struct PinTextView: View {
         )
     } //: otpView
 }
-#if os(iOS)
+#endif

@@ -94,7 +94,6 @@ struct PinTextViewRepresentable: UIViewRepresentable {
         private let slotsCount: Int
         private let onCommit: (() -> Void)?
 
-
         init(
             text: Binding<String>,
             slotsCount: Int,
@@ -120,8 +119,8 @@ struct PinTextViewRepresentable: UIViewRepresentable {
             return true
         }
 
-        func textField(_ textField: UITextField, shouldChangeCharactersIn
-                       range: NSRange, replacementString string: String) -> Bool {
+        func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange,
+                       replacementString string: String) -> Bool {
             guard let characterCount = textField.text?.count else { return false }
             return characterCount < slotsCount || string.isEmpty
         }
