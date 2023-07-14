@@ -1,9 +1,4 @@
-//
-//  AEOTPViewRepresentable.swift
-//  AEOTPTextField-SwiftUI
-//
-//  Created by Abdelrhman Eliwa on 31/05/2022.
-//
+// Based on AEOTPTextField - https://github.com/AbdelrhmanKamalEliwa/AEOTPTextField
 
 import SwiftUI
 

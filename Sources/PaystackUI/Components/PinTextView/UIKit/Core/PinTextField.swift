@@ -1,10 +1,4 @@
-//
-//  PinTextTextField.swift
-//  PinTextTextField
-//
-//  Created by Abdelrhman Eliwa on 10/12/20.
-//  Copyright © 2020 Abdelrhman Eliwa. All rights reserved.
-//
+// Based on AEOTPTextField - https://github.com/AbdelrhmanKamalEliwa/AEOTPTextField
 
 #if os(iOS)
 import UIKit

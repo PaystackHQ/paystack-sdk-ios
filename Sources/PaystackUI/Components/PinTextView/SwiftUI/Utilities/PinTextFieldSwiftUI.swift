@@ -1,9 +1,4 @@
-//
-//  AEOTPTextFieldSwiftUI.swift
-//  AEOTPTextField-SwiftUI
-//
-//  Created by Abdelrhman Eliwa on 01/06/2022.
-//
+// Based on AEOTPTextField - https://github.com/AbdelrhmanKamalEliwa/AEOTPTextField
 
 #if os(iOS)
 import UIKit
