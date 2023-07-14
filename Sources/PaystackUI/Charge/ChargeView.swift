@@ -24,8 +24,8 @@ struct ChargeView: View {
                 LoadingView(message: message)
             case .error:
                 Text("TODO")
-            case .cardDetails(let amountInformation):
-               CardDetailsView(amountDetails: amountInformation)
+            case .payment(let type):
+                paymentFlowView(for: type)
             case .success(let amount, let merchant):
                 ChargeSuccessView(amount: amount, merchant: merchant)
             }
@@ -43,6 +43,14 @@ struct ChargeView: View {
         .task(viewModel.verifyAccessCodeAndProceedWithCard)
         .modalCancelButton(showConfirmation: viewModel.displayCloseButtonConfirmation,
                            onCancelled: chargeCancelled)
+    }
+
+    @ViewBuilder
+    func paymentFlowView(for type: ChargePaymentType) -> some View {
+        switch type {
+        case .card(let amountInformation):
+            ChargeCardView(amountDetails: amountInformation)
+        }
     }
 
     func chargeCancelled() {

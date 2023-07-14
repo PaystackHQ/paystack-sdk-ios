@@ -23,7 +23,7 @@ class ChargeViewModel: ObservableObject {
             transactionState = .loading()
             let accessCodeResponse = try await repository.verifyAccessCode(accessCode)
             self.transactionDetails = accessCodeResponse
-            transactionState = .cardDetails(amount: accessCodeResponse.amountCurrency)
+            transactionState = .payment(type: .card(amountInformation: accessCodeResponse.amountCurrency))
         } catch {
             transactionState = .error(error)
         }
