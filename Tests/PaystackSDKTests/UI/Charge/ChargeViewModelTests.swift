@@ -18,7 +18,8 @@ final class ChargeViewModelTests: PSTestCase {
         mockRepo.expectedVerifyAccessCode = verifyAccessCodeResponse
         let expectedAmountCurrency = AmountCurrency(amount: 100, currency: "USD")
         await serviceUnderTest.verifyAccessCodeAndProceedWithCard()
-        XCTAssertEqual(serviceUnderTest.transactionState, .cardDetails(amount: expectedAmountCurrency))
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .payment(type: .card(amountInformation: expectedAmountCurrency)))
     }
 
     func testVerifyAccessCodeSetsViewStateAsErrorWhenUnsuccessful() async {
@@ -63,7 +64,7 @@ extension ChargeState: Equatable {
             return true
         case (.success(let firstAmount, let firstMerchant), .success(let secondAmount, let secondMerchant)):
             return firstAmount == secondAmount && firstMerchant == secondMerchant
-        case (.cardDetails(let first), .cardDetails(let second)):
+        case (.payment(let first), .payment(let second)):
             return first == second
         case (.error(let first), .error(let second)):
             return first.localizedDescription == second.localizedDescription
