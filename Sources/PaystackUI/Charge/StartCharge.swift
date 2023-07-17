@@ -3,6 +3,7 @@ import SwiftUI
 import PaystackCore
 
 @available(iOS 14.0, *)
+@available(macOS, unavailable)
 public extension Paystack {
 
     /// Creates a SwiftUI Button to intiate the charge flow using Paystack's UI
