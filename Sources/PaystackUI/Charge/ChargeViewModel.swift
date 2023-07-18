@@ -34,15 +34,6 @@ class ChargeViewModel: ObservableObject {
 // MARK: UI State Management
 extension ChargeViewModel {
 
-    var displaySecuredByPaystack: Bool {
-        switch transactionState {
-        case .success:
-            return false
-        default:
-            return true
-        }
-    }
-
     var centerView: Bool {
         switch transactionState {
         case .success:

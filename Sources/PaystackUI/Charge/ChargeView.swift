@@ -19,6 +19,10 @@ struct ChargeView: View {
 
     var body: some View {
         VStack {
+            if !viewModel.centerView {
+                Spacer()
+            }
+
             switch viewModel.transactionState {
             case .loading(let message):
                 LoadingView(message: message)
@@ -30,15 +34,11 @@ struct ChargeView: View {
                 ChargeSuccessView(amount: amount, merchant: merchant)
             }
 
-            if viewModel.displaySecuredByPaystack {
-                Image.paystackSecured
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 140)
-            }
+            Spacer()
 
-            if !viewModel.centerView {
-                Spacer()
-            }
+            Image.paystackSecured
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 140)
         }
         .task(viewModel.verifyAccessCodeAndProceedWithCard)
         .modalCancelButton(showConfirmation: viewModel.displayCloseButtonConfirmation,
