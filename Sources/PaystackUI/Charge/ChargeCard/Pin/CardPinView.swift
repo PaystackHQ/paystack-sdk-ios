@@ -1,6 +1,7 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
+// TODO: Replace constants and colors from design system
 struct CardPinView: View {
 
     @StateObject
@@ -8,10 +9,7 @@ struct CardPinView: View {
 
     var body: some View {
         VStack(spacing: 24) {
-
-            Text("Please enter your 4-digit card pin to authorize this payment")
-                .font(.headline)
-                .multilineTextAlignment(.center)
+            titleText
 
             #if os(iOS)
             if viewModel.showLoading {
@@ -29,6 +27,12 @@ struct CardPinView: View {
 
         }
         .padding(16)
+    }
+
+    var titleText: some View {
+        Text("Please enter your 4-digit card pin to authorize this payment")
+            .font(.headline)
+            .multilineTextAlignment(.center)
     }
 
     var loadingView: some View {

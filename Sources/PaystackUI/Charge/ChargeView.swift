@@ -19,7 +19,7 @@ struct ChargeView: View {
 
     var body: some View {
         VStack {
-            if !viewModel.centerView {
+            if viewModel.centerView {
                 Spacer()
             }
 
