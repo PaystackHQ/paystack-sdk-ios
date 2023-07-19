@@ -91,6 +91,7 @@ private extension PinTextField {
         textContentType = .oneTimeCode
         borderStyle = .none
         addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        addTarget(self, action: #selector(textFieldDidFocus), for: .editingDidBegin)
         delegate = implementation
         implementation.implementationDelegate = self
     }
@@ -129,30 +130,40 @@ private extension PinTextField {
 
     @objc
     func textDidChange() {
+        styleFields()
+        guard let text = self.text, text.count <= digitLabels.count else { return }
+        if text.count == digitLabels.count {
+            otpDelegate?.didUserFinishEnter(the: text)
+        }
+    }
+
+    @objc
+    func textFieldDidFocus() {
+        styleFields()
+    }
+
+    func styleFields() {
         guard let text = self.text, text.count <= digitLabels.count else { return }
         for labelIndex in 0 ..< digitLabels.count {
             let currentLabel = digitLabels[labelIndex]
-            if labelIndex == text.count - 1 {
-                let index = text.index(text.startIndex, offsetBy: labelIndex)
-                currentLabel.text = String(text[index])
+
+            if labelIndex > text.count {
+                currentLabel.text = otpDefaultCharacter
+                currentLabel.layer.borderWidth = otpDefaultBorderWidth
+                currentLabel.layer.borderColor = otpDefaultBorderColor.cgColor
+                currentLabel.backgroundColor = otpBackgroundColor
+            } else if labelIndex == text.count {
+                currentLabel.text = otpDefaultCharacter
                 currentLabel.layer.borderWidth = otpFilledBorderWidth
                 currentLabel.layer.borderColor = otpFilledBorderColor.cgColor
                 currentLabel.backgroundColor = otpFilledBackgroundColor
             } else {
-                if labelIndex < text.count - 1 {
-                    let index = text.index(text.startIndex, offsetBy: labelIndex)
-                    currentLabel.text = isSecureTextEntry ? "•" : String(text[index])
-                } else {
-                    currentLabel.text = otpDefaultCharacter
-                }
+                let index = text.index(text.startIndex, offsetBy: labelIndex)
+                currentLabel.text = isSecureTextEntry ? "•" : String(text[index])
                 currentLabel.layer.borderWidth = otpDefaultBorderWidth
                 currentLabel.layer.borderColor = otpDefaultBorderColor.cgColor
                 currentLabel.backgroundColor = otpBackgroundColor
             }
-        }
-
-        if text.count == digitLabels.count {
-            otpDelegate?.didUserFinishEnter(the: text)
         }
     }
 }

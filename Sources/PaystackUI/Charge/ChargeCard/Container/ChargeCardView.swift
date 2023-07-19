@@ -14,6 +14,8 @@ struct ChargeCardView: View {
         switch viewModel.chargeCardState {
         case .cardDetails(let amount):
             CardDetailsView(amountDetails: amount)
+        case .pin:
+            CardPinView()
         }
     }
 
