@@ -13,9 +13,10 @@ struct ChargeCardView: View {
     var body: some View {
         switch viewModel.chargeCardState {
         case .cardDetails(let amount):
-            CardDetailsView(amountDetails: amount)
+            CardDetailsView(amountDetails: amount,
+                            chargeCardContainer: viewModel)
         case .pin:
-            CardPinView()
+            CardPinView(chargeCardContainer: viewModel)
         }
     }
 

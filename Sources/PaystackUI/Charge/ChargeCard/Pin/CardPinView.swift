@@ -5,7 +5,12 @@ import SwiftUI
 struct CardPinView: View {
 
     @StateObject
-    var viewModel = CardPinViewModel()
+    var viewModel: CardPinViewModel
+
+    init(chargeCardContainer: ChargeCardContainer) {
+        self._viewModel = StateObject(wrappedValue: CardPinViewModel(
+            chargeCardContainer: chargeCardContainer))
+    }
 
     var body: some View {
         VStack(spacing: 24) {
@@ -45,6 +50,7 @@ struct CardPinView: View {
 @available(iOS 14.0, *)
 struct CardPinView_Previews: PreviewProvider {
     static var previews: some View {
-        CardPinView()
+        CardPinView(chargeCardContainer: ChargeCardViewModel(
+            amountDetails: .init(amount: 100000, currency: "USD")))
     }
 }

@@ -5,10 +5,13 @@ final class CardDetailsViewModelTests: XCTestCase {
 
     var serviceUnderTest: CardDetailsViewModel!
     var mockAmountCurrency = AmountCurrency(amount: 100, currency: "USD")
+    var mockChargeCardContainer: MockChargeCardContainer!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        serviceUnderTest = CardDetailsViewModel(amountDetails: mockAmountCurrency)
+        mockChargeCardContainer = MockChargeCardContainer()
+        serviceUnderTest = CardDetailsViewModel(amountDetails: mockAmountCurrency,
+                                                chargeCardContainer: mockChargeCardContainer)
     }
 
     func testWhenCardNumberChangesThatCardTypeUpdatesToReflectCorrectTypeAndFormatsCorrectly() {
