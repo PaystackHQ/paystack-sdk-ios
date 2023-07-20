@@ -8,12 +8,18 @@ class CardPinViewModel: ObservableObject {
     @Published
     var showLoading = false
 
+    var chargeCardContainer: ChargeCardContainer
+
+    init(chargeCardContainer: ChargeCardContainer) {
+        self.chargeCardContainer = chargeCardContainer
+    }
+
     func submitPin() {
         showLoading = true
         // TODO: Perform API call
     }
 
     func cancelTransaction() {
-        // TODO: Add cancel transaction functionality in the next PR
+        chargeCardContainer.restartCardPayment()
     }
 }

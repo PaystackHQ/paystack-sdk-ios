@@ -18,10 +18,12 @@ struct CardDetailsView: View {
     @State
     private var showExpiryError = false
 
-    init(amountDetails: AmountCurrency) {
+    init(amountDetails: AmountCurrency,
+         chargeCardContainer: ChargeCardContainer) {
         self._viewModel = StateObject(
             wrappedValue: CardDetailsViewModel(
-                amountDetails: amountDetails))
+                amountDetails: amountDetails,
+                chargeCardContainer: chargeCardContainer))
     }
 
     var body: some View {
@@ -112,7 +114,10 @@ struct CardDetailsView: View {
 @available(iOS 14.0, *)
 struct CardDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        CardDetailsView(amountDetails: .init(amount: 100,
-                                             currency: "USD"))
+        CardDetailsView(
+            amountDetails: .init(amount: 10000,
+                                 currency: "USD"),
+            chargeCardContainer: ChargeCardViewModel(
+                amountDetails: .init(amount: 10000, currency: "USD")))
     }
 }

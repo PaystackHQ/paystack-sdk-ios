@@ -16,9 +16,12 @@ class CardDetailsViewModel: ObservableObject {
     var cardType: CardType = .unknown
 
     var amountDetails: AmountCurrency
+    var chargeCardContainer: ChargeCardContainer
 
-    init(amountDetails: AmountCurrency) {
+    init(amountDetails: AmountCurrency,
+         chargeCardContainer: ChargeCardContainer) {
         self.amountDetails = amountDetails
+        self.chargeCardContainer = chargeCardContainer
     }
 
     var buttonTitle: String {
