@@ -45,4 +45,11 @@ extension Image {
     static var successIcon: some View {
         Image("successIcon", bundle: .current)
     }
+
+    static var otpIcon: some View {
+        Image("otpIcon", bundle: .current)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 48)
+    }
 }
