@@ -16,8 +16,7 @@ class CardOTPViewModel: ObservableObject {
     }
 
     var isValid: Bool {
-        // TODO: Will add logic once we get feedback from design
-        true
+        !otp.removingAllWhitespaces.isEmpty
     }
 
     func submitOTP(onComplete: @escaping () -> Void) {

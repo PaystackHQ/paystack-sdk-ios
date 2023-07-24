@@ -14,6 +14,19 @@ final class CardOTPViewModelTests: XCTestCase {
                                             chargeCardContainer: mockChargeCardContainer)
     }
 
+    func testFormIsInvalidIfOTPIsEmpty() {
+        serviceUnderTest.otp = ""
+        XCTAssertFalse(serviceUnderTest.isValid)
+
+        serviceUnderTest.otp = " "
+        XCTAssertFalse(serviceUnderTest.isValid)
+    }
+
+    func testFormIsValidIfOTPHasAtLeastOneDigit() {
+        serviceUnderTest.otp = "1"
+        XCTAssertTrue(serviceUnderTest.isValid)
+    }
+
     func testCancelTransactionCallsContainerToRestartCardFlow() {
         serviceUnderTest.cancelTransaction()
         XCTAssertTrue(mockChargeCardContainer.cardPaymentRestarted)

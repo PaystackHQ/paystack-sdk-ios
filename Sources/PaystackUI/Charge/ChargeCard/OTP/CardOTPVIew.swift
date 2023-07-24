@@ -8,8 +8,6 @@ struct CardOTPVIew: View {
     @StateObject
     var viewModel: CardOTPViewModel
 
-    private let otpMaximumLength = 6
-
     init(phoneNumber: String,
          chargeCardContainer: ChargeCardContainer) {
         self._viewModel = StateObject(wrappedValue: CardOTPViewModel(
@@ -52,8 +50,7 @@ struct CardOTPVIew: View {
         TextFieldFormInputView(title: "OTP",
                                placeholder: "123456",
                                text: $viewModel.otp,
-                               keyboardType: .numberPad,
-                               maxLength: otpMaximumLength)
+                               keyboardType: .numberPad)
     }
 }
 
