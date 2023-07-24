@@ -21,7 +21,7 @@ struct CardOTPVIew: View {
         ScrollView {
             VStack(spacing: 24) {
                 Image.otpIcon
-                
+
                 Text("Please enter the OTP sent to \(viewModel.phoneNumber)")
                     .font(.headline)
                     .multilineTextAlignment(.center)
