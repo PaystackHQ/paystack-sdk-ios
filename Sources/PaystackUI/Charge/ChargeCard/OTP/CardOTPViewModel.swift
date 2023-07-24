@@ -20,7 +20,7 @@ class CardOTPViewModel: ObservableObject {
         true
     }
 
-    func submitOTP(onComplete: @escaping () -> Void)  {
+    func submitOTP(onComplete: @escaping () -> Void) {
         // TODO: Perform API call
     }
 
