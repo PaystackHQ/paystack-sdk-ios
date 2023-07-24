@@ -18,22 +18,24 @@ struct CardOTPVIew: View {
     }
 
     var body: some View {
-        VStack(spacing: 24) {
-            Image.otpIcon
+        ScrollView {
+            VStack(spacing: 24) {
+                Image.otpIcon
+                
+                Text("Please enter the OTP sent to \(viewModel.phoneNumber)")
+                    .font(.headline)
+                    .multilineTextAlignment(.center)
 
-            Text("Please enter the OTP sent to \(viewModel.phoneNumber)")
-                .font(.headline)
-                .multilineTextAlignment(.center)
-
-            FormInput(title: "Authorize",
-                      enabled: viewModel.isValid,
-                      action: viewModel.submitOTP,
-                      cancelAction: viewModel.cancelTransaction,
-                      supplementaryContent: resendOTPSection) {
-                otpField
+                FormInput(title: "Authorize",
+                          enabled: viewModel.isValid,
+                          action: viewModel.submitOTP,
+                          cancelAction: viewModel.cancelTransaction,
+                          supplementaryContent: resendOTPSection) {
+                    otpField
+                }
             }
+            .padding(16)
         }
-        .padding(16)
     }
 
     @ViewBuilder
