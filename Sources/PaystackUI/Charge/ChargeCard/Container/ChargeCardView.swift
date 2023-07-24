@@ -17,6 +17,9 @@ struct ChargeCardView: View {
                             chargeCardContainer: viewModel)
         case .pin:
             CardPinView(chargeCardContainer: viewModel)
+
+        case .phoneNumber:
+            CardPhoneView(chargeCardContainer: viewModel)
         }
     }
 

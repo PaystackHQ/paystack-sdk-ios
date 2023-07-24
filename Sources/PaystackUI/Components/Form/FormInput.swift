@@ -10,15 +10,18 @@ public struct FormInput<Content: View>: View {
     var formData: FormInputData<Content>
     var buttonTitle: String
     var buttonEnabled: Bool
+    var cancelAction: (() -> Void)?
 
     public init(title: String = "Submit",
                 enabled: Bool = true,
                 action: @escaping (@escaping () -> Void) -> Void,
+                cancelAction: (() -> Void)? = nil,
                 @FormInputDataBuilder content: () -> FormInputData<Content>) {
         let content = content()
         self.formData = content
         self.buttonTitle = title
         self.buttonEnabled = enabled
+        self.cancelAction = cancelAction
         self._viewModel = StateObject(wrappedValue: FormInputViewModel(action: action))
     }
 
@@ -31,6 +34,13 @@ public struct FormInput<Content: View>: View {
                 .disabled(!buttonEnabled)
                 .padding(.horizontal, 16)
                 .padding(.top, 8)
+
+            if let cancelAction = cancelAction,
+               !viewModel.showLoading {
+                Button("Cancel", action: cancelAction)
+                    .foregroundColor(.gray)
+                    .padding(.top, 8)
+            }
         }
         .disabled(viewModel.showLoading)
     }
