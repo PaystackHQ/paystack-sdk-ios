@@ -8,6 +8,8 @@ struct CardOTPVIew: View {
     @StateObject
     var viewModel: CardOTPViewModel
 
+    private let timer = Timer.publish(every: 1, on: .main, in: .common)
+
     init(phoneNumber: String,
          chargeCardContainer: ChargeCardContainer) {
         self._viewModel = StateObject(wrappedValue: CardOTPViewModel(
@@ -36,13 +38,35 @@ struct CardOTPVIew: View {
 
     @ViewBuilder
     var resendOTPSection: some View {
-        // TODO: Will flesh out in the next PR
-        Button("Resend OTP", action: resendOTP)
-                        .foregroundColor(.green)
+        if viewModel.otpResendAttempts < 2 {
+            if viewModel.secondsBeforeResendOTP > 0 {
+                Text("Resend OTP in ").foregroundColor(.gray) +
+                Text(viewModel.secondsBeforeResendOTP.formatSecondsAsMinutesAndSeconds())
+                    .foregroundColor(.green)
+            } else {
+                Button("Resend OTP", action: resendOTP)
+                    .foregroundColor(.green)
+            }
+        } else {
+            otpResendAttemptLimitView
+        }
+    }
+
+    var otpResendAttemptLimitView: some View {
+        Text("We are having trouble sending the OTP. Kindly wait a " +
+             "few more minutes or cancel the transaction.")
+        .multilineTextAlignment(.center)
+        .foregroundColor(.gray)
+        .font(.caption)
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     private func resendOTP() {
-        // TODO: Will add resend logic in next PR
+        viewModel.resendOTP()
+        viewModel.subscription = timer.autoconnect()
+            .sink { _ in
+                viewModel.decreaseOTPCountdownTime()
+            }
     }
 
     @ViewBuilder
