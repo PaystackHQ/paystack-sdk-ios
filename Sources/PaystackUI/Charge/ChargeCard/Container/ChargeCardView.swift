@@ -20,6 +20,10 @@ struct ChargeCardView: View {
 
         case .phoneNumber:
             CardPhoneView(chargeCardContainer: viewModel)
+
+        case .otp(let phoneNumber):
+            CardOTPVIew(phoneNumber: phoneNumber,
+                        chargeCardContainer: viewModel)
         }
     }
 
