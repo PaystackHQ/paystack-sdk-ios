@@ -24,6 +24,10 @@ struct ChargeCardView: View {
         case .otp(let phoneNumber):
             CardOTPVIew(phoneNumber: phoneNumber,
                         chargeCardContainer: viewModel)
+
+        case .address(let states):
+            CardAddressView(states: states,
+                            chargeCardContainer: viewModel)
         }
     }
 
