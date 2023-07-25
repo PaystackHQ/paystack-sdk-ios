@@ -33,5 +33,5 @@ class CardAddressViewModel: ObservableObject {
     func cancelTransaction() {
         chargeCardContainer.restartCardPayment()
     }
-    
+
 }
