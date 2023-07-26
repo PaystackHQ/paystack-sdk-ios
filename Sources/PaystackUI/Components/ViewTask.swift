@@ -8,7 +8,7 @@ import SwiftUI
 
 @available(iOS, deprecated: 15.0,
            message: "AsyncCompatibilityKit is only useful when targeting iOS versions earlier than 15")
-public extension View {
+extension View {
     /// Attach an async task to this view, which will be performed
     /// when the view first appears, and cancelled if the view
     /// disappears (or is removed from the view hierarchy).

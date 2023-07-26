@@ -2,16 +2,16 @@
 import SwiftUI
 
 @resultBuilder
-public struct FormInputDataBuilder {
+struct FormInputDataBuilder {
 
-    public static func buildBlock<C1: FormInputItemView>(_ component1: C1)
+    static func buildBlock<C1: FormInputItemView>(_ component1: C1)
     -> FormInputData<C1> {
         return FormInputData(validators: [component1.isValid],
                              submissions: [component1.submit],
                              content: component1)
     }
 
-    public static func buildBlock<C1: FormInputItemView,
+    static func buildBlock<C1: FormInputItemView,
                                   C2: FormInputItemView>(_ component1: C1,
                                                          _ component2: C2)
     -> FormInputData<TupleView<(C1, C2)>> {
@@ -23,7 +23,7 @@ public struct FormInputDataBuilder {
                                                  component2)))
     }
 
-    public static func buildBlock<C1: FormInputItemView,
+    static func buildBlock<C1: FormInputItemView,
                                   C2: FormInputItemView,
                                   C3: FormInputItemView>(_ component1: C1,
                                                          _ component2: C2,
@@ -40,7 +40,7 @@ public struct FormInputDataBuilder {
                                                  component3)))
     }
 
-    public static func buildBlock<C1: FormInputItemView,
+    static func buildBlock<C1: FormInputItemView,
                                   C2: FormInputItemView,
                                   C3: FormInputItemView,
                                   C4: FormInputItemView>(_ component1: C1,
@@ -62,7 +62,7 @@ public struct FormInputDataBuilder {
                                                  component4)))
     }
 
-    public static func buildBlock<C1: FormInputItemView,
+    static func buildBlock<C1: FormInputItemView,
                                   C2: FormInputItemView,
                                   C3: FormInputItemView,
                                   C4: FormInputItemView,
@@ -89,7 +89,7 @@ public struct FormInputDataBuilder {
                                                  component5)))
     }
 
-    public static func buildBlock<C1: FormInputItemView,
+    static func buildBlock<C1: FormInputItemView,
                                   C2: FormInputItemView,
                                   C3: FormInputItemView,
                                   C4: FormInputItemView,
@@ -121,7 +121,7 @@ public struct FormInputDataBuilder {
                                                  component6)))
     }
 
-    public static func buildIf<Content: FormInputItemView>(_ content: Content?) -> some FormInputItemView {
+    static func buildIf<Content: FormInputItemView>(_ content: Content?) -> some FormInputItemView {
         return OptionalFormInputItemView(content: content)
     }
 

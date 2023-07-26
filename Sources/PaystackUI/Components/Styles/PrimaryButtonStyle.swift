@@ -2,18 +2,18 @@ import SwiftUI
 
 // TODO: Move this to the design system and replace colors/fonts
 @available(iOS 14.0, *)
-public struct PrimaryButtonStyle: ButtonStyle {
+struct PrimaryButtonStyle: ButtonStyle {
 
     @Environment(\.isEnabled)
     var isEnabled
 
     var showLoading: Bool
 
-    public init(showLoading: Bool = false) {
+    init(showLoading: Bool = false) {
         self.showLoading = showLoading
     }
 
-    public func makeBody(configuration: Configuration) -> some View {
+    func makeBody(configuration: Configuration) -> some View {
         VStack {
             if showLoading {
                 LoadingIndicator(tintColor: foreground)

@@ -1,26 +1,26 @@
 import SwiftUI
 import Combine
 
-public struct HorizontallyGroupedFormInputItemView<Content: View>: FormInputItemView {
+struct HorizontallyGroupedFormInputItemView<Content: View>: FormInputItemView {
 
     @FormInputDataBuilder
     var builder: FormInputData<Content>
 
-    public init(@FormInputDataBuilder builder: () -> FormInputData<Content>) {
+    init(@FormInputDataBuilder builder: () -> FormInputData<Content>) {
         self.builder = builder()
     }
 
-    public var body: some View {
+    var body: some View {
         HStack(alignment: .top, spacing: 16) {
             builder
         }
     }
 
-    public var isValid: [FormValidator] {
+    var isValid: [FormValidator] {
         return builder.validators
     }
 
-    public var submit: [PassthroughSubject<Void, Never>] {
+    var submit: [PassthroughSubject<Void, Never>] {
         return builder.submissions
     }
 
