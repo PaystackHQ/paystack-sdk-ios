@@ -30,9 +30,7 @@ struct CardAddressView: View {
                     zipCodeField
 
                     HorizontallyGroupedFormInputItemView {
-
-                        // TODO: Add State drop down
-
+                        stateField
                         cityField
                     }
                 }
@@ -53,6 +51,13 @@ struct CardAddressView: View {
                                placeholder: "12345",
                                text: $viewModel.zipCode,
                                keyboardType: .numbersAndPunctuation)
+    }
+
+    var stateField: some FormInputItemView {
+        PickerFormInputView(title: "State",
+                            items: viewModel.stateList,
+                            placeholder: "Select State",
+                            selectedItem: $viewModel.state)
     }
 
     var cityField: some FormInputItemView {
