@@ -1,5 +1,5 @@
 import Foundation
 
-public protocol PinTextFieldDelegate: AnyObject {
+protocol PinTextFieldDelegate: AnyObject {
     func didUserFinishEnter(the code: String)
 }

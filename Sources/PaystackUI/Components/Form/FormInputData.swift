@@ -1,7 +1,7 @@
 import SwiftUI
 import Combine
 
-public struct FormInputData<Content: View>: FormInputItemView {
+struct FormInputData<Content: View>: FormInputItemView {
 
     var validators: [FormValidator]
     var submissions: [PassthroughSubject<Void, Never>]
@@ -15,19 +15,19 @@ public struct FormInputData<Content: View>: FormInputItemView {
         self.content = content
     }
 
-    public var body: some View {
+    var body: some View {
         content
     }
 
-    public var isValid: [FormValidator] {
+    var isValid: [FormValidator] {
         return validators
     }
 
-    public var submit: [PassthroughSubject<Void, Never>] {
+    var submit: [PassthroughSubject<Void, Never>] {
         return submissions
     }
 
-    public func validate() -> Bool {
+    func validate() -> Bool {
         submissions.forEach {
             $0.send()
         }

@@ -2,12 +2,10 @@ import SwiftUI
 
 // TODO: Replace constants and colors from design system
 // Note: When we drop UI Support for iOS 14, we should clean this up to remove the conditionals
-public struct FormTextFieldStyle: TextFieldStyle {
-
-    public init() {}
+struct FormTextFieldStyle: TextFieldStyle {
 
     // swiftlint:disable:next identifier_name
-    public func _body(configuration: TextField<Self._Label>) -> some View {
+    func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
             .padding(16)
             .foregroundColor(.black)
@@ -15,7 +13,7 @@ public struct FormTextFieldStyle: TextFieldStyle {
     }
 }
 
-public extension TextFieldStyle where Self == FormTextFieldStyle {
+extension TextFieldStyle where Self == FormTextFieldStyle {
 
     static var form: Self {
         return .init()
