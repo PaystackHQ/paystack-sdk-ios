@@ -11,7 +11,7 @@ class CardOTPViewModel: ObservableObject {
 
     @Published
     var secondsBeforeResendOTP = 0
-    var otpResendLength = 59
+    var otpResendLength = 60
 
     var subscription: AnyCancellable?
     var otpResendAttempts = 0
