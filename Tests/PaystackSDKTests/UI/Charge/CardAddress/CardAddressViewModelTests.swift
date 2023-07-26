@@ -38,7 +38,6 @@ final class CardAddressViewModelTests: XCTestCase {
         XCTAssertTrue(serviceUnderTest.isValid)
     }
 
-
     func testCancelTransactionCallsContainerToRestartCardFlow() {
         serviceUnderTest.cancelTransaction()
         XCTAssertTrue(mockChargeCardContainer.cardPaymentRestarted)

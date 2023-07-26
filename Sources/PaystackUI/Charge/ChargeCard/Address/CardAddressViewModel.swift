@@ -12,7 +12,7 @@ class CardAddressViewModel: ObservableObject {
     var zipCode: String = ""
 
     @Published
-    var state: String? = nil
+    var state: String?
 
     @Published
     var city: String = ""

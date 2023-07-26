@@ -11,7 +11,7 @@ struct PickerFormInputView<Item: Hashable & CustomStringConvertible>: FormInputI
     @Binding
     var selectedItem: Item?
 
-    init(title: String,items: [Item],
+    init(title: String, items: [Item],
          placeholder: String, selectedItem: Binding<Item?>) {
         self.items = items
         self.title = title
@@ -55,7 +55,7 @@ struct PickerFormInputView<Item: Hashable & CustomStringConvertible>: FormInputI
             }
 
             Spacer()
-            
+
             Image.dropDownIndicator
         }
     }
