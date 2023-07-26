@@ -12,6 +12,9 @@ class CardAddressViewModel: ObservableObject {
     var zipCode: String = ""
 
     @Published
+    var state: String?
+
+    @Published
     var city: String = ""
 
     init(states: [String],
@@ -23,7 +26,8 @@ class CardAddressViewModel: ObservableObject {
     var isValid: Bool {
         !street.isEmpty &&
         !zipCode.isEmpty &&
-        !city.isEmpty
+        !city.isEmpty &&
+        state != nil
     }
 
     func submitAddress(onComplete: @escaping () -> Void) {

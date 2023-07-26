@@ -14,8 +14,28 @@ final class CardAddressViewModelTests: XCTestCase {
                                                 chargeCardContainer: mockChargeCardContainer)
     }
 
+    func testFormIsInvalidWhenAllFieldsAreEmpty() {
+        serviceUnderTest.street = ""
+        serviceUnderTest.zipCode = ""
+        serviceUnderTest.city = ""
+        serviceUnderTest.state = nil
+        XCTAssertFalse(serviceUnderTest.isValid)
+    }
+
+    func testFormIsInvalidWhenSomeFieldsAreEmpty() {
+        serviceUnderTest.street = "123 Test Street"
+        serviceUnderTest.zipCode = "12345"
+        serviceUnderTest.city = ""
+        serviceUnderTest.state = nil
+        XCTAssertFalse(serviceUnderTest.isValid)
+    }
+
     func testFormIsValidIfAllFieldsAreNotEmpty() {
-        // TODO: Add this test once we complete the last field
+        serviceUnderTest.street = "123 Test Street"
+        serviceUnderTest.zipCode = "12345"
+        serviceUnderTest.city = "Test City"
+        serviceUnderTest.state = "Test State"
+        XCTAssertTrue(serviceUnderTest.isValid)
     }
 
     func testCancelTransactionCallsContainerToRestartCardFlow() {
