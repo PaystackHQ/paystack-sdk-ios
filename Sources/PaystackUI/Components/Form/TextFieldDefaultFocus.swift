@@ -1,6 +1,6 @@
 import SwiftUI
 
-@available(iOS 15.0, *)
+@available(iOS 15, macOS 12.0, *)
 struct TextFieldDefaultFocus: ViewModifier {
 
     @FocusState
@@ -24,7 +24,7 @@ extension View {
 
     @ViewBuilder
     func setDefaultFocus(_ shouldFocus: Bool) -> some View {
-        if #available(iOS 15, *), shouldFocus {
+        if #available(iOS 15, macOS 12.0, *), shouldFocus {
             self.modifier(TextFieldDefaultFocus())
         } else {
             self
