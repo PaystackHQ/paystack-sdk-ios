@@ -48,6 +48,7 @@ class PinTextField: UITextField {
         guard isConfigured == false else { return }
         isConfigured.toggle()
         configureTextField()
+        becomeFirstResponder()
 
         let labelsStackView = createLabelsStackView(with: slotCount)
         addSubview(labelsStackView)

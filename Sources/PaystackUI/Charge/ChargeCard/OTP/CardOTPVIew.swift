@@ -76,7 +76,8 @@ struct CardOTPVIew: View {
         TextFieldFormInputView(title: "OTP",
                                placeholder: "123456",
                                text: $viewModel.otp,
-                               keyboardType: .numberPad)
+                               keyboardType: .numberPad,
+                               defaultFocused: true)
     }
 }
 

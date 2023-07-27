@@ -41,7 +41,8 @@ struct CardPhoneView: View {
                                text: $viewModel.phoneNumber,
                                keyboardType: .phonePad,
                                maxLength: phoneNumberMaximumLength,
-                               inErrorState: $showPhoneNumberError)
+                               inErrorState: $showPhoneNumberError,
+                               defaultFocused: true)
         .minLength(10, errorMessage: "Invalid Phone Number")
     }
 }
