@@ -58,6 +58,7 @@ struct CardDetailsView: View {
                                keyboardType: .numberPad,
                                maxLength: cardNumberMaximumLength,
                                inErrorState: $showCardNumberError,
+                               defaultFocused: true,
                                accessoryView: cardImage)
         .validateCardNumber(errorMessage: "Invalid Card Number")
     }

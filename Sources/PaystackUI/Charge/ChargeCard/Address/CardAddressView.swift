@@ -43,7 +43,8 @@ struct CardAddressView: View {
         TextFieldFormInputView(title: "Street Address",
                                placeholder: "201 Spear Street",
                                text: $viewModel.street,
-                               keyboardType: .asciiCapable)
+                               keyboardType: .asciiCapable,
+                               defaultFocused: true)
     }
 
     var zipCodeField: some FormInputItemView {

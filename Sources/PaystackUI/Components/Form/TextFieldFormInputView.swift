@@ -10,6 +10,7 @@ struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
     var keyboardType: KeyboardType
     var maxLength: Int?
     var accessoryView: Accessory?
+    var defaultFocused: Bool = true
 
     @Binding
     var text: String
@@ -23,12 +24,14 @@ struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
          keyboardType: KeyboardType = .asciiCapable,
          maxLength: Int? = nil,
          inErrorState: Binding<Bool> = .constant(false),
+         defaultFocused: Bool = false,
          accessoryView: Accessory?) {
         self.title = title
         self.placeholder = placeholder
         self.keyboardType = keyboardType
         self.maxLength = maxLength
         self.accessoryView = accessoryView
+        self.defaultFocused = defaultFocused
         self._inErrorState = inErrorState
         self._text = text
     }
@@ -38,12 +41,14 @@ struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
          text: Binding<String>,
          keyboardType: KeyboardType = .asciiCapable,
          maxLength: Int? = nil,
-         inErrorState: Binding<Bool> = .constant(false)) where Accessory == EmptyView {
+         inErrorState: Binding<Bool> = .constant(false),
+         defaultFocused: Bool = false) where Accessory == EmptyView {
         self.title = title
         self.placeholder = placeholder
         self.keyboardType = keyboardType
         self.maxLength = maxLength
         self.accessoryView = nil
+        self.defaultFocused = defaultFocused
         self._inErrorState = inErrorState
         self._text = text
     }
@@ -59,6 +64,7 @@ struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
         }
         .textFieldStyle(.form)
         .focusedBorderColor(defaultColor: inErrorState ? .red : .gray)
+        .setDefaultFocus(defaultFocused)
         .keyboardType(keyboardType)
         .onReceive(Just(text)) { value in
             if let maxLength = maxLength, value.count > maxLength {
