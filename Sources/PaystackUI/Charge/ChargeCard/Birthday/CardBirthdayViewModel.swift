@@ -25,5 +25,5 @@ class CardBirthdayViewModel: ObservableObject {
     func cancelTransaction() {
         chargeCardContainer.restartCardPayment()
     }
-    
+
 }
