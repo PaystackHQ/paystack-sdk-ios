@@ -6,4 +6,5 @@ enum ChargeCardState {
     case phoneNumber
     case otp(phoneNumber: String)
     case address(states: [String])
+    case birthday
 }

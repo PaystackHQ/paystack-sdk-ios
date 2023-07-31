@@ -28,6 +28,9 @@ struct ChargeCardView: View {
         case .address(let states):
             CardAddressView(states: states,
                             chargeCardContainer: viewModel)
+
+        case .birthday:
+            CardBirthdayView(chargeCardContainer: viewModel)
         }
     }
 
