@@ -10,6 +10,12 @@ struct CardBirthdayView: View {
     private let dayMaximumLength = 2
     private let yearMaximumLength = 4
 
+    @State
+    private var showDayError = false
+
+    @State
+    private var showYearError = false
+
     init(chargeCardContainer: ChargeCardContainer) {
         self._viewModel = StateObject(
             wrappedValue: CardBirthdayViewModel(chargeCardContainer: chargeCardContainer))
@@ -27,7 +33,7 @@ struct CardBirthdayView: View {
                       enabled: viewModel.isValid,
                       action: viewModel.submitPhoneNumber, cancelAction: viewModel.cancelTransaction) {
 
-                // TODO: Month field
+                monthField
 
                 HorizontallyGroupedFormInputItemView {
                     dayField
@@ -43,7 +49,16 @@ struct CardBirthdayView: View {
                                placeholder: "01",
                                text: $viewModel.day,
                                keyboardType: .numberPad,
-                               maxLength: dayMaximumLength)
+                               maxLength: dayMaximumLength,
+                               inErrorState: $showDayError)
+        .minLength(2, errorMessage: "Invalid Day")
+    }
+
+    var monthField: some FormInputItemView {
+        PickerFormInputView(title: "Month",
+                            items: Month.allCases.reversed(),
+                            placeholder: "Select Month",
+                            selectedItem: $viewModel.month)
     }
 
     var yearField: some FormInputItemView {
@@ -51,7 +66,9 @@ struct CardBirthdayView: View {
                                placeholder: "1990",
                                text: $viewModel.year,
                                keyboardType: .numberPad,
-                               maxLength: yearMaximumLength)
+                               maxLength: yearMaximumLength,
+                               inErrorState: $showYearError)
+        .minLength(4, errorMessage: "Invalid Year")
     }
 }
 
