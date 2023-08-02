@@ -16,4 +16,25 @@ final class CardBirthdayViewModelTests: XCTestCase {
         serviceUnderTest.cancelTransaction()
         XCTAssertTrue(mockChargeCardContainer.cardPaymentRestarted)
     }
+
+    func testFormIsInvalidWhenAllFieldsAreEmpty() {
+        serviceUnderTest.year = ""
+        serviceUnderTest.day = ""
+        serviceUnderTest.month = nil
+        XCTAssertFalse(serviceUnderTest.isValid)
+    }
+
+    func testFormIsInvalidWhenSomeFieldsAreEmpty() {
+        serviceUnderTest.year = "2000"
+        serviceUnderTest.day = "01"
+        serviceUnderTest.month = nil
+        XCTAssertFalse(serviceUnderTest.isValid)
+    }
+
+    func testFormIsValidIfAllFieldsAreNotEmpty() {
+        serviceUnderTest.year = "2000"
+        serviceUnderTest.day = "01"
+        serviceUnderTest.month = .january
+        XCTAssertTrue(serviceUnderTest.isValid)
+    }
 }

@@ -7,6 +7,9 @@ class CardBirthdayViewModel: ObservableObject {
     var day: String = ""
 
     @Published
+    var month: Month?
+
+    @Published
     var year: String = ""
 
     init(chargeCardContainer: ChargeCardContainer) {
@@ -14,8 +17,9 @@ class CardBirthdayViewModel: ObservableObject {
     }
 
     var isValid: Bool {
-        // TODO: Validation will be done in the next PR
-        true
+        !day.isEmpty &&
+        !year.isEmpty &&
+        month != nil
     }
 
     func submitPhoneNumber(onComplete: @escaping () -> Void) {
