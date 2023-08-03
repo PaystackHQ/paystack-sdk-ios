@@ -64,4 +64,12 @@ extension Image {
         Image(systemName: "arrowtriangle.down.circle.fill")
             .foregroundColor(.gray)
     }
+
+    static var errorIcon: some View {
+        Image(systemName: "exclamationmark.triangle.fill")
+            .resizable()
+            .foregroundColor(.orange)
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 32)
+    }
 }
