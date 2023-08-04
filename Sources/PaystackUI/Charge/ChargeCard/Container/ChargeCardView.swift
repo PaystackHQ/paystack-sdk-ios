@@ -31,6 +31,11 @@ struct ChargeCardView: View {
 
         case .birthday:
             CardBirthdayView(chargeCardContainer: viewModel)
+
+        case .error(let error):
+            ErrorView(message: error.message,
+                      buttonText: "Try another card",
+                      buttonAction: viewModel.restartCardPayment)
         }
     }
 
