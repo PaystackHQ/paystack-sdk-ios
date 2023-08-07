@@ -63,8 +63,6 @@ struct CardDetailsView: View {
         .validateCardNumber(errorMessage: "Invalid Card Number")
     }
 
-    
-
     @ViewBuilder
     var expiryDate: some FormInputItemView {
         let expiryBinding = Binding(
