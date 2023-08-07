@@ -23,6 +23,10 @@ struct ChargeView: View {
                 Spacer()
             }
 
+            if viewModel.inTestMode {
+                TestModeInidcator()
+            }
+
             switch viewModel.transactionState {
             case .loading(let message):
                 LoadingView(message: message)

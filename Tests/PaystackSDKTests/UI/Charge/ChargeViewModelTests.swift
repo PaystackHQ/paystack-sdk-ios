@@ -45,6 +45,23 @@ final class ChargeViewModelTests: PSTestCase {
             amount: 100, currency: "USD"), merchant: "Test")
         XCTAssertFalse(serviceUnderTest.displayCloseButtonConfirmation)
     }
+
+    func testPaymentIsInTestModeWhenDomainIsSetToTest() {
+        serviceUnderTest.transactionDetails = .init(amount: 10000, currency: "USD",
+                                                    paymentChannels: [], domain: .test)
+        XCTAssertTrue(serviceUnderTest.inTestMode)
+    }
+
+    func testPaymentIsNotInTestModeWhenDomainIsSetToLive() {
+        serviceUnderTest.transactionDetails = .init(amount: 10000, currency: "USD",
+                                                    paymentChannels: [], domain: .live)
+        XCTAssertFalse(serviceUnderTest.inTestMode)
+    }
+
+    func testPaymentIsNotInTestModeWhenDomainIsNotSet() {
+        serviceUnderTest.transactionDetails = nil
+        XCTAssertFalse(serviceUnderTest.inTestMode)
+    }
 }
 
 extension ChargeState: Equatable {

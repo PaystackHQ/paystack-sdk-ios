@@ -51,4 +51,8 @@ extension ChargeViewModel {
             return true
         }
     }
+
+    var inTestMode: Bool {
+        transactionDetails?.domain == .test
+    }
 }
