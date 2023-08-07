@@ -59,31 +59,11 @@ struct CardDetailsView: View {
                                maxLength: cardNumberMaximumLength,
                                inErrorState: $showCardNumberError,
                                defaultFocused: true,
-                               accessoryView: cardImage)
+                               accessoryView: viewModel.cardType.cardImage)
         .validateCardNumber(errorMessage: "Invalid Card Number")
     }
 
-    @ViewBuilder
-    var cardImage: some View {
-        switch viewModel.cardType {
-        case .amex:
-            Image.amexLogo
-        case .diners:
-            Image.dinersLogo
-        case .discover:
-            Image.discoverLogo
-        case .jcb:
-            Image.jcbLogo
-        case .mastercard:
-            Image.mastercardLogo
-        case .verve:
-            Image.verveLogo
-        case .visa:
-            Image.visaLogo
-        default:
-            EmptyView()
-        }
-    }
+    
 
     @ViewBuilder
     var expiryDate: some FormInputItemView {
