@@ -15,6 +15,11 @@ struct ChargeCardView: View {
         case .cardDetails(let amount):
             CardDetailsView(amountDetails: amount,
                             chargeCardContainer: viewModel)
+
+        case .testModeCardSelection(let amount):
+            TestModeCardSelectionView(amountDetails: amount,
+                                      chargeCardContainer: viewModel)
+
         case .pin:
             CardPinView(chargeCardContainer: viewModel)
 

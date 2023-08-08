@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 enum CardType {
     case amex
@@ -91,4 +92,31 @@ extension CardType {
         }
         return splitCardNumbers.joined(separator: " ")
     }
+}
+
+// MARK: - Card Logo View
+extension CardType {
+
+    @ViewBuilder
+    var cardImage: some View {
+        switch self {
+        case .amex:
+            Image.amexLogo
+        case .diners:
+            Image.dinersLogo
+        case .discover:
+            Image.discoverLogo
+        case .jcb:
+            Image.jcbLogo
+        case .mastercard:
+            Image.mastercardLogo
+        case .verve:
+            Image.verveLogo
+        case .visa:
+            Image.visaLogo
+        default:
+            EmptyView()
+        }
+    }
+
 }

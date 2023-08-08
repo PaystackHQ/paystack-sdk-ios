@@ -72,4 +72,20 @@ extension Image {
             .aspectRatio(contentMode: .fit)
             .frame(width: 32)
     }
+
+    static var radioButtonUnselected: some View {
+        Image(systemName: "circle")
+            .resizable()
+            .foregroundColor(.black)
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 16)
+    }
+
+    static var radioButtonSelected: some View {
+        Image(systemName: "checkmark.circle.fill")
+            .resizable()
+            .foregroundColor(.green)
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 16)
+    }
 }
