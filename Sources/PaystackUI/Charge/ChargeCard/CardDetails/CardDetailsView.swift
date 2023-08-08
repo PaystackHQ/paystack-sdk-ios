@@ -97,6 +97,6 @@ struct CardDetailsView_Previews: PreviewProvider {
             amountDetails: .init(amount: 10000,
                                  currency: "USD"),
             chargeCardContainer: ChargeCardViewModel(
-                amountDetails: .init(amount: 10000, currency: "USD")))
+                transactionDetails: .example))
     }
 }

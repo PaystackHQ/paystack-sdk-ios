@@ -29,7 +29,7 @@ struct CardOTPVIew: View {
                 FormInput(title: "Authorize",
                           enabled: viewModel.isValid,
                           action: viewModel.submitOTP,
-                          cancelAction: viewModel.cancelTransaction,
+                          secondaryAction: viewModel.cancelTransaction,
                           supplementaryContent: resendOTPSection) {
                     otpField
                 }
@@ -86,6 +86,6 @@ struct CardOTPVIew_Previews: PreviewProvider {
     static var previews: some View {
         CardOTPVIew(phoneNumber: "+234801****5678",
                     chargeCardContainer: ChargeCardViewModel(
-            amountDetails: .init(amount: 100000, currency: "USD")))
+                        transactionDetails: .example))
     }
 }

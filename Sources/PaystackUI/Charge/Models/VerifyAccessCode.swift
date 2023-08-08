@@ -23,3 +23,13 @@ extension VerifyAccessCode {
     }
 
 }
+
+// MARK: - Previews
+extension VerifyAccessCode {
+    static var example: Self {
+        .init(amount: 10000,
+              currency: "USD",
+              paymentChannels: [],
+              domain: .test)
+    }
+}

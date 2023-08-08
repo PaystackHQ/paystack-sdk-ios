@@ -25,7 +25,7 @@ struct CardAddressView: View {
                 FormInput(title: "Complete Payment",
                           enabled: viewModel.isValid,
                           action: viewModel.submitAddress,
-                          cancelAction: viewModel.cancelTransaction) {
+                          secondaryAction: viewModel.cancelTransaction) {
                     streetField
                     zipCodeField
 
@@ -74,6 +74,6 @@ struct CardAddressView_Previews: PreviewProvider {
     static var previews: some View {
         CardAddressView(states: [],
                         chargeCardContainer: ChargeCardViewModel(
-            amountDetails: .init(amount: 100000, currency: "USD")))
+                            transactionDetails: .example))
     }
 }

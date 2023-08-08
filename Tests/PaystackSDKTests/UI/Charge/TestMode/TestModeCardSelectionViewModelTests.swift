@@ -23,4 +23,9 @@ final class TestModeCardSelectionViewModelTests: XCTestCase {
         serviceUnderTest.testCard = nil
         XCTAssertFalse(serviceUnderTest.isValid)
     }
+
+    func testUseManualCardEntryCallsContainerToSwitchToCardDetailsFlow() {
+        serviceUnderTest.displayManualCardDetailsEntry()
+        XCTAssertTrue(mockChargeCardContainer.cardPaymentRestarted)
+    }
 }
