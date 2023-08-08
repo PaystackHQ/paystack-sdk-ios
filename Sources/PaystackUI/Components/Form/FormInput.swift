@@ -12,19 +12,22 @@ struct FormInput<Content: View,
     var supplementaryContent: SupplementaryContent?
     var buttonTitle: String
     var buttonEnabled: Bool
-    var cancelAction: (() -> Void)?
+    var secondaryButtonText: String
+    var secondaryAction: (() -> Void)?
 
     init(title: String = "Submit",
          enabled: Bool = true,
          action: @escaping (@escaping () -> Void) -> Void,
-         cancelAction: (() -> Void)? = nil,
+         secondaryButtonText: String = "Cancel",
+         secondaryAction: (() -> Void)? = nil,
          supplementaryContent: SupplementaryContent,
          @FormInputDataBuilder content: () -> FormInputData<Content>) {
         let content = content()
         self.formData = content
         self.buttonTitle = title
         self.buttonEnabled = enabled
-        self.cancelAction = cancelAction
+        self.secondaryButtonText = secondaryButtonText
+        self.secondaryAction = secondaryAction
         self.supplementaryContent = supplementaryContent
         self._viewModel = StateObject(wrappedValue: FormInputViewModel(action: action))
     }
@@ -32,14 +35,16 @@ struct FormInput<Content: View,
     init(title: String = "Submit",
          enabled: Bool = true,
          action: @escaping (@escaping () -> Void) -> Void,
-         cancelAction: (() -> Void)? = nil,
+         secondaryButtonText: String = "Cancel",
+         secondaryAction: (() -> Void)? = nil,
          @FormInputDataBuilder content: () -> FormInputData<Content>)
     where SupplementaryContent == EmptyView {
         let content = content()
         self.formData = content
         self.buttonTitle = title
         self.buttonEnabled = enabled
-        self.cancelAction = cancelAction
+        self.secondaryButtonText = secondaryButtonText
+        self.secondaryAction = secondaryAction
         self.supplementaryContent = nil
         self._viewModel = StateObject(wrappedValue: FormInputViewModel(action: action))
     }
@@ -59,9 +64,9 @@ struct FormInput<Content: View,
                 supplementaryContent
             }
 
-            if let cancelAction = cancelAction,
+            if let secondaryAction = secondaryAction,
                !viewModel.showLoading {
-                Button("Cancel", action: cancelAction)
+                Button(secondaryButtonText, action: secondaryAction)
                     .foregroundColor(.gray)
                     .padding(.top, 8)
             }

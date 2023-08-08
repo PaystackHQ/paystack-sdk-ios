@@ -24,7 +24,9 @@ struct TestModeCardSelectionView: View {
 
                 FormInput(title: viewModel.buttonTitle,
                           enabled: viewModel.isValid,
-                          action: viewModel.proceedWithTestCard) {
+                          action: viewModel.proceedWithTestCard,
+                          secondaryButtonText: "Use another card",
+                          secondaryAction: viewModel.displayManualCardDetailsEntry) {
                     testCardOptions
                 }
             }
@@ -58,6 +60,6 @@ struct TestModeCardSelectionView_Previews: PreviewProvider {
             amountDetails: .init(amount: 10000,
                                  currency: "USD"),
             chargeCardContainer: ChargeCardViewModel(
-                amountDetails: .init(amount: 10000, currency: "USD")))
+                transactionDetails: .example))
     }
 }

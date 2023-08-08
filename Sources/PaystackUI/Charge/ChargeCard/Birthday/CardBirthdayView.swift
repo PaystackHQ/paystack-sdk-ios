@@ -31,7 +31,8 @@ struct CardBirthdayView: View {
 
             FormInput(title: "Authorize",
                       enabled: viewModel.isValid,
-                      action: viewModel.submitPhoneNumber, cancelAction: viewModel.cancelTransaction) {
+                      action: viewModel.submitPhoneNumber,
+                      secondaryAction: viewModel.cancelTransaction) {
 
                 monthField
 
@@ -76,6 +77,6 @@ struct CardBirthdayView: View {
 struct CardBirthdayView_Previews: PreviewProvider {
     static var previews: some View {
         CardBirthdayView(chargeCardContainer: ChargeCardViewModel(
-            amountDetails: .init(amount: 100000, currency: "USD")))
+            transactionDetails: .example))
     }
 }

@@ -25,4 +25,8 @@ class TestModeCardSelectionViewModel: ObservableObject {
     func proceedWithTestCard(onComplete: @escaping () -> Void) {
         // TODO: Perform API call with card details
     }
+
+    func displayManualCardDetailsEntry() {
+        chargeCardContainer.restartCardPayment()
+    }
 }

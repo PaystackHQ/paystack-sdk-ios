@@ -5,14 +5,17 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
     @Published
     var chargeCardState: ChargeCardState
 
-    var amountDetails: AmountCurrency
+    var transactionDetails: VerifyAccessCode
 
-    init(amountDetails: AmountCurrency) {
-        self.amountDetails = amountDetails
-        self.chargeCardState = .cardDetails(amount: amountDetails)
+    init(transactionDetails: VerifyAccessCode) {
+        self.transactionDetails = transactionDetails
+        let amountDetails = transactionDetails.amountCurrency
+        self.chargeCardState = transactionDetails.domain == .live ?
+            .cardDetails(amount: amountDetails) :
+            .testModeCardSelection(amount: amountDetails)
     }
 
     func restartCardPayment() {
-        chargeCardState = .cardDetails(amount: amountDetails)
+        chargeCardState = .cardDetails(amount: transactionDetails.amountCurrency)
     }
 }

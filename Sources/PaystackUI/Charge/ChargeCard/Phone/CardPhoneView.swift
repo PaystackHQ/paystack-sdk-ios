@@ -27,7 +27,8 @@ struct CardPhoneView: View {
 
             FormInput(title: "Send OTP",
                       enabled: viewModel.isValid,
-                      action: viewModel.submitPhoneNumber, cancelAction: viewModel.cancelTransaction) {
+                      action: viewModel.submitPhoneNumber,
+                      secondaryAction: viewModel.cancelTransaction) {
                 phoneNumber
             }
         }
@@ -51,6 +52,6 @@ struct CardPhoneView: View {
 struct CardPhoneView_Previews: PreviewProvider {
     static var previews: some View {
         CardPhoneView(chargeCardContainer: ChargeCardViewModel(
-            amountDetails: .init(amount: 100000, currency: "USD")))
+            transactionDetails: .example))
     }
 }

@@ -52,8 +52,8 @@ struct ChargeView: View {
     @ViewBuilder
     func paymentFlowView(for type: ChargePaymentType) -> some View {
         switch type {
-        case .card(let amountInformation):
-            ChargeCardView(amountDetails: amountInformation)
+        case .card(let transactionInformation):
+            ChargeCardView(transactionDetails: transactionInformation)
         }
     }
 

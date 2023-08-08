@@ -51,6 +51,6 @@ struct CardPinView: View {
 struct CardPinView_Previews: PreviewProvider {
     static var previews: some View {
         CardPinView(chargeCardContainer: ChargeCardViewModel(
-            amountDetails: .init(amount: 100000, currency: "USD")))
+            transactionDetails: .example))
     }
 }
