@@ -74,4 +74,9 @@ final class CardDetailsViewModelTests: XCTestCase {
         XCTAssertTrue(serviceUnderTest.isValid)
     }
 
+    func testSwitchingToTestModeCardSelectionCallsContainerToChangeState() {
+        serviceUnderTest.switchToTestModeCardSelection()
+        XCTAssertTrue(mockChargeCardContainer.switchedToTestMode)
+    }
+
 }

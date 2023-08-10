@@ -36,6 +36,30 @@ final class ChargeCardViewModelTests: PSTestCase {
                        .testModeCardSelection(amount: transactionDetails.amountCurrency))
     }
 
+    func testInTestModeReturnsTrueIfDomainIsTest() {
+        let transactionDetails: VerifyAccessCode = .init(amount: 10000,
+                                                         currency: "USD",
+                                                         paymentChannels: [], domain: .test)
+        serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails)
+        XCTAssertTrue(serviceUnderTest.inTestMode)
+    }
+
+    func testInTestModeReturnsFalseIfDomainIsLive() {
+        let transactionDetails: VerifyAccessCode = .init(amount: 10000,
+                                                         currency: "USD",
+                                                         paymentChannels: [], domain: .live)
+        serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails)
+        XCTAssertFalse(serviceUnderTest.inTestMode)
+    }
+
+    func testSwitchToTestModeCardSelectionChangesState() {
+        let transactionDetails: VerifyAccessCode = .init(amount: 10000,
+                                                         currency: "USD",
+                                                         paymentChannels: [], domain: .live)
+        serviceUnderTest.switchToTestModeCardSelection()
+        XCTAssertEqual(serviceUnderTest.chargeCardState,
+                       .testModeCardSelection(amount: transactionDetails.amountCurrency))
+    }
 }
 
 extension ChargeCardState: Equatable {
