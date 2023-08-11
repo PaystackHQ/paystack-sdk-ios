@@ -15,7 +15,15 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
             .testModeCardSelection(amount: amountDetails)
     }
 
+    var inTestMode: Bool {
+        transactionDetails.domain == .test
+    }
+
     func restartCardPayment() {
         chargeCardState = .cardDetails(amount: transactionDetails.amountCurrency)
+    }
+
+    func switchToTestModeCardSelection() {
+        chargeCardState = .testModeCardSelection(amount: transactionDetails.amountCurrency)
     }
 }

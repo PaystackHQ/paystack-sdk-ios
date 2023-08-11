@@ -33,7 +33,11 @@ struct CardDetailsView: View {
 
             FormInput(title: viewModel.buttonTitle,
                       enabled: viewModel.isValid,
-                      action: viewModel.submitCardDetails) {
+                      action: viewModel.submitCardDetails,
+                      secondaryButtonText: viewModel.chargeCardContainer.inTestMode ?
+                      "Use a test card" : "",
+                      secondaryAction: viewModel.chargeCardContainer.inTestMode ?
+                      viewModel.switchToTestModeCardSelection : nil) {
                 cardNumber
 
                 HorizontallyGroupedFormInputItemView {

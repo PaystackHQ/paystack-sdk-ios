@@ -57,4 +57,8 @@ class CardDetailsViewModel: ObservableObject {
     func submitCardDetails(onComplete: @escaping () -> Void) {
         // TODO: Perform API call with card details
     }
+
+    func switchToTestModeCardSelection() {
+        chargeCardContainer.switchToTestModeCardSelection()
+    }
 }
