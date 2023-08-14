@@ -21,9 +21,7 @@ class ChargeViewModel: ObservableObject {
     func verifyAccessCodeAndProceedWithCard() async {
         do {
             transactionState = .loading()
-//            let accessCodeResponse = try await repository.verifyAccessCode(accessCode)
-            try await Task.sleep(nanoseconds: 0_800_000_000)
-            let accessCodeResponse = VerifyAccessCode.example
+            let accessCodeResponse = try await repository.verifyAccessCode(accessCode)
             self.transactionDetails = accessCodeResponse
             transactionState = .payment(type: .card(transactionInformation: accessCodeResponse))
         } catch {
