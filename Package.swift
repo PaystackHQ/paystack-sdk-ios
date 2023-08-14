@@ -25,7 +25,8 @@ let package = Package(
         .target(
             name: "PaystackUI",
             dependencies: ["PaystackCore"],
-            path: "Sources/PaystackUI"),
+            path: "Sources/PaystackUI",
+            resources: [.process("Design/FontAssets")]),
         .testTarget(
             name: "PaystackSDKTests",
             dependencies: ["PaystackCore", "PaystackUI"],
