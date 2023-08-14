@@ -40,8 +40,10 @@ struct ChargeCardView: View {
 
         case .error(let error):
             ErrorView(message: error.message,
-                      buttonText: "Try another card",
-                      buttonAction: viewModel.restartCardPayment)
+                      buttonText: viewModel.inTestMode ?
+                      "Retry with test details" : "Try another card",
+                      buttonAction: viewModel.inTestMode ?
+                      viewModel.switchToTestModeCardSelection : viewModel.restartCardPayment)
         }
     }
 
