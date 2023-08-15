@@ -66,6 +66,10 @@ extension Color {
         .named("Warning04")
     }
 
+    static var warning05: Color {
+        .named("Warning05")
+    }
+
 }
 
 // MARK: - Neutral
