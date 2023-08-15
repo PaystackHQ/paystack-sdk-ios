@@ -19,6 +19,7 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = "11.0"
   s.swift_versions = '5.7'
   s.source_files = 'Sources/PaystackUI/**/*.{h,m,swift}'
+  s.resources = 'Sources/PaystackUI/**/*.{lproj,ttf,json}'
   s.resource_bundles = {
     'PaystackSDK_PaystackUI' => [ 
        'Sources/PaystackUI/Images/Images.xcassets'

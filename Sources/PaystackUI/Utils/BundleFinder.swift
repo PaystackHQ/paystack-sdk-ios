@@ -27,4 +27,13 @@ extension Foundation.Bundle {
         return Bundle(for: BundleFinder.self)
         #endif
     }()
+
+    /// Accesses the seperate `resources` bundle used for fonts and the like
+    static var resources: Bundle = {
+        #if SWIFT_PACKAGE
+        return Bundle.module
+        #else
+        return Bundle(for: BundleFinder.self)
+        #endif
+    }()
 }

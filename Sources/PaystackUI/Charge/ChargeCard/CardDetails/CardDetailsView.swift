@@ -29,7 +29,7 @@ struct CardDetailsView: View {
     var body: some View {
         VStack(spacing: 24) {
             Text("Enter your card details to pay")
-                .font(.headline)
+                .font(.body16M)
 
             FormInput(title: viewModel.buttonTitle,
                       enabled: viewModel.isValid,
