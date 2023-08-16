@@ -22,7 +22,8 @@ Pod::Spec.new do |s|
   s.resources = 'Sources/PaystackUI/**/*.{lproj,ttf,json}'
   s.resource_bundles = {
     'PaystackSDK_PaystackUI' => [ 
-       'Sources/PaystackUI/Images/Images.xcassets'
+       'Sources/PaystackUI/Images/Images.xcassets',
+       'Sources/PaystackUI/Design/ColorAssets/Colors.xcassets'
     ]
   }
 
