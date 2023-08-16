@@ -48,6 +48,7 @@ extension Font {
 }
 
 // MARK: - UIKit compatibility
+#if os(iOS)
 extension UIFont {
 
     private enum BoingFont: String {
@@ -58,6 +59,7 @@ extension UIFont {
         UIFont(name: BoingFont.semibold.rawValue, size: 24) ?? .systemFont(ofSize: 24)
     }
 }
+#endif
 
 private var fontsRegistered = false
 
