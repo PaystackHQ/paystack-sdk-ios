@@ -47,6 +47,18 @@ extension Font {
     }
 }
 
+// MARK: - UIKit compatibility
+extension UIFont {
+
+    private enum BoingFont: String {
+        case semibold = "Boing-SemiBold"
+    }
+
+    static var heading2: UIFont {
+        UIFont(name: BoingFont.semibold.rawValue, size: 24) ?? .systemFont(ofSize: 24)
+    }
+}
+
 private var fontsRegistered = false
 
 func registerFonts() {

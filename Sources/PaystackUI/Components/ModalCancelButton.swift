@@ -1,6 +1,5 @@
 import SwiftUI
 
-// TODO: Replace constants from Design System
 @available(iOS 14.0, *)
 struct ModalCancelButton: ViewModifier {
 
@@ -35,8 +34,8 @@ struct ModalCancelButton: ViewModifier {
     private var closeButton: some View {
         Button(action: closeButtonTapped) {
             Image(systemName: "xmark")
-                .font(.system(size: 18, weight: .bold))
-                .foregroundColor(.gray)
+                .font(.system(size: 20, weight: .medium))
+                .foregroundColor(.gray01)
         }
     }
 

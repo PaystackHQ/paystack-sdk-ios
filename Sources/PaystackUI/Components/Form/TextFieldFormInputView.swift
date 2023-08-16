@@ -2,7 +2,6 @@ import SwiftUI
 import Combine
 
 @available(iOS 14.0, *)
-// TODO: Replace constants and colors from design system
 struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
 
     var title: String
@@ -59,11 +58,11 @@ struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
 
             if let accessory = accessoryView {
                 accessory
-                    .padding(16)
+                    .padding(.doublePadding)
             }
         }
         .textFieldStyle(.form)
-        .focusedBorderColor(defaultColor: inErrorState ? .red : .gray)
+        .focusedBorderColor(defaultColor: inErrorState ? .error02 : .navy04)
         .setDefaultFocus(defaultFocused)
         .keyboardType(keyboardType)
         .onReceive(Just(text)) { value in

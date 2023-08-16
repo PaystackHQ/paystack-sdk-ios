@@ -1,6 +1,5 @@
 import SwiftUI
 
-// TODO: Move this to the design system and replace colors/fonts
 @available(iOS 14.0, *)
 struct ErrorView: View {
 
@@ -15,18 +14,18 @@ struct ErrorView: View {
     }
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: .doublePadding) {
             Image.errorIcon
 
             Text(message)
-                .font(.headline)
-                .multilineTextAlignment(.center)
-                .padding(.bottom, 8)
+                .font(.body16M)
+                .foregroundColor(.stackBlue)
+                .padding(.bottom, .singlePadding)
 
             Button(buttonText, action: buttonAction)
                 .buttonStyle(SecondaryButtonStyle())
         }
-        .padding(16)
+        .padding(.doublePadding)
     }
 }
 

@@ -1,6 +1,5 @@
 import SwiftUI
 
-// TODO: Replace constants and colors from design system
 @available(iOS 15, macOS 12.0, *)
 struct TextFieldFocusedBorder: ViewModifier {
 
@@ -13,8 +12,8 @@ struct TextFieldFocusedBorder: ViewModifier {
         content
             .focused($isFocused)
             .background(
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .stroke(isFocused ?  Color.green : defaultColor, lineWidth: 1)
+                RoundedRectangle(cornerRadius: .cornerRadius, style: .continuous)
+                    .stroke(isFocused ?  Color.stackGreen : defaultColor, lineWidth: 1)
             )
     }
 }
@@ -22,12 +21,12 @@ struct TextFieldFocusedBorder: ViewModifier {
 extension View {
 
     @ViewBuilder
-    func focusedBorderColor(defaultColor: Color = .gray) -> some View {
+    func focusedBorderColor(defaultColor: Color = .navy04) -> some View {
         if #available(iOS 15, macOS 12.0, *) {
             self.modifier(TextFieldFocusedBorder(defaultColor: defaultColor))
         } else {
             self.background(
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                RoundedRectangle(cornerRadius: .cornerRadius, style: .continuous)
                     .stroke(defaultColor, lineWidth: 1)
             )
         }

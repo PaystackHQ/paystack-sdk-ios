@@ -14,17 +14,16 @@ struct LoadingView: View {
     }
 
     var body: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: .quadPadding) {
             Text(message)
-                .font(.title2)
-                .bold()
+                .font(.body16M)
+                .foregroundColor(.stackBlue)
 
-            ProgressView()
-                .progressViewStyle(CircularProgressViewStyle())
+            LoadingIndicator(tintColor: .navy04)
                 .scaleEffect(2)
-                .padding(.bottom, 24)
+                .padding(.bottom, .triplePadding)
         }
-        .padding(16)
+        .padding(.doublePadding)
     }
 }
 

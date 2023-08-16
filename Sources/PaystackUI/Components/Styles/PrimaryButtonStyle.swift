@@ -1,6 +1,5 @@
 import SwiftUI
 
-// TODO: Move this to the design system and replace colors/fonts
 @available(iOS 14.0, *)
 struct PrimaryButtonStyle: ButtonStyle {
 
@@ -22,27 +21,26 @@ struct PrimaryButtonStyle: ButtonStyle {
             }
         }
         .padding()
-        .frame(height: 56)
+        .frame(height: .buttonHeight)
         .frame(maxWidth: .infinity)
-        .font(.body)
+        .font(.body16M)
         .background(configuration.isPressed ? pressedBackground : background)
         .foregroundColor(configuration.isPressed ? pressedForeground : foreground)
-        .cornerRadius(8)
+        .cornerRadius(.cornerRadius)
         .disabled(showLoading)
     }
 
 }
 
-// TODO: These values are all incorrect and will be pulled from Design when available
 @available(iOS 14.0, *)
 extension PrimaryButtonStyle {
 
     var background: Color {
-        isEnabled ? .green : .gray
+        isEnabled ? .stackGreen : .stackGreen.opacity(0.6)
     }
 
     var pressedBackground: Color {
-        .green.opacity(0.75)
+        .stackGreen.opacity(0.75)
     }
 
     var foreground: Color {

@@ -1,7 +1,6 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
-// TODO: Replace constants and colors from design system
 struct PickerFormInputView<Item: Hashable & CustomStringConvertible>: FormInputItemView {
 
     let items: [Item]
@@ -35,11 +34,11 @@ struct PickerFormInputView<Item: Hashable & CustomStringConvertible>: FormInputI
         } label: {
             label
         }
-        .padding(16)
+        .padding(.doublePadding)
         .frame(maxWidth: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .stroke(.gray, lineWidth: 1)
+            RoundedRectangle(cornerRadius: .cornerRadius, style: .continuous)
+                .stroke(Color.navy04, lineWidth: 1)
         )
         .form(title)
     }
@@ -48,10 +47,10 @@ struct PickerFormInputView<Item: Hashable & CustomStringConvertible>: FormInputI
         HStack {
             if let selectedItem = selectedItem {
                 Text(selectedItem.description)
-                    .foregroundColor(.black)
+                    .foregroundColor(.stackBlue)
             } else {
                 Text(placeholder)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.navy04)
             }
 
             Spacer()

@@ -1,7 +1,6 @@
 import SwiftUI
 import Combine
 
-// TODO: Replace constants and colors from design system
 struct ValidationFormInputView<Content: FormInputItemView>: FormInputItemViewModifier {
 
     var validators: [FormValidator]
@@ -37,8 +36,8 @@ struct ValidationFormInputView<Content: FormInputItemView>: FormInputItemViewMod
                 ForEach(Array(zip(validators.indices, validators)), id: \.0) { index, validator in
                     if !validatorStates[index] {
                         Text(validator.errorMessage)
-                            .font(.body)
-                            .foregroundColor(.red)
+                            .font(.body12R)
+                            .foregroundColor(.error01)
                     }
                 }
             }
