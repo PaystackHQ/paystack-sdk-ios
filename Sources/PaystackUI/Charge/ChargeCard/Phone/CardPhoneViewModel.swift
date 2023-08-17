@@ -15,7 +15,7 @@ class CardPhoneViewModel: ObservableObject {
         phoneNumber.count >= 10
     }
 
-    func submitPhoneNumber(onComplete: @escaping () -> Void) {
+    func submitPhoneNumber() async {
         // TODO: Perform API call to submit phone number
     }
 

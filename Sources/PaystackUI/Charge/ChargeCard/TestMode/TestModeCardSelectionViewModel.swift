@@ -22,7 +22,7 @@ class TestModeCardSelectionViewModel: ObservableObject {
         testCard != nil
     }
 
-    func proceedWithTestCard(onComplete: @escaping () -> Void) {
+    func proceedWithTestCard() async {
         // TODO: Perform API call with card details
     }
 

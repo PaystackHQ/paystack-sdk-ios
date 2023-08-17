@@ -5,17 +5,16 @@ class FormInputViewModel: ObservableObject {
     @Published
     var showLoading = false
 
-    var action: (@escaping () -> Void) -> Void
+    var action: () async -> Void
 
-    init(action: @escaping (@escaping () -> Void) -> Void) {
+    init(action: @escaping () async -> Void) {
         self.action = action
     }
 
-    func submit() {
+    func submit() async {
         showLoading = true
-        action { [self] in
-            showLoading = false
-        }
+        await action()
+        showLoading = false
     }
 
 }

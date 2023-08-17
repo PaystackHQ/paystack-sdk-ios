@@ -22,7 +22,7 @@ class CardBirthdayViewModel: ObservableObject {
         month != nil
     }
 
-    func submitPhoneNumber(onComplete: @escaping () -> Void) {
+    func submitPhoneNumber() async {
         // TODO: Perform API call to submit birthday
     }
 
