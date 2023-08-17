@@ -54,7 +54,7 @@ class CardDetailsViewModel: ObservableObject {
         }
     }
 
-    func submitCardDetails(onComplete: @escaping () -> Void) {
+    func submitCardDetails() async {
         // TODO: Perform API call with card details
     }
 

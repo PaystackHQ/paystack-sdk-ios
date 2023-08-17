@@ -26,7 +26,7 @@ class CardOTPViewModel: ObservableObject {
         !otp.removingAllWhitespaces.isEmpty
     }
 
-    func submitOTP(onComplete: @escaping () -> Void) {
+    func submitOTP() async {
         // TODO: Perform API call
     }
 

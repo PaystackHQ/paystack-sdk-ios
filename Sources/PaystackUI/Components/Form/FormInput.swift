@@ -16,7 +16,7 @@ struct FormInput<Content: View,
 
     init(title: String = "Submit",
          enabled: Bool = true,
-         action: @escaping (@escaping () -> Void) -> Void,
+         action: @escaping () async -> Void,
          secondaryButtonText: String = "Cancel",
          secondaryAction: (() -> Void)? = nil,
          supplementaryContent: SupplementaryContent,
@@ -33,7 +33,7 @@ struct FormInput<Content: View,
 
     init(title: String = "Submit",
          enabled: Bool = true,
-         action: @escaping (@escaping () -> Void) -> Void,
+         action: @escaping () async -> Void,
          secondaryButtonText: String = "Cancel",
          secondaryAction: (() -> Void)? = nil,
          @FormInputDataBuilder content: () -> FormInputData<Content>)
@@ -76,7 +76,9 @@ struct FormInput<Content: View,
 
     func submit() {
         guard formData.validate() else { return }
-        viewModel.submit()
+        Task {
+            await viewModel.submit()
+        }
     }
 
 }
@@ -96,12 +98,13 @@ struct FormInput_Previews: PreviewProvider {
         @State
         var status: String = ""
 
+        func complete() async {
+            status = "Complete"
+        }
+
         var body: some View {
             VStack {
-                FormInput { onComplete in
-                    status = "Complete"
-                    onComplete()
-                } content: {
+                FormInput(action: complete) {
                     TextField("Name", text: $name)
                         .form("Name")
 

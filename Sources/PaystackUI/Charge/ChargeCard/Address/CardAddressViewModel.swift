@@ -30,7 +30,7 @@ class CardAddressViewModel: ObservableObject {
         state != nil
     }
 
-    func submitAddress(onComplete: @escaping () -> Void) {
+    func submitAddress() async {
         // TODO: Perform API call
     }
 
