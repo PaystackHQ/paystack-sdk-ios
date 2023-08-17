@@ -62,15 +62,15 @@ extension Image {
 
     static var dropDownIndicator: some View {
         Image(systemName: "arrowtriangle.down.circle.fill")
-            .foregroundColor(.gray)
+            .foregroundColor(.gray01)
     }
 
     static var errorIcon: some View {
         Image(systemName: "exclamationmark.triangle.fill")
             .resizable()
-            .foregroundColor(.orange)
+            .foregroundColor(.warning02)
             .aspectRatio(contentMode: .fit)
-            .frame(width: 32)
+            .frame(width: .quadPadding)
     }
 
     static var radioButtonUnselected: some View {
@@ -78,14 +78,14 @@ extension Image {
             .resizable()
             .foregroundColor(.black)
             .aspectRatio(contentMode: .fit)
-            .frame(width: 16)
+            .frame(width: .doublePadding)
     }
 
     static var radioButtonSelected: some View {
         Image(systemName: "checkmark.circle.fill")
             .resizable()
-            .foregroundColor(.green)
+            .foregroundColor(.stackGreen)
             .aspectRatio(contentMode: .fit)
-            .frame(width: 16)
+            .frame(width: .doublePadding)
     }
 }

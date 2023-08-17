@@ -1,7 +1,6 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
-// TODO: Replace constants and colors from design system
 struct CardAddressView: View {
 
     @StateObject
@@ -16,10 +15,11 @@ struct CardAddressView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
+            VStack(spacing: .triplePadding) {
 
                 Text("Enter your billing address to complete this payment")
-                    .font(.headline)
+                    .font(.body16M)
+                    .foregroundColor(.stackBlue)
                     .multilineTextAlignment(.center)
 
                 FormInput(title: "Complete Payment",
@@ -35,7 +35,7 @@ struct CardAddressView: View {
                     }
                 }
             }
-            .padding(16)
+            .padding(.doublePadding)
         }
     }
 

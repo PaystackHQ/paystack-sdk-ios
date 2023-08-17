@@ -1,7 +1,6 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
-// TODO: Replace constants and colors from design system
 struct CardBirthdayView: View {
 
     @StateObject
@@ -22,11 +21,12 @@ struct CardBirthdayView: View {
     }
 
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: .triplePadding) {
             Image.birthdayIcon
 
             Text("Verify your date of birth to use this bank account with Paystack")
-                .font(.headline)
+                .font(.body16M)
+                .foregroundColor(.stackBlue)
                 .multilineTextAlignment(.center)
 
             FormInput(title: "Authorize",
@@ -42,7 +42,7 @@ struct CardBirthdayView: View {
                 }
             }
         }
-        .padding(16)
+        .padding(.doublePadding)
     }
 
     var dayField: some FormInputItemView {

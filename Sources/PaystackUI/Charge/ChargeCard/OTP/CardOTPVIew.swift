@@ -2,7 +2,6 @@ import SwiftUI
 import Combine
 
 @available(iOS 14.0, *)
-// TODO: Replace constants and colors from design system
 struct CardOTPVIew: View {
 
     @StateObject
@@ -19,11 +18,12 @@ struct CardOTPVIew: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
+            VStack(spacing: .triplePadding) {
                 Image.otpIcon
 
                 Text("Please enter the OTP sent to \(viewModel.phoneNumber)")
-                    .font(.headline)
+                    .font(.body16M)
+                    .foregroundColor(.stackBlue)
                     .multilineTextAlignment(.center)
 
                 FormInput(title: "Authorize",
@@ -34,7 +34,7 @@ struct CardOTPVIew: View {
                     otpField
                 }
             }
-            .padding(16)
+            .padding(.doublePadding)
         }
     }
 
@@ -42,12 +42,14 @@ struct CardOTPVIew: View {
     var resendOTPSection: some View {
         if viewModel.otpResendAttempts < 2 {
             if viewModel.secondsBeforeResendOTP > 0 {
-                Text("Resend OTP in ").foregroundColor(.gray) +
-                Text(viewModel.secondsBeforeResendOTP.formatSecondsAsMinutesAndSeconds())
-                    .foregroundColor(.green)
+                (Text("Resend OTP in ").foregroundColor(.gray01) +
+                 Text(viewModel.secondsBeforeResendOTP.formatSecondsAsMinutesAndSeconds())
+                    .foregroundColor(.stackGreen))
+                .font(.body14M)
             } else {
                 Button("Resend OTP", action: resendOTP)
-                    .foregroundColor(.green)
+                    .font(.body14M)
+                    .foregroundColor(.stackGreen)
             }
         } else {
             otpResendAttemptLimitView
@@ -58,8 +60,8 @@ struct CardOTPVIew: View {
         Text("We are having trouble sending the OTP. Kindly wait a " +
              "few more minutes or cancel the transaction.")
         .multilineTextAlignment(.center)
-        .foregroundColor(.gray)
-        .font(.caption)
+        .foregroundColor(.navy03)
+        .font(.body14R)
         .fixedSize(horizontal: false, vertical: true)
     }
 

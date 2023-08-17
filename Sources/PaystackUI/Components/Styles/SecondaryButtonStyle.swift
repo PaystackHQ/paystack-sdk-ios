@@ -1,6 +1,5 @@
 import SwiftUI
 
-// TODO: Move this to the design system and replace colors/fonts
 @available(iOS 14.0, *)
 struct SecondaryButtonStyle: ButtonStyle {
 
@@ -19,40 +18,39 @@ struct SecondaryButtonStyle: ButtonStyle {
             }
         }
         .padding()
-        .frame(height: 56)
+        .frame(height: .buttonHeight)
         .frame(maxWidth: .infinity)
-        .font(.body)
+        .font(.body16M)
         .background(
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
+            RoundedRectangle(cornerRadius: .cornerRadius, style: .continuous)
                 .stroke(configuration.isPressed ?
                         border : pressedBorder, lineWidth: 1)
         )
         .foregroundColor(configuration.isPressed ? pressedForeground : foreground)
-        .cornerRadius(8)
+        .cornerRadius(.cornerRadius)
         .disabled(showLoading)
     }
 
 }
 
-// TODO: These values are all incorrect and will be pulled from Design when available
 // TODO: Remove pressed states if we later decided that they will be
 @available(iOS 14.0, *)
 extension SecondaryButtonStyle {
 
     var border: Color {
-        .green
+        .green02
     }
 
     var pressedBorder: Color {
-        .green
+        .green02
     }
 
     var foreground: Color {
-        .green
+        .green02
     }
 
     var pressedForeground: Color {
-        .green
+        .green02
     }
 
 }

@@ -1,7 +1,6 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
-// TODO: Replace constants and colors from design system
 struct TestModeCardSelectionView: View {
 
     @StateObject
@@ -17,9 +16,10 @@ struct TestModeCardSelectionView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
+            VStack(spacing: .triplePadding) {
                 Text("Use any of the options below to test the payment flow")
-                    .font(.headline)
+                    .font(.body16M)
+                    .foregroundColor(.stackBlue)
                     .multilineTextAlignment(.center)
 
                 FormInput(title: viewModel.buttonTitle,
@@ -30,7 +30,7 @@ struct TestModeCardSelectionView: View {
                     testCardOptions
                 }
             }
-            .padding(16)
+            .padding(.doublePadding)
         }
     }
 
@@ -40,8 +40,8 @@ struct TestModeCardSelectionView: View {
             selectedItem: $viewModel.testCard) { item in
                 HStack {
                     Text(item.description)
-                        .foregroundColor(.black)
-                        .font(.body)
+                        .foregroundColor(.stackBlue)
+                        .font(.body14R)
 
                     Spacer()
 

@@ -1,7 +1,6 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
-// TODO: Replace constants and colors from design system
 struct SingleSelectionFormInputView<Item: Hashable,
                             Content: View>: FormInputItemView {
 
@@ -20,7 +19,7 @@ struct SingleSelectionFormInputView<Item: Hashable,
     }
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: .doublePadding) {
             ForEach(items, id: \.hashValue) { item in
                 Button {
                     selectedItem = item
@@ -35,12 +34,12 @@ struct SingleSelectionFormInputView<Item: Hashable,
         HStack {
             radioButton(for: item)
             content(item)
-            // todo: remove?
             Spacer()
         }
-        .padding(16)
+        .padding(.doublePadding)
         .background(
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
+            RoundedRectangle(cornerRadius: .cornerRadius,
+                             style: .continuous)
                 .stroke(.gray, lineWidth: 1)
         )
     }

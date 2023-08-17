@@ -1,6 +1,5 @@
 import SwiftUI
 
-// TODO: Replace constants from Design System
 @available(iOS 14.0, *)
 struct ChargeSuccessView: View {
 
@@ -11,15 +10,16 @@ struct ChargeSuccessView: View {
     var visibilityContainer: ViewVisibilityContainer
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: .singlePadding) {
             Image.successIcon
 
             Text("Payment Successful")
-                .font(.headline)
+                .font(.heading3)
+                .foregroundColor(.stackBlue)
 
             Text("You paid \(amount.description) to \(merchant)")
-                .font(.body)
-                .foregroundColor(.gray)
+                .font(.body16R)
+                .foregroundColor(.navy03)
         }
         .task(dismissAutomatically)
     }
@@ -33,7 +33,7 @@ struct ChargeSuccessView: View {
 @available(iOS 14.0, *)
 struct ChargeSuccessView_Previews: PreviewProvider {
     static var previews: some View {
-        ChargeSuccessView(amount: .init(amount: 100, currency: "USD"),
+        ChargeSuccessView(amount: .init(amount: 10000, currency: "USD"),
                           merchant: "Merchant")
     }
 }

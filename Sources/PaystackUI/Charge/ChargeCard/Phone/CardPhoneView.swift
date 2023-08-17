@@ -1,7 +1,6 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
-// TODO: Replace constants and colors from design system
 struct CardPhoneView: View {
 
     @StateObject
@@ -18,11 +17,12 @@ struct CardPhoneView: View {
     }
 
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: .triplePadding) {
             Image.otpIcon
 
             Text("Please enter your mobile phone number (at least 10 digits)")
-                .font(.headline)
+                .font(.body16M)
+                .foregroundColor(.stackBlue)
                 .multilineTextAlignment(.center)
 
             FormInput(title: "Send OTP",
@@ -32,7 +32,7 @@ struct CardPhoneView: View {
                 phoneNumber
             }
         }
-        .padding(16)
+        .padding(.doublePadding)
     }
 
     @ViewBuilder

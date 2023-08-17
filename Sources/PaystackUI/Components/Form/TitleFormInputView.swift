@@ -1,6 +1,5 @@
 import SwiftUI
 
-// TODO: Replace constants and colors from design system
 struct TitleFormInputView<Content: View>: FormInputItemViewModifier {
 
     var title: String
@@ -9,10 +8,10 @@ struct TitleFormInputView<Content: View>: FormInputItemViewModifier {
     var content: Content
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: .halfPadding) {
             Text(title)
-                .foregroundColor(.gray)
-                .font(.body)
+                .foregroundColor(.navy02)
+                .font(.body14R)
 
             content
         }

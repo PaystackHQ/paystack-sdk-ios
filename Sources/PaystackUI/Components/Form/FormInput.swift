@@ -1,7 +1,6 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
-// TODO: Replace constants and colors from design system
 struct FormInput<Content: View,
                         SupplementaryContent: View>: View {
 
@@ -50,14 +49,14 @@ struct FormInput<Content: View,
     }
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: .doublePadding) {
             formData.content
 
             Button(buttonTitle, action: submit)
                 .buttonStyle(PrimaryButtonStyle(showLoading: viewModel.showLoading))
                 .disabled(!buttonEnabled)
-                .padding(.horizontal, 16)
-                .padding(.top, 8)
+                .padding(.horizontal, .doublePadding)
+                .padding(.top, .singlePadding)
 
             if let supplementaryContent = supplementaryContent,
                !viewModel.showLoading {
@@ -67,8 +66,9 @@ struct FormInput<Content: View,
             if let secondaryAction = secondaryAction,
                !viewModel.showLoading {
                 Button(secondaryButtonText, action: secondaryAction)
-                    .foregroundColor(.gray)
-                    .padding(.top, 8)
+                    .foregroundColor(.navy02)
+                    .font(.body14M)
+                    .padding(.top, .singlePadding)
             }
         }
         .disabled(viewModel.showLoading)
@@ -112,7 +112,7 @@ struct FormInput_Previews: PreviewProvider {
 
                 Text(status)
             }
-            .padding(16)
+            .padding(.doublePadding)
         }
 
     }
