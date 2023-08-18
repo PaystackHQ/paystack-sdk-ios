@@ -5,18 +5,13 @@ struct SubmitAddressRequest: Codable {
     var city: String
     var state: String
     var zipCode: String
-    var reference: String
+    var accessCode: String
 
-    init(address: Address, reference: String) {
+    init(address: Address, accessCode: String) {
         self.address = address.address
         self.city = address.city
         self.state = address.state
         self.zipCode = address.zipCode
-        self.reference = reference
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case address, city, state, reference
-        case zipCode = "zip_code"
+        self.accessCode = accessCode
     }
 }
