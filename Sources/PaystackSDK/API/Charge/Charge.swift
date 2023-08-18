@@ -8,53 +8,53 @@ public extension Paystack {
     /// Continues the Charge flow by authenticating a user with an OTP
     /// - Parameters:
     ///   - otp: The OTP sent to the user's device
-    ///   - reference: The reference of the current transaction
+    ///   - accessCode: The access code for the current transaction
     /// - Returns: A ``Service`` with the results of the authentication
-    func authenticateCharge(withOtp otp: String, reference: String) -> Service<ChargeResponse> {
-        let request = SubmitOtpRequest(otp: otp, reference: reference)
+    func authenticateCharge(withOtp otp: String, accessCode: String) -> Service<ChargeResponse> {
+        let request = SubmitOtpRequest(otp: otp, accessCode: accessCode)
         return service.postSubmitOtp(request)
     }
 
     /// Continues the Charge flow by authenticating a user with a Pin
     /// - Parameters:
     ///   - pin: The user's card pin
-    ///   - reference: The reference of the current transaction
+    ///   - accessCode: The access code for the current transaction
     /// - Returns: A ``Service`` with the results of the authentication
-    func authenticateCharge(withPin pin: String, reference: String) -> Service<ChargeResponse> {
-        let request = SubmitPinRequest(pin: pin, reference: reference)
+    func authenticateCharge(withPin pin: String, accessCode: String) -> Service<ChargeResponse> {
+        let request = SubmitPinRequest(pin: pin, accessCode: accessCode)
         return service.postSubmitPin(request)
     }
 
     /// Continues the Charge flow by authenticating a user with a phone number
     /// - Parameters:
     ///   - phone: The user's phone number associated with the card
-    ///   - reference: The reference of the current transaction
+    ///   - accessCode: The access code for the current transaction
     /// - Returns: A ``Service`` with the results of the authentication
     func authenticateCharge(withPhone phone: String,
-                            reference: String) -> Service<ChargeResponse> {
-        let request = SubmitPhoneRequest(phone: phone, reference: reference)
+                            accessCode: String) -> Service<ChargeResponse> {
+        let request = SubmitPhoneRequest(phone: phone, accessCode: accessCode)
         return service.postSubmitPhone(request)
     }
 
     /// Continues the Charge flow by authenticating a user with their birthday
     /// - Parameters:
     ///   - birthday: The user's birthday in ISO 8601 format
-    ///   - reference: The reference of the current transaction
+    ///   - accessCode: The access code for the current transaction
     /// - Returns: A ``Service`` with the results of the authentication
     func authenticateCharge(withBirthday birthday: String,
-                            reference: String) -> Service<ChargeResponse> {
-        let request = SubmitBirthdayRequest(birthday: birthday, reference: reference)
+                            accessCode: String) -> Service<ChargeResponse> {
+        let request = SubmitBirthdayRequest(birthday: birthday, accessCode: accessCode)
         return service.postSubmitBirthday(request)
     }
 
     /// Continues the Charge flow by authenticating a user with their address
     /// - Parameters:
     ///   - address: An ``Address`` object describing the user's address
-    ///   - reference: The reference of the current transaction
+    ///   - accessCode: The access code for the current transaction
     /// - Returns: A ``Service`` with the results of the authentication
     func authenticateCharge(withAddress address: Address,
-                            reference: String) -> Service<ChargeResponse> {
-        let request = SubmitAddressRequest(address: address, reference: reference)
+                            accessCode: String) -> Service<ChargeResponse> {
+        let request = SubmitAddressRequest(address: address, accessCode: accessCode)
         return service.postSubmitAddress(request)
     }
 

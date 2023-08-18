@@ -15,7 +15,7 @@ final class ChargeTests: PSTestCase {
     }
 
     func testAuthenticateChargeWithOTPAuthentication() throws {
-        let otpRequestBody = SubmitOtpRequest(otp: "12345", reference: "abcde")
+        let otpRequestBody = SubmitOtpRequest(otp: "12345", accessCode: "abcde")
 
         mockServiceExecutor
             .expectURL("https://api.paystack.co/charge/submit_otp")
@@ -24,11 +24,11 @@ final class ChargeTests: PSTestCase {
             .expectBody(otpRequestBody)
             .andReturn(json: "ChargeAuthenticationResponse")
 
-        _ = try serviceUnderTest.authenticateCharge(withOtp: "12345", reference: "abcde").sync()
+        _ = try serviceUnderTest.authenticateCharge(withOtp: "12345", accessCode: "abcde").sync()
     }
 
     func testAuthenticateChargeWithPinAuthentication() throws {
-        let pinRequestBody = SubmitPinRequest(pin: "1234", reference: "abcde")
+        let pinRequestBody = SubmitPinRequest(pin: "1234", accessCode: "abcde")
 
         mockServiceExecutor
             .expectURL("https://api.paystack.co/charge/submit_pin")
@@ -37,11 +37,11 @@ final class ChargeTests: PSTestCase {
             .expectBody(pinRequestBody)
             .andReturn(json: "ChargeAuthenticationResponse")
 
-        _ = try serviceUnderTest.authenticateCharge(withPin: "1234", reference: "abcde").sync()
+        _ = try serviceUnderTest.authenticateCharge(withPin: "1234", accessCode: "abcde").sync()
     }
 
     func testAuthenticateChargeWithPhoneAuthentication() throws {
-        let phoneRequestBody = SubmitPhoneRequest(phone: "0111234567", reference: "abcde")
+        let phoneRequestBody = SubmitPhoneRequest(phone: "0111234567", accessCode: "abcde")
 
         mockServiceExecutor
             .expectURL("https://api.paystack.co/charge/submit_phone")
@@ -50,11 +50,11 @@ final class ChargeTests: PSTestCase {
             .expectBody(phoneRequestBody)
             .andReturn(json: "ChargeAuthenticationResponse")
 
-        _ = try serviceUnderTest.authenticateCharge(withPhone: "0111234567", reference: "abcde").sync()
+        _ = try serviceUnderTest.authenticateCharge(withPhone: "0111234567", accessCode: "abcde").sync()
     }
 
     func testAuthenticateChargeWithBirthdayAuthentication() throws {
-        let birthdayRequestBody = SubmitBirthdayRequest(birthday: "1990-01-01", reference: "abcde")
+        let birthdayRequestBody = SubmitBirthdayRequest(birthday: "1990-01-01", accessCode: "abcde")
 
         mockServiceExecutor
             .expectURL("https://api.paystack.co/charge/submit_birthday")
@@ -63,14 +63,14 @@ final class ChargeTests: PSTestCase {
             .expectBody(birthdayRequestBody)
             .andReturn(json: "ChargeAuthenticationResponse")
 
-        _ = try serviceUnderTest.authenticateCharge(withBirthday: "1990-01-01", reference: "abcde").sync()
+        _ = try serviceUnderTest.authenticateCharge(withBirthday: "1990-01-01", accessCode: "abcde").sync()
     }
 
     func testAuthenticateChargeWithAddressAuthentication() throws {
         let address = Address(address: "123 Road", city: "Johannesburg",
                               state: "Gauteng", zipCode: "1234")
         let addressRequestBody = SubmitAddressRequest(address: address,
-                                                      reference: "abcde")
+                                                      accessCode: "abcde")
 
         mockServiceExecutor
             .expectURL("https://api.paystack.co/charge/submit_address")
@@ -79,7 +79,7 @@ final class ChargeTests: PSTestCase {
             .expectBody(addressRequestBody)
             .andReturn(json: "ChargeAuthenticationResponse")
 
-        _ = try serviceUnderTest.authenticateCharge(withAddress: address, reference: "abcde").sync()
+        _ = try serviceUnderTest.authenticateCharge(withAddress: address, accessCode: "abcde").sync()
     }
 
     func testListenFor3DS() throws {
