@@ -24,9 +24,10 @@ public extension Paystack {
         accessCode: String,
         onComplete: @escaping (TransactionResult) -> Void,
         @ViewBuilder button: @escaping () -> Content) -> some View {
+            PaystackContainer.instance.store(self)
             return NavigationalButton(
                 onComplete: onComplete,
-                destination: ChargeView(accessCode: accessCode, paystack: self)) { button() }
+                destination: ChargeView(accessCode: accessCode)) { button() }
 
         }
 
@@ -45,10 +46,11 @@ public extension Paystack {
         on viewController: UIViewController,
         accessCode: String,
         onComplete: @escaping (TransactionResult) -> Void) {
+            PaystackContainer.instance.store(self)
             let visibilityContainer = ViewVisibilityContainer(onComplete: onComplete,
                                                               parentViewController: viewController)
             let chargeCardViewController = UIHostingController(
-                rootView: ChargeView(accessCode: accessCode, paystack: self)
+                rootView: ChargeView(accessCode: accessCode)
                     .environmentObject(visibilityContainer))
             viewController.present(chargeCardViewController, animated: true)
         }
