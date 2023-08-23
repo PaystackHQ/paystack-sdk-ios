@@ -42,4 +42,8 @@ enum Month: Int, CustomStringConvertible, CaseIterable {
             return "December"
         }
     }
+
+    var formattedRepresentation: String {
+        String(format: "%02d", self.rawValue)
+    }
 }

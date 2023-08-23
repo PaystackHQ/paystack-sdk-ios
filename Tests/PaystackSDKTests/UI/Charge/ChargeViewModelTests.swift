@@ -13,12 +13,10 @@ final class ChargeViewModelTests: PSTestCase {
     }
 
     func testVerifyAccessCodeSetsViewStateAsCardDetailsWhenSuccessful() async {
-        let verifyAccessCodeResponse = VerifyAccessCode(amount: 100, currency: "USD",
-                                                                paymentChannels: ["card"], domain: .test)
-        mockRepo.expectedVerifyAccessCode = verifyAccessCodeResponse
+        mockRepo.expectedVerifyAccessCode = .example
         await serviceUnderTest.verifyAccessCodeAndProceedWithCard()
         XCTAssertEqual(serviceUnderTest.transactionState,
-                       .payment(type: .card(transactionInformation: verifyAccessCodeResponse)))
+                       .payment(type: .card(transactionInformation: .example)))
     }
 
     func testVerifyAccessCodeSetsViewStateAsErrorWhenUnsuccessful() async {
@@ -47,12 +45,14 @@ final class ChargeViewModelTests: PSTestCase {
 
     func testPaymentIsInTestModeWhenDomainIsSetToTest() {
         serviceUnderTest.transactionDetails = .init(amount: 10000, currency: "USD",
+                                                    accessCode: "test_access",
                                                     paymentChannels: [], domain: .test)
         XCTAssertTrue(serviceUnderTest.inTestMode)
     }
 
     func testPaymentIsNotInTestModeWhenDomainIsSetToLive() {
         serviceUnderTest.transactionDetails = .init(amount: 10000, currency: "USD",
+                                                    accessCode: "test_access",
                                                     paymentChannels: [], domain: .live)
         XCTAssertFalse(serviceUnderTest.inTestMode)
     }

@@ -5,11 +5,14 @@ final class CardBirthdayViewModelTests: XCTestCase {
 
     var serviceUnderTest: CardBirthdayViewModel!
     var mockChargeCardContainer: MockChargeCardContainer!
+    var mockRepository: MockChargeCardRepository!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
         mockChargeCardContainer = MockChargeCardContainer()
-        serviceUnderTest = CardBirthdayViewModel(chargeCardContainer: mockChargeCardContainer)
+        mockRepository = MockChargeCardRepository()
+        serviceUnderTest = CardBirthdayViewModel(chargeCardContainer: mockChargeCardContainer,
+                                                 repository: mockRepository)
     }
 
     func testCancelTransactionCallsContainerToRestartCardFlow() {
@@ -36,5 +39,18 @@ final class CardBirthdayViewModelTests: XCTestCase {
         serviceUnderTest.day = "01"
         serviceUnderTest.month = .january
         XCTAssertTrue(serviceUnderTest.isValid)
+    }
+
+    func testSubmittingBirthdayFormatsBirthdayCorrectlyAndSendsRepoResultToCardContainer() async throws {
+        serviceUnderTest.year = "2000"
+        serviceUnderTest.month = .january
+        serviceUnderTest.day = "01"
+
+        mockRepository.expectedChargeCardTransaction = .example
+        await serviceUnderTest.submitPhoneNumber()
+
+        let expectedBirthdayFormat = "2000-01-01"
+        XCTAssertEqual(mockRepository.birthdaySubmitted.birthday, expectedBirthdayFormat)
+        XCTAssertEqual(mockChargeCardContainer.transactionResponse, .example)
     }
 }
