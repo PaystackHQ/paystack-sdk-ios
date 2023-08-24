@@ -2,7 +2,7 @@ import Foundation
 import PaystackCore
 
 // TODO: Add further fields here once we know what is required
-struct ChargeCardTransaction {
+struct ChargeCardTransaction: Equatable {
     var status: TransactionStatus
     var redirectUrl: String?
     var customerPhone: String?

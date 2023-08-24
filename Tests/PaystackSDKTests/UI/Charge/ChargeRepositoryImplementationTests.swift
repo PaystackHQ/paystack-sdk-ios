@@ -24,6 +24,7 @@ final class ChargeRepositoryImplementationTests: PSTestCase {
         let result = try await serviceUnderTest.verifyAccessCode("access_code_test")
         let expectedResult = VerifyAccessCode(amount: 10000,
                                               currency: "NGN",
+                                              accessCode: "Access_Code_Test",
                                               paymentChannels: ["card", "qr", "ussd"],
                                               domain: .test)
 

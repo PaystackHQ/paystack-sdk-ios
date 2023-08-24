@@ -21,6 +21,7 @@ final class ChargeCardViewModelTests: PSTestCase {
     func testInitialStateIsSetToCardDetailsInLiveMode() {
         let transactionDetails: VerifyAccessCode = .init(amount: 10000,
                                                          currency: "USD",
+                                                         accessCode: "test_access",
                                                          paymentChannels: [], domain: .live)
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails)
         XCTAssertEqual(serviceUnderTest.chargeCardState,
@@ -30,6 +31,7 @@ final class ChargeCardViewModelTests: PSTestCase {
     func testInitialStateIsSetToTestModeCardSelectionInTestMode() {
         let transactionDetails: VerifyAccessCode = .init(amount: 10000,
                                                          currency: "USD",
+                                                         accessCode: "test_access",
                                                          paymentChannels: [], domain: .test)
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails)
         XCTAssertEqual(serviceUnderTest.chargeCardState,
@@ -39,6 +41,7 @@ final class ChargeCardViewModelTests: PSTestCase {
     func testInTestModeReturnsTrueIfDomainIsTest() {
         let transactionDetails: VerifyAccessCode = .init(amount: 10000,
                                                          currency: "USD",
+                                                         accessCode: "test_access",
                                                          paymentChannels: [], domain: .test)
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails)
         XCTAssertTrue(serviceUnderTest.inTestMode)
@@ -47,6 +50,7 @@ final class ChargeCardViewModelTests: PSTestCase {
     func testInTestModeReturnsFalseIfDomainIsLive() {
         let transactionDetails: VerifyAccessCode = .init(amount: 10000,
                                                          currency: "USD",
+                                                         accessCode: "test_access",
                                                          paymentChannels: [], domain: .live)
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails)
         XCTAssertFalse(serviceUnderTest.inTestMode)
@@ -55,6 +59,7 @@ final class ChargeCardViewModelTests: PSTestCase {
     func testSwitchToTestModeCardSelectionChangesState() {
         let transactionDetails: VerifyAccessCode = .init(amount: 10000,
                                                          currency: "USD",
+                                                         accessCode: "test_access",
                                                          paymentChannels: [], domain: .live)
         serviceUnderTest.switchToTestModeCardSelection()
         XCTAssertEqual(serviceUnderTest.chargeCardState,

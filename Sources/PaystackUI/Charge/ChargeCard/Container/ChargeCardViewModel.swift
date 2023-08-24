@@ -15,6 +15,10 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
             .testModeCardSelection(amount: amountDetails)
     }
 
+    var accessCode: String {
+        transactionDetails.accessCode
+    }
+
     var inTestMode: Bool {
         transactionDetails.domain == .test
     }
@@ -25,5 +29,9 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
 
     func switchToTestModeCardSelection() {
         chargeCardState = .testModeCardSelection(amount: transactionDetails.amountCurrency)
+    }
+
+    func processTransactionResponse(_ response: ChargeCardTransaction) {
+        // TODO: Will handle processing the responses in a future PR
     }
 }
