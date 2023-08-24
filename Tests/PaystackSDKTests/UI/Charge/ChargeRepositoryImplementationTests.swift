@@ -26,7 +26,8 @@ final class ChargeRepositoryImplementationTests: PSTestCase {
                                               currency: "NGN",
                                               accessCode: "Access_Code_Test",
                                               paymentChannels: ["card", "qr", "ussd"],
-                                              domain: .test)
+                                              domain: .test,
+                                              publicEncryptionKey: "test_encryption_key")
 
         XCTAssertEqual(result, expectedResult)
     }
