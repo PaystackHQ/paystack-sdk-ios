@@ -5,11 +5,14 @@ final class CardPhoneViewModelTests: XCTestCase {
 
     var serviceUnderTest: CardPhoneViewModel!
     var mockChargeCardContainer: MockChargeCardContainer!
+    var mockRepository: MockChargeCardRepository!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
         mockChargeCardContainer = MockChargeCardContainer()
-        serviceUnderTest = CardPhoneViewModel(chargeCardContainer: mockChargeCardContainer)
+        mockRepository = MockChargeCardRepository()
+        serviceUnderTest = CardPhoneViewModel(chargeCardContainer: mockChargeCardContainer,
+                                              repository: mockRepository)
     }
 
     func testButtonIsDisabledWhenPhoneNumberIsLessThanTenDigits() {
@@ -28,5 +31,15 @@ final class CardPhoneViewModelTests: XCTestCase {
     func testCancelTransactionCallsContainerToRestartCardFlow() {
         serviceUnderTest.cancelTransaction()
         XCTAssertTrue(mockChargeCardContainer.cardPaymentRestarted)
+    }
+
+    func testSubmittingPhoneNumberSendsRepositoryResultToCardContainer() async throws {
+        let expectedPhoneNumber = "0123456789"
+        mockRepository.expectedChargeCardTransaction = .example
+        serviceUnderTest.phoneNumber = expectedPhoneNumber
+        await serviceUnderTest.submitPhoneNumber()
+
+        XCTAssertEqual(mockRepository.phoneSubmitted.phone, expectedPhoneNumber)
+        XCTAssertEqual(mockChargeCardContainer.transactionResponse, .example)
     }
 }

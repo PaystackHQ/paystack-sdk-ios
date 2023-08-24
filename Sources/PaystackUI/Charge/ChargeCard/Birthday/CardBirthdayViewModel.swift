@@ -25,7 +25,7 @@ class CardBirthdayViewModel: ObservableObject {
         month != nil
     }
 
-    func submitPhoneNumber() async {
+    func submitBirthday() async {
         do {
             let formattedBirthday = "\(year)-\(month?.formattedRepresentation ?? "00")-\(day)"
             let authenticationResult = try await repository.submitBirthday(

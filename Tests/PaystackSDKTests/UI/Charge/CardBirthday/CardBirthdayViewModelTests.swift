@@ -47,7 +47,7 @@ final class CardBirthdayViewModelTests: XCTestCase {
         serviceUnderTest.day = "01"
 
         mockRepository.expectedChargeCardTransaction = .example
-        await serviceUnderTest.submitPhoneNumber()
+        await serviceUnderTest.submitBirthday()
 
         let expectedBirthdayFormat = "2000-01-01"
         XCTAssertEqual(mockRepository.birthdaySubmitted.birthday, expectedBirthdayFormat)

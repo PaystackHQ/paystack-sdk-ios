@@ -3,12 +3,15 @@ import Foundation
 class CardPhoneViewModel: ObservableObject {
 
     var chargeCardContainer: ChargeCardContainer
+    var repository: ChargeCardRepository
 
     @Published
     var phoneNumber: String = ""
 
-    init(chargeCardContainer: ChargeCardContainer) {
+    init(chargeCardContainer: ChargeCardContainer,
+         repository: ChargeCardRepository = ChargeCardRepositoryImplementation()) {
         self.chargeCardContainer = chargeCardContainer
+        self.repository = repository
     }
 
     var isValid: Bool {
@@ -16,7 +19,13 @@ class CardPhoneViewModel: ObservableObject {
     }
 
     func submitPhoneNumber() async {
-        // TODO: Perform API call to submit phone number
+        do {
+            let authenticationResult = try await repository.submitPhone(
+                phoneNumber, accessCode: chargeCardContainer.accessCode)
+            chargeCardContainer.processTransactionResponse(authenticationResult)
+        } catch {
+            // TODO: Determine error handling once we have further information
+        }
     }
 
     func cancelTransaction() {
