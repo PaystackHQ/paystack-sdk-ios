@@ -4,6 +4,7 @@ import Combine
 class CardOTPViewModel: ObservableObject {
 
     var chargeCardContainer: ChargeCardContainer
+    var repository: ChargeCardRepository
     var phoneNumber: String
 
     @Published
@@ -17,9 +18,11 @@ class CardOTPViewModel: ObservableObject {
     var otpResendAttempts = 0
 
     init(phoneNumber: String,
-         chargeCardContainer: ChargeCardContainer) {
+         chargeCardContainer: ChargeCardContainer,
+         repository: ChargeCardRepository = ChargeCardRepositoryImplementation()) {
         self.phoneNumber = phoneNumber
         self.chargeCardContainer = chargeCardContainer
+        self.repository = repository
     }
 
     var isValid: Bool {
@@ -27,7 +30,13 @@ class CardOTPViewModel: ObservableObject {
     }
 
     func submitOTP() async {
-        // TODO: Perform API call
+        do {
+            let authenticationResult = try await repository.submitOTP(
+                otp, accessCode: chargeCardContainer.accessCode)
+            chargeCardContainer.processTransactionResponse(authenticationResult)
+        } catch {
+            // TODO: Determine error handling once we have further information
+        }
     }
 
     func cancelTransaction() {

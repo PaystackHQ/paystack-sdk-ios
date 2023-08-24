@@ -7,4 +7,11 @@ struct ChargeCardRepositoryImplementation: ChargeCardRepository {
         ChargeCardTransaction.example
     }
 
+    func submitPhone(_ phone: String, accessCode: String) async throws -> ChargeCardTransaction {
+        ChargeCardTransaction.example
+    }
+
+    func submitOTP(_ otp: String, accessCode: String) async throws -> ChargeCardTransaction {
+        ChargeCardTransaction.example
+    }
 }

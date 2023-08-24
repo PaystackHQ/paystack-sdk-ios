@@ -5,13 +5,16 @@ final class CardOTPViewModelTests: XCTestCase {
 
     var serviceUnderTest: CardOTPViewModel!
     var mockChargeCardContainer: MockChargeCardContainer!
+    var mockRepository: MockChargeCardRepository!
     let mockPhoneNumber = "+234801****5678"
 
     override func setUpWithError() throws {
         try super.setUpWithError()
         mockChargeCardContainer = MockChargeCardContainer()
+        mockRepository = MockChargeCardRepository()
         serviceUnderTest = CardOTPViewModel(phoneNumber: mockPhoneNumber,
-                                            chargeCardContainer: mockChargeCardContainer)
+                                            chargeCardContainer: mockChargeCardContainer,
+                                            repository: mockRepository)
     }
 
     func testFormIsInvalidIfOTPIsEmpty() {
@@ -50,5 +53,15 @@ final class CardOTPViewModelTests: XCTestCase {
         serviceUnderTest.secondsBeforeResendOTP = 0
         serviceUnderTest.decreaseOTPCountdownTime()
         XCTAssertEqual(serviceUnderTest.secondsBeforeResendOTP, 0)
+    }
+
+    func testSubmittingOTPSendsRepositoryResultToCardContainer() async throws {
+        let expectedOTP = "123456"
+        mockRepository.expectedChargeCardTransaction = .example
+        serviceUnderTest.otp = expectedOTP
+        await serviceUnderTest.submitOTP()
+
+        XCTAssertEqual(mockRepository.otpSubmitted.otp, expectedOTP)
+        XCTAssertEqual(mockChargeCardContainer.transactionResponse, .example)
     }
 }

@@ -31,7 +31,7 @@ struct CardBirthdayView: View {
 
             FormInput(title: "Authorize",
                       enabled: viewModel.isValid,
-                      action: viewModel.submitPhoneNumber,
+                      action: viewModel.submitBirthday,
                       secondaryAction: viewModel.cancelTransaction) {
 
                 monthField
