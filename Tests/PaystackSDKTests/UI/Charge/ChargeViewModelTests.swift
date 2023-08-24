@@ -46,14 +46,16 @@ final class ChargeViewModelTests: PSTestCase {
     func testPaymentIsInTestModeWhenDomainIsSetToTest() {
         serviceUnderTest.transactionDetails = .init(amount: 10000, currency: "USD",
                                                     accessCode: "test_access",
-                                                    paymentChannels: [], domain: .test)
+                                                    paymentChannels: [], domain: .test,
+                                                    publicEncryptionKey: "test_encryption_key")
         XCTAssertTrue(serviceUnderTest.inTestMode)
     }
 
     func testPaymentIsNotInTestModeWhenDomainIsSetToLive() {
         serviceUnderTest.transactionDetails = .init(amount: 10000, currency: "USD",
                                                     accessCode: "test_access",
-                                                    paymentChannels: [], domain: .live)
+                                                    paymentChannels: [], domain: .live,
+                                                    publicEncryptionKey: "test_encryption_key")
         XCTAssertFalse(serviceUnderTest.inTestMode)
     }
 

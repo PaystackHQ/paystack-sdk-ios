@@ -22,7 +22,8 @@ final class ChargeCardViewModelTests: PSTestCase {
         let transactionDetails: VerifyAccessCode = .init(amount: 10000,
                                                          currency: "USD",
                                                          accessCode: "test_access",
-                                                         paymentChannels: [], domain: .live)
+                                                         paymentChannels: [], domain: .live,
+                                                         publicEncryptionKey: "test_encryption_key")
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails)
         XCTAssertEqual(serviceUnderTest.chargeCardState,
             .cardDetails(amount: transactionDetails.amountCurrency))
@@ -32,7 +33,8 @@ final class ChargeCardViewModelTests: PSTestCase {
         let transactionDetails: VerifyAccessCode = .init(amount: 10000,
                                                          currency: "USD",
                                                          accessCode: "test_access",
-                                                         paymentChannels: [], domain: .test)
+                                                         paymentChannels: [], domain: .test,
+                                                         publicEncryptionKey: "test_encryption_key")
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails)
         XCTAssertEqual(serviceUnderTest.chargeCardState,
                        .testModeCardSelection(amount: transactionDetails.amountCurrency))
@@ -42,7 +44,8 @@ final class ChargeCardViewModelTests: PSTestCase {
         let transactionDetails: VerifyAccessCode = .init(amount: 10000,
                                                          currency: "USD",
                                                          accessCode: "test_access",
-                                                         paymentChannels: [], domain: .test)
+                                                         paymentChannels: [], domain: .test,
+                                                         publicEncryptionKey: "test_encryption_key")
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails)
         XCTAssertTrue(serviceUnderTest.inTestMode)
     }
@@ -51,7 +54,8 @@ final class ChargeCardViewModelTests: PSTestCase {
         let transactionDetails: VerifyAccessCode = .init(amount: 10000,
                                                          currency: "USD",
                                                          accessCode: "test_access",
-                                                         paymentChannels: [], domain: .live)
+                                                         paymentChannels: [], domain: .live,
+                                                         publicEncryptionKey: "test_encryption_key")
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails)
         XCTAssertFalse(serviceUnderTest.inTestMode)
     }
@@ -60,7 +64,8 @@ final class ChargeCardViewModelTests: PSTestCase {
         let transactionDetails: VerifyAccessCode = .init(amount: 10000,
                                                          currency: "USD",
                                                          accessCode: "test_access",
-                                                         paymentChannels: [], domain: .live)
+                                                         paymentChannels: [], domain: .live,
+                                                         publicEncryptionKey: "test_encryption_key")
         serviceUnderTest.switchToTestModeCardSelection()
         XCTAssertEqual(serviceUnderTest.chargeCardState,
                        .testModeCardSelection(amount: transactionDetails.amountCurrency))

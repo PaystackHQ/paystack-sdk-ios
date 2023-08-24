@@ -10,6 +10,7 @@
     "merchant_name": "Test Merchant",
     "domain": "test",
     "currency": "NGN",
+    "public_encryption_key": "test_encryption_key",
     "channels": [
       "card",
       "qr",
