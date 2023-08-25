@@ -20,9 +20,8 @@ struct CardPinView: View {
                 loadingView
             } else {
                 PinTextView(text: $viewModel.pinText,
-                            isSecureTextEntry: true) {
-                    await viewModel.submitPin()
-                }
+                            isSecureTextEntry: true,
+                            onCommit: viewModel.submitPin)
 
                 Button("Cancel", action: viewModel.cancelTransaction)
                     .foregroundColor(.navy02)
