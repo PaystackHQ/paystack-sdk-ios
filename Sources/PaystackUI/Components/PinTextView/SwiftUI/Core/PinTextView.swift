@@ -45,7 +45,7 @@ struct PinTextView: View {
     /// A Boolean value that used to allow the `PinTextView` clear the OTP and set the `PinTextView` to the default state when you set the OTP Text with Empty Value
     private let enableClearOTP: Bool
     /// A Closure that fires when the OTP returned
-    private var onCommit: (() -> Void)?
+    private var onCommit: (() async -> Void)?
 
     // MARK: - INIT
     //
@@ -87,7 +87,7 @@ struct PinTextView: View {
         otpFont: UIFont = .heading2,
         isSecureTextEntry: Bool = false,
         enableClearOTP: Bool = false,
-        onCommit: (() -> Void)? = nil
+        onCommit: (() async -> Void)? = nil
     ) {
         self._text = text
         self.slotsCount = slotsCount

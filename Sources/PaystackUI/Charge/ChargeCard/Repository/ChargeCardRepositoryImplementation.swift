@@ -14,4 +14,12 @@ struct ChargeCardRepositoryImplementation: ChargeCardRepository {
     func submitOTP(_ otp: String, accessCode: String) async throws -> ChargeCardTransaction {
         ChargeCardTransaction.example
     }
+
+    func submitAddress(_ address: Address, accessCode: String) async throws -> ChargeCardTransaction {
+        ChargeCardTransaction.example
+    }
+
+    func submitPin(_ pin: String, accessCode: String) async throws -> ChargeCardTransaction {
+        ChargeCardTransaction.example
+    }
 }

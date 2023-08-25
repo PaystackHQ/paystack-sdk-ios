@@ -9,14 +9,23 @@ class CardPinViewModel: ObservableObject {
     var showLoading = false
 
     var chargeCardContainer: ChargeCardContainer
+    var repository: ChargeCardRepository
 
-    init(chargeCardContainer: ChargeCardContainer) {
+    init(chargeCardContainer: ChargeCardContainer,
+         repository: ChargeCardRepository = ChargeCardRepositoryImplementation()) {
         self.chargeCardContainer = chargeCardContainer
+        self.repository = repository
     }
 
-    func submitPin() {
+    func submitPin() async {
         showLoading = true
-        // TODO: Perform API call
+        do {
+            let authenticationResult = try await repository.submitPin(
+                pinText, accessCode: chargeCardContainer.accessCode)
+            chargeCardContainer.processTransactionResponse(authenticationResult)
+        } catch {
+            // TODO: Determine error handling once we have further information
+        }
     }
 
     func cancelTransaction() {

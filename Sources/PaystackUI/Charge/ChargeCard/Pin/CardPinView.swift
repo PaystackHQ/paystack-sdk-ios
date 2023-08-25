@@ -21,7 +21,7 @@ struct CardPinView: View {
             } else {
                 PinTextView(text: $viewModel.pinText,
                             isSecureTextEntry: true) {
-                    viewModel.submitPin()
+                    await viewModel.submitPin()
                 }
 
                 Button("Cancel", action: viewModel.cancelTransaction)

@@ -1,8 +1,10 @@
 import Foundation
+import PaystackCore
 
 class CardAddressViewModel: ObservableObject {
 
     var chargeCardContainer: ChargeCardContainer
+    var repository: ChargeCardRepository
     var stateList: [String]
 
     @Published
@@ -18,9 +20,11 @@ class CardAddressViewModel: ObservableObject {
     var city: String = ""
 
     init(states: [String],
-         chargeCardContainer: ChargeCardContainer) {
+         chargeCardContainer: ChargeCardContainer,
+         repository: ChargeCardRepository = ChargeCardRepositoryImplementation()) {
         self.chargeCardContainer = chargeCardContainer
         self.stateList = states
+        self.repository = repository
     }
 
     var isValid: Bool {
@@ -31,7 +35,14 @@ class CardAddressViewModel: ObservableObject {
     }
 
     func submitAddress() async {
-        // TODO: Perform API call
+        do {
+            let address = Address(address: street, city: city, state: state ?? "", zipCode: zipCode)
+            let authenticationResult = try await repository.submitAddress(
+                address, accessCode: chargeCardContainer.accessCode)
+            chargeCardContainer.processTransactionResponse(authenticationResult)
+        } catch {
+            // TODO: Determine error handling once we have further information
+        }
     }
 
     func cancelTransaction() {
