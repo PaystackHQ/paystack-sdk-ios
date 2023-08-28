@@ -10,12 +10,11 @@ struct ChargeView: View {
     @EnvironmentObject
     var visibilityContainer: ViewVisibilityContainer
 
-    init(accessCode: String, paystack: Paystack) {
-        registerFonts()
+    init(accessCode: String) {
         self._viewModel = StateObject(
             wrappedValue: ChargeViewModel(
                 accessCode: accessCode,
-                repository: ChargeRepositoryImplementation(paystack: paystack)))
+                repository: ChargeRepositoryImplementation()))
     }
 
     var body: some View {

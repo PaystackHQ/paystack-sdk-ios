@@ -4,8 +4,8 @@ struct ChargeRepositoryImplementation: ChargeRepository {
 
     let paystack: Paystack
 
-    init(paystack: Paystack) {
-        self.paystack = paystack
+    init() {
+        self.paystack = PaystackContainer.instance.retrieve()
     }
 
     func verifyAccessCode(_ code: String) async throws -> VerifyAccessCode {
