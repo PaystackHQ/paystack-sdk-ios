@@ -11,7 +11,6 @@ struct ChargeView: View {
     var visibilityContainer: ViewVisibilityContainer
 
     init(accessCode: String) {
-        registerFonts()
         self._viewModel = StateObject(
             wrappedValue: ChargeViewModel(
                 accessCode: accessCode,

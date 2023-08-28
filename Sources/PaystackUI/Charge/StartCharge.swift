@@ -24,7 +24,7 @@ public extension Paystack {
         accessCode: String,
         onComplete: @escaping (TransactionResult) -> Void,
         @ViewBuilder button: @escaping () -> Content) -> some View {
-            PaystackContainer.instance.store(self)
+            initializeSDK()
             return NavigationalButton(
                 onComplete: onComplete,
                 destination: ChargeView(accessCode: accessCode)) { button() }
@@ -46,7 +46,7 @@ public extension Paystack {
         on viewController: UIViewController,
         accessCode: String,
         onComplete: @escaping (TransactionResult) -> Void) {
-            PaystackContainer.instance.store(self)
+            initializeSDK()
             let visibilityContainer = ViewVisibilityContainer(onComplete: onComplete,
                                                               parentViewController: viewController)
             let chargeCardViewController = UIHostingController(
@@ -55,4 +55,14 @@ public extension Paystack {
             viewController.present(chargeCardViewController, animated: true)
         }
     #endif
+}
+
+// MARK: Paystack UI Initialization
+extension Paystack {
+
+    func initializeSDK() {
+        registerFonts()
+        PaystackContainer.instance.store(self)
+    }
+
 }

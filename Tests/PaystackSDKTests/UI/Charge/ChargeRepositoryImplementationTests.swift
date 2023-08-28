@@ -11,6 +11,7 @@ final class ChargeRepositoryImplementationTests: PSTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         paystack = try PaystackBuilder.newInstance.setKey(apiKey).build()
+        PaystackContainer.instance.store(paystack)
         serviceUnderTest = ChargeRepositoryImplementation()
     }
 
