@@ -18,7 +18,7 @@ struct PinTextViewRepresentable: UIViewRepresentable {
     private let otpFontSize: CGFloat
     private let otpFont: UIFont
     private let isSecureTextEntry: Bool
-    private let onCommit: (() -> Void)?
+    private let onCommit: (() async -> Void)?
     private let textField: PinTextFieldSwiftUI
 
     init(
@@ -36,7 +36,7 @@ struct PinTextViewRepresentable: UIViewRepresentable {
         otpFontSize: CGFloat = 18,
         otpFont: UIFont = UIFont.systemFont(ofSize: 18),
         isSecureTextEntry: Bool = false,
-        onCommit: (() -> Void)? = nil
+        onCommit: (() async -> Void)? = nil
     ) {
         self._text = text
         self.slotsCount = slotsCount
@@ -87,12 +87,12 @@ struct PinTextViewRepresentable: UIViewRepresentable {
         @Binding private var text: String
 
         private let slotsCount: Int
-        private let onCommit: (() -> Void)?
+        private let onCommit: (() async -> Void)?
 
         init(
             text: Binding<String>,
             slotsCount: Int,
-            onCommit: (() -> Void)?
+            onCommit: (() async -> Void)?
         ) {
             self._text = text
             self.slotsCount = slotsCount
@@ -105,7 +105,9 @@ struct PinTextViewRepresentable: UIViewRepresentable {
             text = textField.text ?? ""
 
             if textField.text?.count == slotsCount {
-                onCommit?()
+                Task {
+                    await onCommit?()
+                }
             }
         }
 

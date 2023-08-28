@@ -1,17 +1,21 @@
 import XCTest
+import PaystackCore
 @testable import PaystackUI
 
 final class CardAddressViewModelTests: XCTestCase {
 
     var serviceUnderTest: CardAddressViewModel!
     var mockChargeCardContainer: MockChargeCardContainer!
+    var mockRepository: MockChargeCardRepository!
     let mockStates: [String] = []
 
     override func setUpWithError() throws {
         try super.setUpWithError()
         mockChargeCardContainer = MockChargeCardContainer()
+        mockRepository = MockChargeCardRepository()
         serviceUnderTest = CardAddressViewModel(states: mockStates,
-                                                chargeCardContainer: mockChargeCardContainer)
+                                                chargeCardContainer: mockChargeCardContainer,
+                                                repository: mockRepository)
     }
 
     func testFormIsInvalidWhenAllFieldsAreEmpty() {
@@ -41,6 +45,23 @@ final class CardAddressViewModelTests: XCTestCase {
     func testCancelTransactionCallsContainerToRestartCardFlow() {
         serviceUnderTest.cancelTransaction()
         XCTAssertTrue(mockChargeCardContainer.cardPaymentRestarted)
+    }
+
+    func testSubmittingAddressSendsRepositoryResultToCardContainer() async throws {
+        let expectedAddress = Address(address: "123 Test Street",
+                                      city: "Test City",
+                                      state: "Test State",
+                                      zipCode: "12345")
+
+        serviceUnderTest.street = "123 Test Street"
+        serviceUnderTest.zipCode = "12345"
+        serviceUnderTest.city = "Test City"
+        serviceUnderTest.state = "Test State"
+        mockRepository.expectedChargeCardTransaction = .example
+        await serviceUnderTest.submitAddress()
+
+        XCTAssertEqual(mockRepository.addressSubmitted.address, expectedAddress)
+        XCTAssertEqual(mockChargeCardContainer.transactionResponse, .example)
     }
 
 }

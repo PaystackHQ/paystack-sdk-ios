@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Address {
+public struct Address: Equatable {
     public var address: String
     public var city: String
     public var state: String
