@@ -8,6 +8,7 @@ struct VerifyAccessCode: Equatable {
     // TODO: Use enum once we see example responses
     var paymentChannels: [String]
     var domain: Domain
+    var merchantName: String
     var publicEncryptionKey: String
 
     var amountCurrency: AmountCurrency {
@@ -23,6 +24,7 @@ extension VerifyAccessCode {
                          accessCode: response.data.accessCode,
                          paymentChannels: response.data.channels,
                          domain: response.data.domain,
+                         merchantName: response.data.merchantName,
                          publicEncryptionKey: response.data.publicEncryptionKey)
     }
 
@@ -36,6 +38,7 @@ extension VerifyAccessCode {
               accessCode: "test_access",
               paymentChannels: [],
               domain: .test,
+              merchantName: "Test Merchant",
               publicEncryptionKey: "test_encryption_key")
     }
 }

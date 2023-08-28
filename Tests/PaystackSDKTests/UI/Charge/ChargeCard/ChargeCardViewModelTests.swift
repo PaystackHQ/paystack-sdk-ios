@@ -5,10 +5,13 @@ final class ChargeCardViewModelTests: PSTestCase {
 
     var serviceUnderTest: ChargeCardViewModel!
     var mockTransactionDetails = VerifyAccessCode.example
+    var mockChargeContainer: MockChargeContainer!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        serviceUnderTest = ChargeCardViewModel(transactionDetails: mockTransactionDetails)
+        mockChargeContainer = MockChargeContainer()
+        serviceUnderTest = ChargeCardViewModel(transactionDetails: mockTransactionDetails,
+                                               chargeContainer: mockChargeContainer)
     }
 
     func testRestartCardPaymentResetsStateToCardDetailsWithAmount() {
@@ -23,8 +26,10 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          currency: "USD",
                                                          accessCode: "test_access",
                                                          paymentChannels: [], domain: .live,
+                                                         merchantName: "Test Merchant",
                                                          publicEncryptionKey: "test_encryption_key")
-        serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails)
+        serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails,
+                                               chargeContainer: mockChargeContainer)
         XCTAssertEqual(serviceUnderTest.chargeCardState,
             .cardDetails(amount: transactionDetails.amountCurrency))
     }
@@ -34,8 +39,10 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          currency: "USD",
                                                          accessCode: "test_access",
                                                          paymentChannels: [], domain: .test,
+                                                         merchantName: "Test Merchant",
                                                          publicEncryptionKey: "test_encryption_key")
-        serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails)
+        serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails,
+                                               chargeContainer: mockChargeContainer)
         XCTAssertEqual(serviceUnderTest.chargeCardState,
                        .testModeCardSelection(amount: transactionDetails.amountCurrency))
     }
@@ -45,8 +52,10 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          currency: "USD",
                                                          accessCode: "test_access",
                                                          paymentChannels: [], domain: .test,
+                                                         merchantName: "Test Merchant",
                                                          publicEncryptionKey: "test_encryption_key")
-        serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails)
+        serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails,
+                                               chargeContainer: mockChargeContainer)
         XCTAssertTrue(serviceUnderTest.inTestMode)
     }
 
@@ -55,8 +64,10 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          currency: "USD",
                                                          accessCode: "test_access",
                                                          paymentChannels: [], domain: .live,
+                                                         merchantName: "Test Merchant",
                                                          publicEncryptionKey: "test_encryption_key")
-        serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails)
+        serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails,
+                                               chargeContainer: mockChargeContainer)
         XCTAssertFalse(serviceUnderTest.inTestMode)
     }
 
@@ -65,6 +76,7 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          currency: "USD",
                                                          accessCode: "test_access",
                                                          paymentChannels: [], domain: .live,
+                                                         merchantName: "Test Merchant",
                                                          publicEncryptionKey: "test_encryption_key")
         serviceUnderTest.switchToTestModeCardSelection()
         XCTAssertEqual(serviceUnderTest.chargeCardState,

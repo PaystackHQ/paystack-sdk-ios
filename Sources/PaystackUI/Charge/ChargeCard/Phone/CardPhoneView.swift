@@ -52,6 +52,7 @@ struct CardPhoneView: View {
 struct CardPhoneView_Previews: PreviewProvider {
     static var previews: some View {
         CardPhoneView(chargeCardContainer: ChargeCardViewModel(
-            transactionDetails: .example))
+            transactionDetails: .example,
+            chargeContainer: ChargeViewModel(accessCode: "access_code")))
     }
 }

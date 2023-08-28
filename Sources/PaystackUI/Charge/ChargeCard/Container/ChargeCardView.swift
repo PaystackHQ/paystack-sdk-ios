@@ -6,9 +6,10 @@ struct ChargeCardView: View {
     @StateObject
     var viewModel: ChargeCardViewModel
 
-    init(transactionDetails: VerifyAccessCode) {
+    init(transactionDetails: VerifyAccessCode, chargeContainer: ChargeContainer) {
         self._viewModel = StateObject(
-            wrappedValue: ChargeCardViewModel(transactionDetails: transactionDetails))
+            wrappedValue: ChargeCardViewModel(transactionDetails: transactionDetails,
+                                              chargeContainer: chargeContainer))
     }
 
     var body: some View {

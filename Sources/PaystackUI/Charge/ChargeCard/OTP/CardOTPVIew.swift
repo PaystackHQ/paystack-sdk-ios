@@ -88,6 +88,7 @@ struct CardOTPVIew_Previews: PreviewProvider {
     static var previews: some View {
         CardOTPVIew(phoneNumber: "+234801****5678",
                     chargeCardContainer: ChargeCardViewModel(
-                        transactionDetails: .example))
+                        transactionDetails: .example,
+                        chargeContainer: ChargeViewModel(accessCode: "access_code")))
     }
 }

@@ -74,6 +74,7 @@ struct CardAddressView_Previews: PreviewProvider {
     static var previews: some View {
         CardAddressView(states: [],
                         chargeCardContainer: ChargeCardViewModel(
-                            transactionDetails: .example))
+                            transactionDetails: .example,
+                            chargeContainer: ChargeViewModel(accessCode: "access_code")))
     }
 }

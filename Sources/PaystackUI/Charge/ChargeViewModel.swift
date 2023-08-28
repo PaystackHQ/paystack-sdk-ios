@@ -12,7 +12,7 @@ class ChargeViewModel: ObservableObject {
     var transactionDetails: VerifyAccessCode?
 
     init(accessCode: String,
-         repository: ChargeRepository) {
+         repository: ChargeRepository = ChargeRepositoryImplementation()) {
         self.accessCode = accessCode
         self.repository = repository
     }
@@ -27,6 +27,19 @@ class ChargeViewModel: ObservableObject {
         } catch {
             transactionState = .error(error)
         }
+    }
+
+}
+
+// MARK: - Charge Container
+extension ChargeViewModel: ChargeContainer {
+
+    func processSuccessfulTransaction(details: VerifyAccessCode) {
+        transactionState = .success(amount: details.amountCurrency, merchant: details.merchantName)
+    }
+
+    func processFailedTransaction() {
+        // TODO: Will handle in another PR
     }
 
 }

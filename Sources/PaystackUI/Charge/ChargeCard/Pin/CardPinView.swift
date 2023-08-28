@@ -51,6 +51,7 @@ struct CardPinView: View {
 struct CardPinView_Previews: PreviewProvider {
     static var previews: some View {
         CardPinView(chargeCardContainer: ChargeCardViewModel(
-            transactionDetails: .example))
+            transactionDetails: .example,
+            chargeContainer: ChargeViewModel(accessCode: "access_code")))
     }
 }
