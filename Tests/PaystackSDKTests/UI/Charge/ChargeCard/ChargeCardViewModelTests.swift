@@ -82,6 +82,50 @@ final class ChargeCardViewModelTests: PSTestCase {
         XCTAssertEqual(serviceUnderTest.chargeCardState,
                        .testModeCardSelection(amount: transactionDetails.amountCurrency))
     }
+
+    func testProcessResponseWithAddressStatusSetsStateToAddress() async {
+        let addressResponse = ChargeCardTransaction(status: .sendAddress)
+        let mockStates = ["Test State A", "Test State B"]
+        await serviceUnderTest.processTransactionResponse(addressResponse)
+        XCTAssertEqual(serviceUnderTest.chargeCardState, .address(states: mockStates))
+    }
+
+    func testProcessResponseWithBirthdayStatusSetsStateToBirthday() async {
+        let birthdayResponse = ChargeCardTransaction(status: .sendBirthday)
+        await serviceUnderTest.processTransactionResponse(birthdayResponse)
+        XCTAssertEqual(serviceUnderTest.chargeCardState, .birthday)
+    }
+
+    func testProcessResponseWithPhoneStatusSetsStateToPhone() async {
+        let phoneResponse = ChargeCardTransaction(status: .sendPhone)
+        await serviceUnderTest.processTransactionResponse(phoneResponse)
+        XCTAssertEqual(serviceUnderTest.chargeCardState, .phoneNumber)
+    }
+
+    func testProcessResponseWithOTPStatusSetsStateToOTP() async {
+        let expectedPhoneNumber = "0123456789"
+        let otpResponse = ChargeCardTransaction(status: .sendOtp, customerPhone: expectedPhoneNumber)
+        await serviceUnderTest.processTransactionResponse(otpResponse)
+        XCTAssertEqual(serviceUnderTest.chargeCardState, .otp(phoneNumber: expectedPhoneNumber))
+    }
+
+    func testProcessResponseWithPinStatusSetsStateToPin() async {
+        let pinResponse = ChargeCardTransaction(status: .sendPin)
+        await serviceUnderTest.processTransactionResponse(pinResponse)
+        XCTAssertEqual(serviceUnderTest.chargeCardState, .pin)
+    }
+
+    func testProcessResponseWithSuccessStatusCallsChargeContainerToUpdateStatus() async {
+        let successResponse = ChargeCardTransaction(status: .success)
+        await serviceUnderTest.processTransactionResponse(successResponse)
+        XCTAssertTrue(mockChargeContainer.transactionSuccessful)
+    }
+
+    func testProcessResponseWithFailureStatusCallsChargeContainerToUpdateStatus() async {
+        let successResponse = ChargeCardTransaction(status: .failed)
+        await serviceUnderTest.processTransactionResponse(successResponse)
+        XCTAssertTrue(mockChargeContainer.transactionFailed)
+    }
 }
 
 extension ChargeCardState: Equatable {

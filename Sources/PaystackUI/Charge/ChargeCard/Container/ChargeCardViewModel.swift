@@ -34,7 +34,38 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
         chargeCardState = .testModeCardSelection(amount: transactionDetails.amountCurrency)
     }
 
+    @MainActor
     func processTransactionResponse(_ response: ChargeCardTransaction) {
-        // TODO: Will handle processing the responses in a future PR
+        switch response.status {
+        case .sendAddress:
+            // TODO: Fetch states from API
+            let mockStates = ["Test State A", "Test State B"]
+            chargeCardState = .address(states: mockStates)
+        case .sendBirthday:
+            chargeCardState = .birthday
+        case .sendPhone:
+            chargeCardState = .phoneNumber
+        case .sendOtp:
+            if let phoneNumber = response.customerPhone {
+                chargeCardState = .otp(phoneNumber: phoneNumber)
+            } else {
+                // TODO: Display error
+            }
+        case .sendPin:
+            chargeCardState = .pin
+        case .success:
+            chargeContainer.processSuccessfulTransaction(details: transactionDetails)
+        case .failed:
+            chargeContainer.processFailedTransaction()
+        case .pending:
+            // TODO: Add logic for pending state
+            break
+        case .redirect:
+            // TODO: Add logic for 3DS
+            break
+        case .timeout:
+            // TODO: Add logic for timeout
+            break
+        }
     }
 }
