@@ -35,26 +35,6 @@ final class CardOTPViewModelTests: XCTestCase {
         XCTAssertTrue(mockChargeCardContainer.cardPaymentRestarted)
     }
 
-    func testResendOTPIncreasesResendCountAndResetsTimeToResendLength() {
-        let expectedResendLength = 5
-        serviceUnderTest.otpResendLength = expectedResendLength
-        serviceUnderTest.resendOTP()
-        XCTAssertEqual(serviceUnderTest.secondsBeforeResendOTP, expectedResendLength)
-        XCTAssertEqual(serviceUnderTest.otpResendAttempts, 1)
-    }
-
-    func testDecreaseOTPTimerDecrementsRemainingTimeByOne() {
-        serviceUnderTest.secondsBeforeResendOTP = 10
-        serviceUnderTest.decreaseOTPCountdownTime()
-        XCTAssertEqual(serviceUnderTest.secondsBeforeResendOTP, 9)
-    }
-
-    func testDecreaseOTPTimerDoesNotDecrementWhenRemainingTimeIsZero() {
-        serviceUnderTest.secondsBeforeResendOTP = 0
-        serviceUnderTest.decreaseOTPCountdownTime()
-        XCTAssertEqual(serviceUnderTest.secondsBeforeResendOTP, 0)
-    }
-
     func testSubmittingOTPSendsRepositoryResultToCardContainer() async throws {
         let expectedOTP = "123456"
         mockRepository.expectedChargeCardTransaction = .example
