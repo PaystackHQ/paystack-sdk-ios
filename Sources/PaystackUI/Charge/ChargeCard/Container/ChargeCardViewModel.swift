@@ -6,9 +6,12 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
     var chargeCardState: ChargeCardState
 
     var transactionDetails: VerifyAccessCode
+    var chargeContainer: ChargeContainer
 
-    init(transactionDetails: VerifyAccessCode) {
+    init(transactionDetails: VerifyAccessCode,
+         chargeContainer: ChargeContainer) {
         self.transactionDetails = transactionDetails
+        self.chargeContainer = chargeContainer
         let amountDetails = transactionDetails.amountCurrency
         self.chargeCardState = transactionDetails.domain == .live ?
             .cardDetails(amount: amountDetails) :

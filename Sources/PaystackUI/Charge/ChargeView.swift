@@ -12,9 +12,7 @@ struct ChargeView: View {
 
     init(accessCode: String) {
         self._viewModel = StateObject(
-            wrappedValue: ChargeViewModel(
-                accessCode: accessCode,
-                repository: ChargeRepositoryImplementation()))
+            wrappedValue: ChargeViewModel(accessCode: accessCode))
     }
 
     var body: some View {
@@ -31,7 +29,7 @@ struct ChargeView: View {
             case .loading(let message):
                 LoadingView(message: message)
             case .error:
-                Text("TODO")
+                Text("Something went wrong")
             case .payment(let type):
                 paymentFlowView(for: type)
             case .success(let amount, let merchant):
@@ -53,7 +51,8 @@ struct ChargeView: View {
     func paymentFlowView(for type: ChargePaymentType) -> some View {
         switch type {
         case .card(let transactionInformation):
-            ChargeCardView(transactionDetails: transactionInformation)
+            ChargeCardView(transactionDetails: transactionInformation,
+                           chargeContainer: viewModel)
         }
     }
 

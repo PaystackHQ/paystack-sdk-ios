@@ -47,6 +47,7 @@ final class ChargeViewModelTests: PSTestCase {
         serviceUnderTest.transactionDetails = .init(amount: 10000, currency: "USD",
                                                     accessCode: "test_access",
                                                     paymentChannels: [], domain: .test,
+                                                    merchantName: "Test Merchant",
                                                     publicEncryptionKey: "test_encryption_key")
         XCTAssertTrue(serviceUnderTest.inTestMode)
     }
@@ -55,6 +56,7 @@ final class ChargeViewModelTests: PSTestCase {
         serviceUnderTest.transactionDetails = .init(amount: 10000, currency: "USD",
                                                     accessCode: "test_access",
                                                     paymentChannels: [], domain: .live,
+                                                    merchantName: "Test Merchant",
                                                     publicEncryptionKey: "test_encryption_key")
         XCTAssertFalse(serviceUnderTest.inTestMode)
     }

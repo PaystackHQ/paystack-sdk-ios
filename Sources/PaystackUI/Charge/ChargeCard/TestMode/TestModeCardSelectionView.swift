@@ -60,6 +60,7 @@ struct TestModeCardSelectionView_Previews: PreviewProvider {
             amountDetails: .init(amount: 10000,
                                  currency: "USD"),
             chargeCardContainer: ChargeCardViewModel(
-                transactionDetails: .example))
+                transactionDetails: .example,
+                chargeContainer: ChargeViewModel(accessCode: "access_code")))
     }
 }

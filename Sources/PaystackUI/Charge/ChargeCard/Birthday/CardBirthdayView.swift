@@ -77,6 +77,7 @@ struct CardBirthdayView: View {
 struct CardBirthdayView_Previews: PreviewProvider {
     static var previews: some View {
         CardBirthdayView(chargeCardContainer: ChargeCardViewModel(
-            transactionDetails: .example))
+            transactionDetails: .example,
+            chargeContainer: ChargeViewModel(accessCode: "access_code")))
     }
 }
