@@ -168,3 +168,31 @@ private struct MockObject: Codable, Equatable {
     var number: Int
     var name: String
 }
+
+// MARK: - Decryption
+extension Cryptography {
+    func decrypt(base64String: String, privateKey: String) throws -> String {
+        guard let data = Data(base64Encoded: base64String) else {
+            throw CryptographyError.invalidBase64String
+        }
+        let key = try createKey(from: privateKey, isPublic: false)
+
+        var error: Unmanaged<CFError>?
+        guard let decrypted = SecKeyCreateDecryptedData(key, .rsaEncryptionPKCS1,
+                                                        data as CFData, &error),
+                let decryptedString = String(data: decrypted as Data, encoding: .utf8) else {
+            throw CryptographyError.decryptionFailed
+        }
+
+        return decryptedString
+    }
+
+    func decrypt<T: Decodable>(base64String: String, privateKey: String) throws -> T {
+        let decryptedString = try decrypt(base64String: base64String, privateKey: privateKey)
+        guard let encodedData = decryptedString.data(using: .utf8),
+              let model = try? JSONDecoder.decoder.decode(T.self, from: encodedData) else {
+            throw CryptographyError.modelDecodingFailed
+        }
+        return model
+    }
+}
