@@ -1,6 +1,7 @@
 import XCTest
 @testable import PaystackCore
 
+// swiftlint:disable: line_length
 final class CryptographyTests: XCTestCase {
     var serviceUnderTest: Cryptography!
     let publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCeCnSCpcVRhP5cvJ8HNTzax/Lw17ERVTS/wafBTLlJ0BxT+WGwy2OfdIshAroiZfSAWfFKFhF9KbKJvcyPGQ4oDibSbN/YriHmKxQt2CP6l3X0A7wHzSRLD4QR2DaqcA+blrm0szZQ5/8goyK+JDlyHrsSck/AVzm4S2zQ8FEEIQIDAQAB"

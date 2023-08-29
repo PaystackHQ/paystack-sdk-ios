@@ -1,4 +1,3 @@
-
 enum CryptographyError: Error {
     case invalidBase64String
     case asn1ParsingFailed
