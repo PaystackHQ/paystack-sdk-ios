@@ -7,4 +7,6 @@ enum CryptographyError: Error {
     case keyCreationFailed
     case encryptionFailed
     case decryptionFailed
+    case modelEncodingFailed
+    case modelDecodingFailed
 }

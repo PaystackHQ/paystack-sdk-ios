@@ -20,6 +20,14 @@ struct Cryptography {
         return encryptedData.base64EncodedString()
     }
 
+    func encrypt<T: Encodable>(model: T, publicKey: String) throws -> String {
+        let encodedModel = try JSONEncoder.encoder.encode(model)
+        guard let jsonString = String(data: encodedModel, encoding: .utf8) else {
+            throw CryptographyError.modelEncodingFailed
+        }
+        return try encrypt(text: jsonString, publicKey: publicKey)
+    }
+
     func decrypt(base64String: String, privateKey: String) throws -> String {
         guard let data = Data(base64Encoded: base64String) else {
             throw CryptographyError.invalidBase64String
@@ -34,6 +42,15 @@ struct Cryptography {
         }
 
         return decryptedString
+    }
+
+    func decrypt<T: Decodable>(base64String: String, privateKey: String) throws -> T {
+        let decryptedString = try decrypt(base64String: base64String, privateKey: privateKey)
+        guard let encodedData = decryptedString.data(using: .utf8),
+              let model = try? JSONDecoder.decoder.decode(T.self, from: encodedData) else {
+            throw CryptographyError.modelDecodingFailed
+        }
+        return model
     }
 }
 

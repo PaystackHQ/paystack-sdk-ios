@@ -124,4 +124,40 @@ final class CryptographyTests: XCTestCase {
         XCTAssertEqual(expectedValue, decryptedString)
     }
 
+    func testEncryptionOfObjectDecryptsBackToTheSameObject() throws {
+        let mockObject = MockObject(number: 123, name: "Test")
+
+        let encryptedData = try serviceUnderTest.encrypt(model: mockObject,
+                                                         publicKey: publicKey)
+        let decryptedData: MockObject = try serviceUnderTest.decrypt(base64String: encryptedData,
+                                                                     privateKey: privateKey)
+        XCTAssertEqual(mockObject, decryptedData)
+    }
+
+    func testAlreadyEncryptedJsonStringDecryptsCorrectlyToModel() throws {
+        let encryptedData = "gF8m8NyQKJSYJTxNaEoTMDrJSie0A1ixKVvkNPm+xQuOvcKc81LISkzgXd4UoFq7wW1ueNafAexADNqrubmW/PwonWjcbTMpqEtx/CVJMlg9QMA7LIXSELbLZsxodiPlH8aZ3xTDqaajEYf5A1o2S3aYCXMZqotBwRNE2/kUvEQ="
+        let expectedObject = MockObject(number: 789, name: "Test Decrypt")
+
+        let decryptedData: MockObject = try serviceUnderTest.decrypt(base64String: encryptedData,
+                                                                     privateKey: privateKey)
+        XCTAssertEqual(expectedObject, decryptedData)
+    }
+
+    func testDecryptionFailsWhenDecryptedDataCannotBeDecodedToTheExpectedModel() {
+        let encryptedData = "UoeZtFlZgBu5j6OzH+5qKeDMAklJ6dyo/2fCYzY0MmifDqQHx81ZzO1GRjYXvKehgZRfU7dwcr8behWHFiHC/BS0X0h25rEtoaH4+2ddkfMGmhVHcIYSyQWzPhabD5rIGZdfPQnHCdNx6OR4lraGM6C0ngraMdSNQifiXe6+qfU="
+
+        do {
+            let _: MockObject = try serviceUnderTest.decrypt(base64String: encryptedData,
+                                                             privateKey: privateKey)
+            XCTFail("Decoding should fail")
+        } catch {
+            XCTAssertEqual(error as? CryptographyError, CryptographyError.modelDecodingFailed)
+        }
+    }
+
+}
+
+private struct MockObject: Codable, Equatable {
+    var number: Int
+    var name: String
 }
