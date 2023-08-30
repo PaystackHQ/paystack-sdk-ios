@@ -14,12 +14,14 @@ struct ChargeCardView: View {
 
     var body: some View {
         switch viewModel.chargeCardState {
-        case .cardDetails(let amount):
+        case .cardDetails(let amount, let encryptionKey):
             CardDetailsView(amountDetails: amount,
+                            encryptionKey: encryptionKey,
                             chargeCardContainer: viewModel)
 
-        case .testModeCardSelection(let amount):
+        case .testModeCardSelection(let amount, let encryptionKey):
             TestModeCardSelectionView(amountDetails: amount,
+                                      encryptionKey: encryptionKey,
                                       chargeCardContainer: viewModel)
 
         case .pin:

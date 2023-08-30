@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import PaystackCore
 
 class CardDetailsViewModel: ObservableObject {
 
@@ -16,12 +17,18 @@ class CardDetailsViewModel: ObservableObject {
     var cardType: CardType = .unknown
 
     var amountDetails: AmountCurrency
+    var encryptionKey: String
     var chargeCardContainer: ChargeCardContainer
+    var repository: ChargeCardRepository
 
     init(amountDetails: AmountCurrency,
-         chargeCardContainer: ChargeCardContainer) {
+         encryptionKey: String,
+         chargeCardContainer: ChargeCardContainer,
+         repository: ChargeCardRepository = ChargeCardRepositoryImplementation()) {
         self.amountDetails = amountDetails
+        self.encryptionKey = encryptionKey
         self.chargeCardContainer = chargeCardContainer
+        self.repository = repository
     }
 
     var buttonTitle: String {
@@ -45,17 +52,33 @@ class CardDetailsViewModel: ObservableObject {
 
     func formatAndSetCardExpiry(_ expiry: String) {
         if cardExpiry.count <= expiry.count && expiry.count >= 2 {
-            let sanitizedExpiry = expiry.replacingOccurrences(of: "/", with: "").removingAllWhitespaces
-            let months = sanitizedExpiry.prefix(2)
-            let remainingDigits = sanitizedExpiry.dropFirst(2)
-            self.cardExpiry = months + " / " + remainingDigits
+            let dateComponents = dateComponents(from: expiry)
+            self.cardExpiry = dateComponents.month + " / " + dateComponents.year
         } else {
             self.cardExpiry = expiry
         }
     }
 
+    private func dateComponents(from date: String) -> (month: String, year: String) {
+        let sanitizedDate = date.replacingOccurrences(of: "/", with: "").removingAllWhitespaces
+        let month = sanitizedDate.prefix(2)
+        let remainingDigits = sanitizedDate.dropFirst(2)
+        return (String(month), String(remainingDigits))
+    }
+
     func submitCardDetails() async {
-        // TODO: Perform API call with card details
+        do {
+            let dateComponents = dateComponents(from: cardExpiry)
+            let card = CardCharge(number: cardNumber,
+                                  cvv: cvv,
+                                  expiryMonth: dateComponents.month,
+                                  expiryYear: dateComponents.year)
+            let authenticationResult = try await repository.submitCardDetails(
+                card, publicEncryptionKey: encryptionKey, accessCode: chargeCardContainer.accessCode)
+            chargeCardContainer.processTransactionResponse(authenticationResult)
+        } catch {
+            // TODO: Determine error handling once we have further information
+        }
     }
 
     func switchToTestModeCardSelection() {

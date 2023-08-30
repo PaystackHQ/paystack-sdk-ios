@@ -8,6 +8,14 @@ struct ChargeCardRepositoryImplementation: ChargeCardRepository {
         self.paystack = PaystackContainer.instance.retrieve()
     }
 
+    func submitCardDetails(_ card: CardCharge, publicEncryptionKey: String,
+                           accessCode: String) async throws -> ChargeCardTransaction {
+        let response = try await paystack.chargeCard(card,
+                                                     publicEncryptionKey: publicEncryptionKey,
+                                                     accessCode: accessCode).async()
+        return ChargeCardTransaction.from(response)
+    }
+
     func submitBirthday(_ birthday: String, accessCode: String) async throws -> ChargeCardTransaction {
         let response = try await paystack.authenticateCharge(withBirthday: birthday,
                                                              accessCode: accessCode).async()
