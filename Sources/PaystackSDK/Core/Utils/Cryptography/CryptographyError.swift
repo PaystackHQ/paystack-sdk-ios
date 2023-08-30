@@ -1,4 +1,3 @@
-
 enum CryptographyError: Error {
     case invalidBase64String
     case asn1ParsingFailed
@@ -7,4 +6,6 @@ enum CryptographyError: Error {
     case keyCreationFailed
     case encryptionFailed
     case decryptionFailed
+    case modelEncodingFailed
+    case modelDecodingFailed
 }

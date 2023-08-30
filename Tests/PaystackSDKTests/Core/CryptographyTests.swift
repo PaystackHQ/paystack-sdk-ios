@@ -3,8 +3,10 @@ import XCTest
 
 final class CryptographyTests: XCTestCase {
     var serviceUnderTest: Cryptography!
+    // swiftlint:disable:next line_length
     let publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCeCnSCpcVRhP5cvJ8HNTzax/Lw17ERVTS/wafBTLlJ0BxT+WGwy2OfdIshAroiZfSAWfFKFhF9KbKJvcyPGQ4oDibSbN/YriHmKxQt2CP6l3X0A7wHzSRLD4QR2DaqcA+blrm0szZQ5/8goyK+JDlyHrsSck/AVzm4S2zQ8FEEIQIDAQAB"
 
+    // swiftlint:disable:next line_length
     let privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJ4KdIKlxVGE/ly8nwc1PNrH8vDXsRFVNL/Bp8FMuUnQHFP5YbDLY590iyECuiJl9IBZ8UoWEX0psom9zI8ZDigOJtJs39iuIeYrFC3YI/qXdfQDvAfNJEsPhBHYNqpwD5uWubSzNlDn/yCjIr4kOXIeuxJyT8BXObhLbNDwUQQhAgMBAAECgYEAhoO1mUHJSdJdwccVwEfS7RBEujOL1YnlZNVKmJ9aEfZdNihLuvPSbnT+unEcxoxq6Bgl5H4WEqc7/Dsc8itMPPsi17rw64BQK2S2ZYyzWxPVrdxJmBFDVK7Fq2jfnUtBlhzY/fJ+gbOf7EvuPDi5vzoaQf15TuALL/C/jiuvFQECQQDMe1Nkn3X4ebVoojtQzyOBxXTNMk1qFnFUTKBKh0UNqJJKL8stxeWh84GgKAZOSrf80jnAmnJ8vKJjr1lv4vyRAkEAxdvIGvNCU21wSUcA3YsUFMzbKCE+pOxwqo9jklySH0m6FGtaO+3T0tcKgAYOyULrXjPa1FfGjppdqRHkshOWkQJAYOHRqiwvTdIElJXA+tGZpiOy6oH50djeSy2fCJC8s/L5lPK+FmrcGPZxpTsxeajHMZ89Q7cppVYOrqJnAq8OMQJAOH06UW94VUdekp1CAv6NOi8OtxNexkl3FUsg+42QbnxnMyM/PPL20jBxIAIawJ1pg5i8dnmlB9vMt9OS/sCW8QJAQ23UgXrKHiCU89R9UY5XzSCzYY2qCRPG0sfVWnuB23m6rN2smIr2lQFOUg+TPPwMYSt+OQQ0pGm9bd6yHYDVkQ=="
 
     override func setUpWithError() throws {
@@ -87,6 +89,7 @@ final class CryptographyTests: XCTestCase {
     }
 
     func testAttemptToEncryptWithInvalidKeyFailsToCreateKeyAndThrowsError() {
+        // swiftlint:disable:next line_length
         let pkcs8Key = "MIIBvTBXBgkqhkiG9w0BBQ0wSjApBgkqhkiG9w0BBQwwHAQIpZHwLtkYRb4CAggAMAwGCCqGSIb3DQIJBQAwHQYJYIZIAWUDBAECBBCCGsoP7F4bd8O5I1poTn8PBIIBYBtM1tgqsAQgbSZT0475aHufzFuJuPWOYqiHag8OUKMeZuxVHndElipEY2V5lS9mwddwtWaGuYD/Swcdt0Xht8U8BF0SjSyzQ4YtRsG9CmEHYhWmQ5AqK1W3mDUApO38Cm5L1HrHV4YJnYmmK9jgq+iWlLFDmB8s4TA6kMPWbCENlpr1kEXz4hLwY3ylH8XWI65WX2jGSn61jayCwpf1HPFBPDUaS5s3f92aKjk0AE8htsDBBiCVS3Yjq4QSbhfzuNIZ1TooXT9Xn+EJC0yjVnlTHZMfqrcA3OmVSi4kftugjAax4Z2qDqO+onkgeJAwP75scMcwH0SQUdrNrejgfIzJFWzcH9xWwKhOT9s9hLx2OfPlMtDDSJVRspqwwQrFQwinX0cR9Hx84rSMrFndxZi52o9EOLJ7cithncoW1KOAf7lIJIUzP0oIKkskAndQo2UiZsxgoMYuq02T07DOknc="
         let clearText = "Hello World"
 
@@ -104,6 +107,7 @@ final class CryptographyTests: XCTestCase {
     }
 
     func testDecryptionFailsWhenAnInvalidPrivateKeyIsUsed() {
+        // swiftlint:disable:next line_length
         let dataEncryptedWithDifferentKey = "c49dou2gFV2kLQQrSncNbARFUSfronZtMoumWZTmd7ALXiAxiwwKT08iG58WtgfAqfEBYHFw0riD3aKj0iwVxKLdw3TIX5eoJVXME9IO6JXRUjnshlwSMqNL3pZ3+yDIosxvGPUK8XE5anajO5y3TekaG6OqG46EtiLiAoZJ+/s="
 
         XCTAssertThrowsError(try serviceUnderTest.decrypt(base64String: dataEncryptedWithDifferentKey,
@@ -113,6 +117,7 @@ final class CryptographyTests: XCTestCase {
     }
 
     func testStandaloneDecryptionWithMatchingPrivateKey() {
+        // swiftlint:disable:next line_length
         let encryptedData = "UoeZtFlZgBu5j6OzH+5qKeDMAklJ6dyo/2fCYzY0MmifDqQHx81ZzO1GRjYXvKehgZRfU7dwcr8behWHFiHC/BS0X0h25rEtoaH4+2ddkfMGmhVHcIYSyQWzPhabD5rIGZdfPQnHCdNx6OR4lraGM6C0ngraMdSNQifiXe6+qfU="
         guard let decryptedString = try? serviceUnderTest.decrypt(base64String: encryptedData,
                                                                   privateKey: privateKey) else {
@@ -124,4 +129,70 @@ final class CryptographyTests: XCTestCase {
         XCTAssertEqual(expectedValue, decryptedString)
     }
 
+    func testEncryptionOfObjectDecryptsBackToTheSameObject() throws {
+        let mockObject = MockObject(number: 123, name: "Test")
+
+        let encryptedData = try serviceUnderTest.encrypt(model: mockObject,
+                                                         publicKey: publicKey)
+        let decryptedData: MockObject = try serviceUnderTest.decrypt(base64String: encryptedData,
+                                                                     privateKey: privateKey)
+        XCTAssertEqual(mockObject, decryptedData)
+    }
+
+    func testAlreadyEncryptedJsonStringDecryptsCorrectlyToModel() throws {
+        // swiftlint:disable:next line_length
+        let encryptedData = "gF8m8NyQKJSYJTxNaEoTMDrJSie0A1ixKVvkNPm+xQuOvcKc81LISkzgXd4UoFq7wW1ueNafAexADNqrubmW/PwonWjcbTMpqEtx/CVJMlg9QMA7LIXSELbLZsxodiPlH8aZ3xTDqaajEYf5A1o2S3aYCXMZqotBwRNE2/kUvEQ="
+        let expectedObject = MockObject(number: 789, name: "Test Decrypt")
+
+        let decryptedData: MockObject = try serviceUnderTest.decrypt(base64String: encryptedData,
+                                                                     privateKey: privateKey)
+        XCTAssertEqual(expectedObject, decryptedData)
+    }
+
+    func testDecryptionFailsWhenDecryptedDataCannotBeDecodedToTheExpectedModel() {
+        // swiftlint:disable:next line_length
+        let encryptedData = "UoeZtFlZgBu5j6OzH+5qKeDMAklJ6dyo/2fCYzY0MmifDqQHx81ZzO1GRjYXvKehgZRfU7dwcr8behWHFiHC/BS0X0h25rEtoaH4+2ddkfMGmhVHcIYSyQWzPhabD5rIGZdfPQnHCdNx6OR4lraGM6C0ngraMdSNQifiXe6+qfU="
+
+        do {
+            let _: MockObject = try serviceUnderTest.decrypt(base64String: encryptedData,
+                                                             privateKey: privateKey)
+            XCTFail("Decoding should fail")
+        } catch {
+            XCTAssertEqual(error as? CryptographyError, CryptographyError.modelDecodingFailed)
+        }
+    }
+
+}
+
+private struct MockObject: Codable, Equatable {
+    var number: Int
+    var name: String
+}
+
+// MARK: - Decryption
+extension Cryptography {
+    func decrypt(base64String: String, privateKey: String) throws -> String {
+        guard let data = Data(base64Encoded: base64String) else {
+            throw CryptographyError.invalidBase64String
+        }
+        let key = try createKey(from: privateKey, isPublic: false)
+
+        var error: Unmanaged<CFError>?
+        guard let decrypted = SecKeyCreateDecryptedData(key, .rsaEncryptionPKCS1,
+                                                        data as CFData, &error),
+                let decryptedString = String(data: decrypted as Data, encoding: .utf8) else {
+            throw CryptographyError.decryptionFailed
+        }
+
+        return decryptedString
+    }
+
+    func decrypt<T: Decodable>(base64String: String, privateKey: String) throws -> T {
+        let decryptedString = try decrypt(base64String: base64String, privateKey: privateKey)
+        guard let encodedData = decryptedString.data(using: .utf8),
+              let model = try? JSONDecoder.decoder.decode(T.self, from: encodedData) else {
+            throw CryptographyError.modelDecodingFailed
+        }
+        return model
+    }
 }

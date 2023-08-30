@@ -12,7 +12,7 @@ struct ChargeServiceImplementation: ChargeService {
     var config: PaystackConfig
 
     var parentPath: String {
-        return "charge"
+        return "transaction/charge"
     }
 
     func postSubmitPin(_ request: SubmitPinRequest) -> Service<ChargeResponse> {

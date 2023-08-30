@@ -2,6 +2,7 @@ import Foundation
 
 protocol TransactionService: PaystackService {
     func getVerifyAccessCode(_ code: String) -> Service<VerifyAccessCodeResponse>
+    func postSubmitCardCharge(_ request: ChargeCardRequest) -> Service<ChargeResponse>
 }
 
 struct TransactionServiceImplementation: TransactionService {
@@ -10,6 +11,11 @@ struct TransactionServiceImplementation: TransactionService {
 
     var parentPath: String {
         return "transaction"
+    }
+
+    func postSubmitCardCharge(_ request: ChargeCardRequest) -> Service<ChargeResponse> {
+        return post("/charge", request)
+            .asService()
     }
 
     func getVerifyAccessCode(_ code: String) -> Service<VerifyAccessCodeResponse> {

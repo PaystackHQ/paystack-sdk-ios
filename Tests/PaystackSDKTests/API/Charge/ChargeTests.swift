@@ -18,7 +18,7 @@ final class ChargeTests: PSTestCase {
         let otpRequestBody = SubmitOtpRequest(otp: "12345", accessCode: "abcde")
 
         mockServiceExecutor
-            .expectURL("https://api.paystack.co/charge/submit_otp")
+            .expectURL("https://api.paystack.co/transaction/charge/submit_otp")
             .expectMethod(.post)
             .expectHeader("Authorization", "Bearer \(apiKey)")
             .expectBody(otpRequestBody)
@@ -31,7 +31,7 @@ final class ChargeTests: PSTestCase {
         let pinRequestBody = SubmitPinRequest(pin: "1234", accessCode: "abcde")
 
         mockServiceExecutor
-            .expectURL("https://api.paystack.co/charge/submit_pin")
+            .expectURL("https://api.paystack.co/transaction/charge/submit_pin")
             .expectMethod(.post)
             .expectHeader("Authorization", "Bearer \(apiKey)")
             .expectBody(pinRequestBody)
@@ -44,7 +44,7 @@ final class ChargeTests: PSTestCase {
         let phoneRequestBody = SubmitPhoneRequest(phone: "0111234567", accessCode: "abcde")
 
         mockServiceExecutor
-            .expectURL("https://api.paystack.co/charge/submit_phone")
+            .expectURL("https://api.paystack.co/transaction/charge/submit_phone")
             .expectMethod(.post)
             .expectHeader("Authorization", "Bearer \(apiKey)")
             .expectBody(phoneRequestBody)
@@ -57,7 +57,7 @@ final class ChargeTests: PSTestCase {
         let birthdayRequestBody = SubmitBirthdayRequest(birthday: "1990-01-01", accessCode: "abcde")
 
         mockServiceExecutor
-            .expectURL("https://api.paystack.co/charge/submit_birthday")
+            .expectURL("https://api.paystack.co/transaction/charge/submit_birthday")
             .expectMethod(.post)
             .expectHeader("Authorization", "Bearer \(apiKey)")
             .expectBody(birthdayRequestBody)
@@ -73,7 +73,7 @@ final class ChargeTests: PSTestCase {
                                                       accessCode: "abcde")
 
         mockServiceExecutor
-            .expectURL("https://api.paystack.co/charge/submit_address")
+            .expectURL("https://api.paystack.co/transaction/charge/submit_address")
             .expectMethod(.post)
             .expectHeader("Authorization", "Bearer \(apiKey)")
             .expectBody(addressRequestBody)

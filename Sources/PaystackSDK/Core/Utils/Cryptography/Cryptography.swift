@@ -20,25 +20,17 @@ struct Cryptography {
         return encryptedData.base64EncodedString()
     }
 
-    func decrypt(base64String: String, privateKey: String) throws -> String {
-        guard let data = Data(base64Encoded: base64String) else {
-            throw CryptographyError.invalidBase64String
+    func encrypt<T: Encodable>(model: T, publicKey: String) throws -> String {
+        let encodedModel = try JSONEncoder.encoder.encode(model)
+        guard let jsonString = String(data: encodedModel, encoding: .utf8) else {
+            throw CryptographyError.modelEncodingFailed
         }
-        let key = try createKey(from: privateKey, isPublic: false)
-
-        var error: Unmanaged<CFError>?
-        guard let decrypted = SecKeyCreateDecryptedData(key, .rsaEncryptionPKCS1,
-                                                        data as CFData, &error),
-                let decryptedString = String(data: decrypted as Data, encoding: .utf8) else {
-            throw CryptographyError.decryptionFailed
-        }
-
-        return decryptedString
+        return try encrypt(text: jsonString, publicKey: publicKey)
     }
 }
 
 // MARK: - Preparing Key
-private extension Cryptography {
+extension Cryptography {
     func createKey(from key: String, isPublic: Bool) throws -> SecKey {
         guard let keyData = Data(base64Encoded: key,
                                  options: [.ignoreUnknownCharacters]) else {
@@ -48,7 +40,7 @@ private extension Cryptography {
         return try createKey(from: keyData, isPublic: isPublic)
     }
 
-    func createKey(from data: Data, isPublic: Bool) throws -> SecKey {
+    private func createKey(from data: Data, isPublic: Bool) throws -> SecKey {
         let headerlessData = try stripKeyHeader(keyData: data)
         let keyClass = isPublic ? kSecAttrKeyClassPublic : kSecAttrKeyClassPrivate
 
@@ -69,7 +61,7 @@ private extension Cryptography {
     }
 
     // This code is sourced from SwiftyRSA project https://github.com/TakeScoop/SwiftyRSA published under the MIT Licence
-    func stripKeyHeader(keyData: Data) throws -> Data {
+    private func stripKeyHeader(keyData: Data) throws -> Data {
 
         let node: Asn1Parser.Node
         do {
