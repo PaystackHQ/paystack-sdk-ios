@@ -11,6 +11,7 @@ class FormInputViewModel: ObservableObject {
         self.action = action
     }
 
+    @MainActor
     func submit() async {
         showLoading = true
         await action()

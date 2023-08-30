@@ -19,10 +19,12 @@ struct CardDetailsView: View {
     private var showExpiryError = false
 
     init(amountDetails: AmountCurrency,
+         encryptionKey: String,
          chargeCardContainer: ChargeCardContainer) {
         self._viewModel = StateObject(
             wrappedValue: CardDetailsViewModel(
                 amountDetails: amountDetails,
+                encryptionKey: encryptionKey,
                 chargeCardContainer: chargeCardContainer))
     }
 
@@ -100,6 +102,7 @@ struct CardDetailsView_Previews: PreviewProvider {
         CardDetailsView(
             amountDetails: .init(amount: 10000,
                                  currency: "USD"),
+            encryptionKey: "test_encryption_key",
             chargeCardContainer: ChargeCardViewModel(
                 transactionDetails: .example,
                 chargeContainer: ChargeViewModel(accessCode: "access_code")))

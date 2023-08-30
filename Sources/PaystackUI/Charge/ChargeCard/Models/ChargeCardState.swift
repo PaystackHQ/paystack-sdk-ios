@@ -1,8 +1,8 @@
 import Foundation
 
 enum ChargeCardState {
-    case cardDetails(amount: AmountCurrency)
-    case testModeCardSelection(amount: AmountCurrency)
+    case cardDetails(amount: AmountCurrency, encryptionKey: String)
+    case testModeCardSelection(amount: AmountCurrency, encryptionKey: String)
     case pin
     case phoneNumber
     case otp(phoneNumber: String)

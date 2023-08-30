@@ -1,4 +1,5 @@
 import XCTest
+import PaystackCore
 @testable import PaystackUI
 
 final class CardDetailsViewModelTests: XCTestCase {
@@ -6,12 +7,17 @@ final class CardDetailsViewModelTests: XCTestCase {
     var serviceUnderTest: CardDetailsViewModel!
     var mockAmountCurrency = AmountCurrency(amount: 100, currency: "USD")
     var mockChargeCardContainer: MockChargeCardContainer!
+    var mockEncryptionKey = "MOCK_ENCRYPTION_KEY"
+    var mockRepository: MockChargeCardRepository!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
         mockChargeCardContainer = MockChargeCardContainer()
+        mockRepository = MockChargeCardRepository()
         serviceUnderTest = CardDetailsViewModel(amountDetails: mockAmountCurrency,
-                                                chargeCardContainer: mockChargeCardContainer)
+                                                encryptionKey: mockEncryptionKey,
+                                                chargeCardContainer: mockChargeCardContainer,
+                                                repository: mockRepository)
     }
 
     func testWhenCardNumberChangesThatCardTypeUpdatesToReflectCorrectTypeAndFormatsCorrectly() {
@@ -77,6 +83,23 @@ final class CardDetailsViewModelTests: XCTestCase {
     func testSwitchingToTestModeCardSelectionCallsContainerToChangeState() {
         serviceUnderTest.switchToTestModeCardSelection()
         XCTAssertTrue(mockChargeCardContainer.switchedToTestMode)
+    }
+
+    func testSubmittingCardDetailsBuildsCardModelAndForwardsRepositoryResponseToContainer() async throws {
+        serviceUnderTest.cardExpiry = "01 / 25"
+        serviceUnderTest.cardNumber = "1234 5678 9012 1234"
+        serviceUnderTest.cvv = "123"
+
+        mockRepository.expectedChargeCardTransaction = .example
+        await serviceUnderTest.submitCardDetails()
+
+        let expectedCard = CardCharge(number: "1234 5678 9012 1234",
+                                      cvv: "123",
+                                      expiryMonth: "01",
+                                      expiryYear: "25")
+
+        XCTAssertEqual(mockRepository.cardDetailsSubmitted.card, expectedCard)
+        XCTAssertEqual(mockChargeCardContainer.transactionResponse, .example)
     }
 
 }

@@ -13,9 +13,10 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
         self.transactionDetails = transactionDetails
         self.chargeContainer = chargeContainer
         let amountDetails = transactionDetails.amountCurrency
+        let encryptionKey = transactionDetails.publicEncryptionKey
         self.chargeCardState = transactionDetails.domain == .live ?
-            .cardDetails(amount: amountDetails) :
-            .testModeCardSelection(amount: amountDetails)
+            .cardDetails(amount: amountDetails, encryptionKey: encryptionKey) :
+            .testModeCardSelection(amount: amountDetails, encryptionKey: encryptionKey)
     }
 
     var accessCode: String {
@@ -27,11 +28,13 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
     }
 
     func restartCardPayment() {
-        chargeCardState = .cardDetails(amount: transactionDetails.amountCurrency)
+        chargeCardState = .cardDetails(amount: transactionDetails.amountCurrency,
+                                       encryptionKey: transactionDetails.publicEncryptionKey)
     }
 
     func switchToTestModeCardSelection() {
-        chargeCardState = .testModeCardSelection(amount: transactionDetails.amountCurrency)
+        chargeCardState = .testModeCardSelection(amount: transactionDetails.amountCurrency,
+                                                 encryptionKey: transactionDetails.publicEncryptionKey)
     }
 
     @MainActor

@@ -42,14 +42,25 @@ extension TestCard {
         }
     }
 
-    var expiry: String {
+    var expiryMonth: String {
         switch self {
         case .success:
-            return "08/24"
+            return "08"
         case .bankAuthentication:
-            return "08/24"
+            return "08"
         case .declined:
-            return "08/24"
+            return "08"
+        }
+    }
+
+    var expiryYear: String {
+        switch self {
+        case .success:
+            return "24"
+        case .bankAuthentication:
+            return "24"
+        case .declined:
+            return "24"
         }
     }
 

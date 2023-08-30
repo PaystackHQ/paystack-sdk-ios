@@ -1,6 +1,6 @@
 import Foundation
 
-public struct CardCharge: Codable {
+public struct CardCharge: Codable, Equatable {
     var number: String
     var cvv: String
     var expiryMonth: String

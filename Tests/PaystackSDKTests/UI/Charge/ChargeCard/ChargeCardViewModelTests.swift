@@ -18,7 +18,8 @@ final class ChargeCardViewModelTests: PSTestCase {
         serviceUnderTest.chargeCardState = .pin
         serviceUnderTest.restartCardPayment()
         XCTAssertEqual(serviceUnderTest.chargeCardState,
-                       .cardDetails(amount: mockTransactionDetails.amountCurrency))
+                       .cardDetails(amount: mockTransactionDetails.amountCurrency,
+                                    encryptionKey: mockTransactionDetails.publicEncryptionKey))
     }
 
     func testInitialStateIsSetToCardDetailsInLiveMode() {
@@ -31,7 +32,8 @@ final class ChargeCardViewModelTests: PSTestCase {
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails,
                                                chargeContainer: mockChargeContainer)
         XCTAssertEqual(serviceUnderTest.chargeCardState,
-            .cardDetails(amount: transactionDetails.amountCurrency))
+                       .cardDetails(amount: transactionDetails.amountCurrency,
+                                    encryptionKey: transactionDetails.publicEncryptionKey))
     }
 
     func testInitialStateIsSetToTestModeCardSelectionInTestMode() {
@@ -44,7 +46,8 @@ final class ChargeCardViewModelTests: PSTestCase {
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails,
                                                chargeContainer: mockChargeContainer)
         XCTAssertEqual(serviceUnderTest.chargeCardState,
-                       .testModeCardSelection(amount: transactionDetails.amountCurrency))
+                       .testModeCardSelection(amount: transactionDetails.amountCurrency,
+                                              encryptionKey: transactionDetails.publicEncryptionKey))
     }
 
     func testInTestModeReturnsTrueIfDomainIsTest() {
@@ -80,7 +83,8 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          publicEncryptionKey: "test_encryption_key")
         serviceUnderTest.switchToTestModeCardSelection()
         XCTAssertEqual(serviceUnderTest.chargeCardState,
-                       .testModeCardSelection(amount: transactionDetails.amountCurrency))
+                       .testModeCardSelection(amount: transactionDetails.amountCurrency,
+                                              encryptionKey: transactionDetails.publicEncryptionKey))
     }
 
     func testProcessResponseWithAddressStatusSetsStateToAddress() async {
