@@ -1,0 +1,281 @@
+{
+    "status": true,
+    "message": "States retrieved",
+    "data": [
+        {
+            "name": "Alaska",
+            "slug": "alaska",
+            "abbreviation": "AK"
+        },
+        {
+            "name": "Alabama",
+            "slug": "alabama",
+            "abbreviation": "AL"
+        },
+        {
+            "name": "Arkansas",
+            "slug": "arkansas",
+            "abbreviation": "AR"
+        },
+        {
+            "name": "American Samoa",
+            "slug": "american-samoa",
+            "abbreviation": "AS"
+        },
+        {
+            "name": "Arizona",
+            "slug": "arizona",
+            "abbreviation": "AZ"
+        },
+        {
+            "name": "California",
+            "slug": "california",
+            "abbreviation": "CA"
+        },
+        {
+            "name": "Colorado",
+            "slug": "colorado",
+            "abbreviation": "CO"
+        },
+        {
+            "name": "Connecticut",
+            "slug": "connecticut",
+            "abbreviation": "CT"
+        },
+        {
+            "name": "District of Columbia",
+            "slug": "district-of-columbia",
+            "abbreviation": "DC"
+        },
+        {
+            "name": "Delaware",
+            "slug": "delaware",
+            "abbreviation": "DE"
+        },
+        {
+            "name": "Florida",
+            "slug": "florida",
+            "abbreviation": "FL"
+        },
+        {
+            "name": "Georgia",
+            "slug": "georgia",
+            "abbreviation": "GA"
+        },
+        {
+            "name": "Guam",
+            "slug": "guam",
+            "abbreviation": "GU"
+        },
+        {
+            "name": "Hawaii",
+            "slug": "hawaii",
+            "abbreviation": "HI"
+        },
+        {
+            "name": "Iowa",
+            "slug": "iowa",
+            "abbreviation": "IA"
+        },
+        {
+            "name": "Idaho",
+            "slug": "idaho",
+            "abbreviation": "ID"
+        },
+        {
+            "name": "Illinois",
+            "slug": "illinois",
+            "abbreviation": "IL"
+        },
+        {
+            "name": "Indiana",
+            "slug": "indiana",
+            "abbreviation": "IN"
+        },
+        {
+            "name": "Kansas",
+            "slug": "kansas",
+            "abbreviation": "KS"
+        },
+        {
+            "name": "Kentucky",
+            "slug": "kentucky",
+            "abbreviation": "KY"
+        },
+        {
+            "name": "Louisiana",
+            "slug": "louisiana",
+            "abbreviation": "LA"
+        },
+        {
+            "name": "Massachusetts",
+            "slug": "massachusetts",
+            "abbreviation": "MA"
+        },
+        {
+            "name": "Maryland",
+            "slug": "maryland",
+            "abbreviation": "MD"
+        },
+        {
+            "name": "Maine",
+            "slug": "maine",
+            "abbreviation": "ME"
+        },
+        {
+            "name": "Michigan",
+            "slug": "michigan",
+            "abbreviation": "MI"
+        },
+        {
+            "name": "Minnesota",
+            "slug": "minnesota",
+            "abbreviation": "MN"
+        },
+        {
+            "name": "Missouri",
+            "slug": "missouri",
+            "abbreviation": "MO"
+        },
+        {
+            "name": "Mississippi",
+            "slug": "mississippi",
+            "abbreviation": "MS"
+        },
+        {
+            "name": "Montana",
+            "slug": "montana",
+            "abbreviation": "MT"
+        },
+        {
+            "name": "North Carolina",
+            "slug": "north-carolina",
+            "abbreviation": "NC"
+        },
+        {
+            "name": "North Dakota",
+            "slug": "north-dakota",
+            "abbreviation": "ND"
+        },
+        {
+            "name": "Nebraska",
+            "slug": "nebraska",
+            "abbreviation": "NE"
+        },
+        {
+            "name": "New Hampshire",
+            "slug": "new-hampshire",
+            "abbreviation": "NH"
+        },
+        {
+            "name": "New Jersey",
+            "slug": "new-jersey",
+            "abbreviation": "NJ"
+        },
+        {
+            "name": "New Mexico",
+            "slug": "new-mexico",
+            "abbreviation": "NM"
+        },
+        {
+            "name": "Nevada",
+            "slug": "nevada",
+            "abbreviation": "NV"
+        },
+        {
+            "name": "New York",
+            "slug": "new-york",
+            "abbreviation": "NY"
+        },
+        {
+            "name": "Ohio",
+            "slug": "ohio",
+            "abbreviation": "OH"
+        },
+        {
+            "name": "Oklahoma",
+            "slug": "oklahoma",
+            "abbreviation": "OK"
+        },
+        {
+            "name": "Oregon",
+            "slug": "oregon",
+            "abbreviation": "OR"
+        },
+        {
+            "name": "Pennsylvania",
+            "slug": "pennsylvania",
+            "abbreviation": "PA"
+        },
+        {
+            "name": "Puerto Rico",
+            "slug": "puerto-rico",
+            "abbreviation": "PR"
+        },
+        {
+            "name": "Rhode Island",
+            "slug": "rhode-island",
+            "abbreviation": "RI"
+        },
+        {
+            "name": "South Carolina",
+            "slug": "south-carolina",
+            "abbreviation": "SC"
+        },
+        {
+            "name": "South Dakota",
+            "slug": "south-dakota",
+            "abbreviation": "SD"
+        },
+        {
+            "name": "Tennessee",
+            "slug": "tennessee",
+            "abbreviation": "TN"
+        },
+        {
+            "name": "Texas",
+            "slug": "texas",
+            "abbreviation": "TX"
+        },
+        {
+            "name": "Utah",
+            "slug": "utah",
+            "abbreviation": "UT"
+        },
+        {
+            "name": "Virginia",
+            "slug": "virginia",
+            "abbreviation": "VA"
+        },
+        {
+            "name": "Virgin Islands",
+            "slug": "virgin-islands",
+            "abbreviation": "VI"
+        },
+        {
+            "name": "Vermont",
+            "slug": "vermont",
+            "abbreviation": "VT"
+        },
+        {
+            "name": "Washington",
+            "slug": "washington",
+            "abbreviation": "WA"
+        },
+        {
+            "name": "Wisconsin",
+            "slug": "wisconsin",
+            "abbreviation": "WI"
+        },
+        {
+            "name": "West Virginia",
+            "slug": "west-virginia",
+            "abbreviation": "WV"
+        },
+        {
+            "name": "Wyoming",
+            "slug": "wyoming",
+            "abbreviation": "WY"
+        }
+    ]
+}
