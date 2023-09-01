@@ -48,7 +48,7 @@ struct ChargeCardRepositoryImplementation: ChargeCardRepository {
 
     func getAddressStates(for countryCode: String) async throws -> [String] {
         let response = try await paystack.addressStates(for: countryCode).async()
-        let states = response.data.compactMap{ $0.name }
+        let states = response.data.compactMap { $0.name }
         return states
     }
 }
