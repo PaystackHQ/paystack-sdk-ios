@@ -45,4 +45,10 @@ struct ChargeCardRepositoryImplementation: ChargeCardRepository {
                                                              accessCode: accessCode).async()
         return ChargeCardTransaction.from(response)
     }
+
+    func getAddressStates(for countryCode: String) async throws -> [String] {
+        let response = try await paystack.addressStates(for: countryCode).async()
+        let states = response.data.compactMap { $0.name }
+        return states
+    }
 }

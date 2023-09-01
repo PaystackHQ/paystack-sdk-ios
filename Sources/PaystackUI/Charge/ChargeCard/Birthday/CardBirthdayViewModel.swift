@@ -30,7 +30,7 @@ class CardBirthdayViewModel: ObservableObject {
             let formattedBirthday = "\(year)-\(month?.formattedRepresentation ?? "00")-\(day)"
             let authenticationResult = try await repository.submitBirthday(
                 formattedBirthday, accessCode: chargeCardContainer.accessCode)
-            chargeCardContainer.processTransactionResponse(authenticationResult)
+            await chargeCardContainer.processTransactionResponse(authenticationResult)
         } catch {
             // TODO: Determine error handling once we have further information
         }

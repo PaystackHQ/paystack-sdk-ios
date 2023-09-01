@@ -39,7 +39,7 @@ class CardAddressViewModel: ObservableObject {
             let address = Address(address: street, city: city, state: state ?? "", zipCode: zipCode)
             let authenticationResult = try await repository.submitAddress(
                 address, accessCode: chargeCardContainer.accessCode)
-            chargeCardContainer.processTransactionResponse(authenticationResult)
+            await chargeCardContainer.processTransactionResponse(authenticationResult)
         } catch {
             // TODO: Determine error handling once we have further information
         }

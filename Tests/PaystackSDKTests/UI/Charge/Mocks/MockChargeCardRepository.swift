@@ -5,6 +5,7 @@ import PaystackCore
 class MockChargeCardRepository: ChargeCardRepository {
 
     var expectedChargeCardTransaction: ChargeCardTransaction?
+    var expectedAddressStates: [String]?
     var expectedErrorResponse: Error?
 
     var cardDetailsSubmitted: (card: CardCharge?, accessCode: String,
@@ -15,7 +16,8 @@ class MockChargeCardRepository: ChargeCardRepository {
     var addressSubmitted: (address: Address?, accessCode: String) = (nil, "")
     var pinSubmitted: (pin: String, accessCode: String) = ("", "")
 
-    func submitCardDetails(_ card: CardCharge, publicEncryptionKey: String, accessCode: String) async throws -> ChargeCardTransaction {
+    func submitCardDetails(_ card: CardCharge, publicEncryptionKey: String,
+                           accessCode: String) async throws -> ChargeCardTransaction {
         cardDetailsSubmitted = (card, accessCode, publicEncryptionKey)
         return try await mockedResponse()
     }
@@ -43,6 +45,13 @@ class MockChargeCardRepository: ChargeCardRepository {
     func submitPin(_ pin: String, accessCode: String) async throws -> ChargeCardTransaction {
         pinSubmitted = (pin, accessCode)
         return try await mockedResponse()
+    }
+
+    func getAddressStates(for countryCode: String) async throws -> [String] {
+        guard let expectedAddressStates else {
+            throw expectedErrorResponse ?? MockError.stubNotProvided
+        }
+        return expectedAddressStates
     }
 
     private func mockedResponse() async throws -> ChargeCardTransaction {
