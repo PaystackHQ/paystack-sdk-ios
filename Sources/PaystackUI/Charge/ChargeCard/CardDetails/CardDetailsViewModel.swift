@@ -75,7 +75,7 @@ class CardDetailsViewModel: ObservableObject {
                                   expiryYear: dateComponents.year)
             let authenticationResult = try await repository.submitCardDetails(
                 card, publicEncryptionKey: encryptionKey, accessCode: chargeCardContainer.accessCode)
-            chargeCardContainer.processTransactionResponse(authenticationResult)
+            await chargeCardContainer.processTransactionResponse(authenticationResult)
         } catch {
             // TODO: Determine error handling once we have further information
         }

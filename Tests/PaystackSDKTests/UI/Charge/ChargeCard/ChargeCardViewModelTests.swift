@@ -6,12 +6,15 @@ final class ChargeCardViewModelTests: PSTestCase {
     var serviceUnderTest: ChargeCardViewModel!
     var mockTransactionDetails = VerifyAccessCode.example
     var mockChargeContainer: MockChargeContainer!
+    var mockRepository: MockChargeCardRepository!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
         mockChargeContainer = MockChargeContainer()
+        mockRepository = MockChargeCardRepository()
         serviceUnderTest = ChargeCardViewModel(transactionDetails: mockTransactionDetails,
-                                               chargeContainer: mockChargeContainer)
+                                               chargeContainer: mockChargeContainer,
+                                               repository: mockRepository)
     }
 
     func testRestartCardPaymentResetsStateToCardDetailsWithAmount() {
@@ -87,9 +90,12 @@ final class ChargeCardViewModelTests: PSTestCase {
                                               encryptionKey: transactionDetails.publicEncryptionKey))
     }
 
-    func testProcessResponseWithAddressStatusSetsStateToAddress() async {
-        let addressResponse = ChargeCardTransaction(status: .sendAddress)
+    func testProcessResponseWithAddressStatusSetsStateToAddressAndFetchesAddreses() async {
+        let addressResponse = ChargeCardTransaction(status: .sendAddress, countryCode: "US")
         let mockStates = ["Test State A", "Test State B"]
+
+        mockRepository.expectedAddressStates = mockStates
+
         await serviceUnderTest.processTransactionResponse(addressResponse)
         XCTAssertEqual(serviceUnderTest.chargeCardState, .address(states: mockStates))
     }

@@ -26,7 +26,7 @@ class CardOTPViewModel: ObservableObject {
         do {
             let authenticationResult = try await repository.submitOTP(
                 otp, accessCode: chargeCardContainer.accessCode)
-            chargeCardContainer.processTransactionResponse(authenticationResult)
+            await chargeCardContainer.processTransactionResponse(authenticationResult)
         } catch {
             // TODO: Determine error handling once we have further information
         }

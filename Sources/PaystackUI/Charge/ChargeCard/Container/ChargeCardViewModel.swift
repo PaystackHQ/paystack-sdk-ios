@@ -7,11 +7,14 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
 
     var transactionDetails: VerifyAccessCode
     var chargeContainer: ChargeContainer
+    var repository: ChargeCardRepository
 
     init(transactionDetails: VerifyAccessCode,
-         chargeContainer: ChargeContainer) {
+         chargeContainer: ChargeContainer,
+         repository: ChargeCardRepository = ChargeCardRepositoryImplementation()) {
         self.transactionDetails = transactionDetails
         self.chargeContainer = chargeContainer
+        self.repository = repository
         let amountDetails = transactionDetails.amountCurrency
         let encryptionKey = transactionDetails.publicEncryptionKey
         self.chargeCardState = transactionDetails.domain == .live ?
@@ -38,12 +41,10 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
     }
 
     @MainActor
-    func processTransactionResponse(_ response: ChargeCardTransaction) {
+    func processTransactionResponse(_ response: ChargeCardTransaction) async {
         switch response.status {
         case .sendAddress:
-            // TODO: Fetch states from API
-            let mockStates = ["Test State A", "Test State B"]
-            chargeCardState = .address(states: mockStates)
+            await handleSendAddress(with: response)
         case .sendBirthday:
             chargeCardState = .birthday
         case .sendPhone:
@@ -70,5 +71,14 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
             // TODO: Add logic for timeout
             break
         }
+    }
+
+    private func handleSendAddress(with response: ChargeCardTransaction) async {
+        guard let countryCode = response.countryCode,
+              let states = try? await repository.getAddressStates(for: countryCode) else {
+            // TODO: Display error
+            return
+        }
+        chargeCardState = .address(states: states)
     }
 }

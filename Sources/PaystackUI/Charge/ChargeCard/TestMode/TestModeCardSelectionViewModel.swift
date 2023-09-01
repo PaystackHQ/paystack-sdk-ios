@@ -39,7 +39,7 @@ class TestModeCardSelectionViewModel: ObservableObject {
 
             let authenticationResult = try await repository.submitCardDetails(
                 card, publicEncryptionKey: encryptionKey, accessCode: chargeCardContainer.accessCode)
-            chargeCardContainer.processTransactionResponse(authenticationResult)
+            await chargeCardContainer.processTransactionResponse(authenticationResult)
         } catch {
             print(error)
             // TODO: Determine error handling once we have further information
