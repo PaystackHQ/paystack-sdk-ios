@@ -1,4 +1,5 @@
 import Foundation
+import PaystackCore
 
 class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
 
@@ -50,11 +51,7 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
         case .sendPhone:
             chargeCardState = .phoneNumber
         case .sendOtp:
-            if let phoneNumber = response.customerPhone {
-                chargeCardState = .otp(phoneNumber: phoneNumber)
-            } else {
-                // TODO: Display error
-            }
+            handleSendOtp(with: response)
         case .sendPin:
             chargeCardState = .pin
         case .success:
@@ -73,12 +70,27 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
         }
     }
 
+    func displayTransactionError(_ error: ChargeError) {
+        Logger.error("Displaying error: %@", arguments: error.message)
+        chargeCardState = .error(error)
+    }
+
     private func handleSendAddress(with response: ChargeCardTransaction) async {
         guard let countryCode = response.countryCode,
               let states = try? await repository.getAddressStates(for: countryCode) else {
-            // TODO: Display error
+            Logger.error("Unable to retrieve address states")
+            chargeCardState = .error(.generic)
             return
         }
         chargeCardState = .address(states: states)
+    }
+
+    private func handleSendOtp(with response: ChargeCardTransaction) {
+        guard let phoneNumber = response.customerPhone else {
+            Logger.error("No customer phone number found in ChargeCardTransaction response")
+            chargeCardState = .error(.generic)
+            return
+        }
+        chargeCardState = .otp(phoneNumber: phoneNumber)
     }
 }
