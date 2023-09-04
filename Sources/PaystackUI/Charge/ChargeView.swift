@@ -59,7 +59,7 @@ struct ChargeView: View {
     func chargeCancelled() {
         switch viewModel.transactionState {
         case .success:
-            visibilityContainer.completeAndDismiss(with: .success)
+            visibilityContainer.completeAndDismiss(with: .completed)
         default:
             visibilityContainer.cancelAndDismiss()
         }

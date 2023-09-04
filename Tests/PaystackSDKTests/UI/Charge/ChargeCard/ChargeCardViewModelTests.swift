@@ -131,10 +131,10 @@ final class ChargeCardViewModelTests: PSTestCase {
         XCTAssertTrue(mockChargeContainer.transactionSuccessful)
     }
 
-    func testProcessResponseWithFailureStatusCallsChargeContainerToUpdateStatus() async {
+    func testProcessResponseWithFailureSetsStateToFailed() async {
         let successResponse = ChargeCardTransaction(status: .failed)
         await serviceUnderTest.processTransactionResponse(successResponse)
-        XCTAssertTrue(mockChargeContainer.transactionFailed)
+        XCTAssertEqual(serviceUnderTest.chargeCardState, .failed)
     }
 }
 
@@ -157,6 +157,8 @@ extension ChargeCardState: Equatable {
             return true
         case (.error(let first), .error(let second)):
             return first == second
+        case (.failed, .failed):
+            return true
         default:
             return false
         }

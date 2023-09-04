@@ -38,10 +38,6 @@ extension ChargeViewModel: ChargeContainer {
         transactionState = .success(amount: details.amountCurrency, merchant: details.merchantName)
     }
 
-    func processFailedTransaction() {
-        // TODO: Will handle in another PR
-    }
-
 }
 
 // MARK: UI State Management

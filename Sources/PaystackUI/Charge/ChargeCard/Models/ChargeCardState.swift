@@ -9,4 +9,5 @@ enum ChargeCardState {
     case address(states: [String])
     case birthday
     case error(ChargeCardError)
+    case failed
 }
