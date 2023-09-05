@@ -57,7 +57,7 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
         case .success:
             chargeContainer.processSuccessfulTransaction(details: transactionDetails)
         case .failed:
-            chargeContainer.processFailedTransaction()
+            chargeCardState = .failed
         case .pending:
             // TODO: Add logic for pending state
             break
