@@ -8,6 +8,7 @@ class MockChargeCardContainer: ChargeCardContainer {
     var accessCode: String = "Mock_Access_Code"
     var switchedToTestMode = false
     var transactionResponse: ChargeCardTransaction?
+    var transactionError: ChargeError?
 
     func restartCardPayment() {
         cardPaymentRestarted = true
@@ -19,6 +20,10 @@ class MockChargeCardContainer: ChargeCardContainer {
 
     func processTransactionResponse(_ response: ChargeCardTransaction) {
         transactionResponse = response
+    }
+
+    func displayTransactionError(_ error: ChargeError) {
+        transactionError = error
     }
 
 }

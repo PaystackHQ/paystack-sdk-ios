@@ -33,7 +33,8 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          merchantName: "Test Merchant",
                                                          publicEncryptionKey: "test_encryption_key")
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails,
-                                               chargeContainer: mockChargeContainer)
+                                               chargeContainer: mockChargeContainer,
+                                               repository: mockRepository)
         XCTAssertEqual(serviceUnderTest.chargeCardState,
                        .cardDetails(amount: transactionDetails.amountCurrency,
                                     encryptionKey: transactionDetails.publicEncryptionKey))
@@ -47,7 +48,8 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          merchantName: "Test Merchant",
                                                          publicEncryptionKey: "test_encryption_key")
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails,
-                                               chargeContainer: mockChargeContainer)
+                                               chargeContainer: mockChargeContainer,
+                                               repository: mockRepository)
         XCTAssertEqual(serviceUnderTest.chargeCardState,
                        .testModeCardSelection(amount: transactionDetails.amountCurrency,
                                               encryptionKey: transactionDetails.publicEncryptionKey))
@@ -61,7 +63,8 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          merchantName: "Test Merchant",
                                                          publicEncryptionKey: "test_encryption_key")
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails,
-                                               chargeContainer: mockChargeContainer)
+                                               chargeContainer: mockChargeContainer,
+                                               repository: mockRepository)
         XCTAssertTrue(serviceUnderTest.inTestMode)
     }
 
@@ -73,7 +76,8 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          merchantName: "Test Merchant",
                                                          publicEncryptionKey: "test_encryption_key")
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails,
-                                               chargeContainer: mockChargeContainer)
+                                               chargeContainer: mockChargeContainer,
+                                               repository: mockRepository)
         XCTAssertFalse(serviceUnderTest.inTestMode)
     }
 
@@ -100,6 +104,23 @@ final class ChargeCardViewModelTests: PSTestCase {
         XCTAssertEqual(serviceUnderTest.chargeCardState, .address(states: mockStates))
     }
 
+    func testProcessResponseWithAddressStatusSetsStatusToGenericErrorIfCountryCodeIsNotPresent() async {
+        let addressResponse = ChargeCardTransaction(status: .sendAddress)
+        mockRepository.expectedAddressStates = ["Test State A", "Test State B"]
+
+        await serviceUnderTest.processTransactionResponse(addressResponse)
+        XCTAssertEqual(serviceUnderTest.chargeCardState, .error(.generic))
+    }
+
+    func testProcessResponseWithAddressStatusSetsStatusToGenericErrorIfFetchingAddressStatesFails() async {
+        let addressResponse = ChargeCardTransaction(status: .sendAddress)
+
+        mockRepository.expectedErrorResponse = MockError.general
+
+        await serviceUnderTest.processTransactionResponse(addressResponse)
+        XCTAssertEqual(serviceUnderTest.chargeCardState, .error(.generic))
+    }
+
     func testProcessResponseWithBirthdayStatusSetsStateToBirthday() async {
         let birthdayResponse = ChargeCardTransaction(status: .sendBirthday)
         await serviceUnderTest.processTransactionResponse(birthdayResponse)
@@ -119,6 +140,12 @@ final class ChargeCardViewModelTests: PSTestCase {
         XCTAssertEqual(serviceUnderTest.chargeCardState, .otp(phoneNumber: expectedPhoneNumber))
     }
 
+    func testProcessResponseWithOTPStatusSetsStatusToGenericErrorIfPhoneNumberIsNotPresent() async {
+        let otpResponse = ChargeCardTransaction(status: .sendOtp)
+        await serviceUnderTest.processTransactionResponse(otpResponse)
+        XCTAssertEqual(serviceUnderTest.chargeCardState, .error(.generic))
+    }
+
     func testProcessResponseWithPinStatusSetsStateToPin() async {
         let pinResponse = ChargeCardTransaction(status: .sendPin)
         await serviceUnderTest.processTransactionResponse(pinResponse)
@@ -135,6 +162,12 @@ final class ChargeCardViewModelTests: PSTestCase {
         let successResponse = ChargeCardTransaction(status: .failed)
         await serviceUnderTest.processTransactionResponse(successResponse)
         XCTAssertEqual(serviceUnderTest.chargeCardState, .failed)
+    }
+
+    func testCallingDisplayTransactionErrorSetsStateToErrorStateWithTheAccompanyingError() {
+        let error = ChargeError(message: "Test")
+        serviceUnderTest.displayTransactionError(error)
+        XCTAssertEqual(serviceUnderTest.chargeCardState, .error(error))
     }
 }
 
