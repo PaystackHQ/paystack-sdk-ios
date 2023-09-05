@@ -164,7 +164,7 @@ final class ChargeCardViewModelTests: PSTestCase {
         XCTAssertTrue(mockChargeContainer.transactionFailed)
     }
 
-    func testDisplayTransactionErrorSetsStateToErrorWithAccompanyingError() {
+    func testCallingDisplayTransactionErrorSetsStateToErrorStateWithTheAccompanyingError() {
         let error = ChargeError(message: "Test")
         serviceUnderTest.displayTransactionError(error)
         XCTAssertEqual(serviceUnderTest.chargeCardState, .error(error))
