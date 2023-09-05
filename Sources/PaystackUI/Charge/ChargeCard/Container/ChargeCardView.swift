@@ -42,12 +42,19 @@ struct ChargeCardView: View {
             CardBirthdayView(chargeCardContainer: viewModel)
 
         case .error(let error):
-            ErrorView(message: error.message,
-                      buttonText: viewModel.inTestMode ?
-                      "Retry with test details" : "Try another card",
-                      buttonAction: viewModel.inTestMode ?
-                      viewModel.switchToTestModeCardSelection : viewModel.restartCardPayment)
+            errorView(message: error.message)
+
+        case .failed:
+            errorView(message: "Declined")
         }
+    }
+
+    func errorView(message: String) -> some View {
+        ErrorView(message: message,
+                  buttonText: viewModel.inTestMode ?
+                  "Retry with test details" : "Try another card",
+                  buttonAction: viewModel.inTestMode ?
+                  viewModel.switchToTestModeCardSelection : viewModel.restartCardPayment)
     }
 
 }

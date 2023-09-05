@@ -26,7 +26,7 @@ struct ChargeSuccessView: View {
 
     func dismissAutomatically() async {
         try? await Task.sleep(nanoseconds: 1_500_000_000)
-        visibilityContainer.completeAndDismiss(with: .success)
+        visibilityContainer.completeAndDismiss(with: .completed)
     }
 }
 
