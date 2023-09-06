@@ -128,22 +128,36 @@ final class ChargeCardViewModelTests: PSTestCase {
     }
 
     func testProcessResponseWithPhoneStatusSetsStateToPhone() async {
-        let phoneResponse = ChargeCardTransaction(status: .sendPhone)
+        let expectedDisplayText = "Test Display Text"
+        let phoneResponse = ChargeCardTransaction(status: .sendPhone,
+                                                  displayText: expectedDisplayText)
         await serviceUnderTest.processTransactionResponse(phoneResponse)
-        XCTAssertEqual(serviceUnderTest.chargeCardState, .phoneNumber)
+        XCTAssertEqual(serviceUnderTest.chargeCardState,
+            .phoneNumber(displayMessage: expectedDisplayText))
+    }
+
+    func testProcessResponseWithPhoneStatusDisplaysAGenericDisplayMessageWhenDisplayTextIsNull() async {
+        let genericExpectedOTPMessage = "Please enter your mobile phone number (at least 10 digits)"
+        let otpResponse = ChargeCardTransaction(status: .sendPhone)
+        await serviceUnderTest.processTransactionResponse(otpResponse)
+        XCTAssertEqual(serviceUnderTest.chargeCardState,
+            .phoneNumber(displayMessage: genericExpectedOTPMessage))
     }
 
     func testProcessResponseWithOTPStatusSetsStateToOTP() async {
-        let expectedPhoneNumber = "0123456789"
-        let otpResponse = ChargeCardTransaction(status: .sendOtp, customerPhone: expectedPhoneNumber)
+        let expectedDisplayText = "Test Display Text"
+        let otpResponse = ChargeCardTransaction(status: .sendOtp, displayText: expectedDisplayText)
         await serviceUnderTest.processTransactionResponse(otpResponse)
-        XCTAssertEqual(serviceUnderTest.chargeCardState, .otp(phoneNumber: expectedPhoneNumber))
+        XCTAssertEqual(serviceUnderTest.chargeCardState,
+            .otp(displayMessage: expectedDisplayText))
     }
 
-    func testProcessResponseWithOTPStatusSetsStatusToGenericErrorIfPhoneNumberIsNotPresent() async {
+    func testProcessResponseWithOTPStatusDisplaysAGenericDisplayMessageWhenDisplayTextIsNull() async {
+        let genericExpectedOTPMessage = "Please enter the OTP sent to your mobile number"
         let otpResponse = ChargeCardTransaction(status: .sendOtp)
         await serviceUnderTest.processTransactionResponse(otpResponse)
-        XCTAssertEqual(serviceUnderTest.chargeCardState, .error(.generic))
+        XCTAssertEqual(serviceUnderTest.chargeCardState,
+            .otp(displayMessage: genericExpectedOTPMessage))
     }
 
     func testProcessResponseWithPinStatusSetsStateToPin() async {
