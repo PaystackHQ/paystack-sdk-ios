@@ -35,7 +35,7 @@ final class TestModeCardSelectionViewModelTests: XCTestCase {
         XCTAssertTrue(mockChargeCardContainer.cardPaymentRestarted)
     }
 
-    func testSubmittingTestardDetailsBuildsCardModelAndForwardsRepositoryResponseToContainer() async throws {
+    func testSubmittingTestCardDetailsBuildsCardModelAndForwardsRepositoryResponseToContainer() async throws {
         serviceUnderTest.testCard = .success
 
         mockRepository.expectedChargeCardTransaction = .example
@@ -48,5 +48,17 @@ final class TestModeCardSelectionViewModelTests: XCTestCase {
 
         XCTAssertEqual(mockRepository.cardDetailsSubmitted.card, expectedCard)
         XCTAssertEqual(mockChargeCardContainer.transactionResponse, .example)
+    }
+
+    func testSubmittingTestCardDetailsWithErrorForwardsErrorToCardContainer() async {
+        let expectedErrorMessage = "Error Message"
+        let expectedError: PaystackError = .response(code: 400, message: expectedErrorMessage)
+        mockRepository.expectedErrorResponse = expectedError
+
+        serviceUnderTest.testCard = .success
+        await serviceUnderTest.proceedWithTestCard()
+
+        XCTAssertEqual(mockChargeCardContainer.transactionError,
+            .paystackResponse(message: expectedErrorMessage))
     }
 }

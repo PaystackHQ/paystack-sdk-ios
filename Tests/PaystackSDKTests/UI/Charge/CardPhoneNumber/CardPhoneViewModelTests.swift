@@ -1,4 +1,5 @@
 import XCTest
+import PaystackCore
 @testable import PaystackUI
 
 final class CardPhoneViewModelTests: XCTestCase {
@@ -41,5 +42,17 @@ final class CardPhoneViewModelTests: XCTestCase {
 
         XCTAssertEqual(mockRepository.phoneSubmitted.phone, expectedPhoneNumber)
         XCTAssertEqual(mockChargeCardContainer.transactionResponse, .example)
+    }
+
+    func testSubmittingPhoneNumberWithErrorForwardsErrorToCardContainer() async {
+        let expectedErrorMessage = "Error Message"
+        let expectedError: PaystackError = .response(code: 400, message: expectedErrorMessage)
+        mockRepository.expectedErrorResponse = expectedError
+
+        serviceUnderTest.phoneNumber = "0123456789"
+        await serviceUnderTest.submitPhoneNumber()
+
+        XCTAssertEqual(mockChargeCardContainer.transactionError,
+            .paystackResponse(message: expectedErrorMessage))
     }
 }

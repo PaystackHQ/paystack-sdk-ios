@@ -28,7 +28,8 @@ class CardOTPViewModel: ObservableObject {
                 otp, accessCode: chargeCardContainer.accessCode)
             await chargeCardContainer.processTransactionResponse(authenticationResult)
         } catch {
-            // TODO: Determine error handling once we have further information
+            let error = ChargeError(error: error)
+            chargeCardContainer.displayTransactionError(error)
         }
     }
 

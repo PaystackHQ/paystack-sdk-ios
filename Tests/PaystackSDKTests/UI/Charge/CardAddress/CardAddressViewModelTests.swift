@@ -64,4 +64,19 @@ final class CardAddressViewModelTests: XCTestCase {
         XCTAssertEqual(mockChargeCardContainer.transactionResponse, .example)
     }
 
+    func testSubmittingAddressWithErrorForwardsErrorToCardContainer() async {
+        let expectedErrorMessage = "Error Message"
+        let expectedError: PaystackError = .response(code: 400, message: expectedErrorMessage)
+        mockRepository.expectedErrorResponse = expectedError
+
+        serviceUnderTest.street = "123 Test Street"
+        serviceUnderTest.zipCode = "12345"
+        serviceUnderTest.city = "Test City"
+        serviceUnderTest.state = "Test State"
+        await serviceUnderTest.submitAddress()
+
+        XCTAssertEqual(mockChargeCardContainer.transactionError,
+            .paystackResponse(message: expectedErrorMessage))
+    }
+
 }

@@ -1,4 +1,5 @@
 import XCTest
+import PaystackCore
 @testable import PaystackUI
 
 final class CardBirthdayViewModelTests: XCTestCase {
@@ -52,5 +53,19 @@ final class CardBirthdayViewModelTests: XCTestCase {
         let expectedBirthdayFormat = "2000-01-01"
         XCTAssertEqual(mockRepository.birthdaySubmitted.birthday, expectedBirthdayFormat)
         XCTAssertEqual(mockChargeCardContainer.transactionResponse, .example)
+    }
+
+    func testSubmittingBirthdayWithErrorForwardsErrorToCardContainer() async {
+        let expectedErrorMessage = "Error Message"
+        let expectedError: PaystackError = .response(code: 400, message: expectedErrorMessage)
+        mockRepository.expectedErrorResponse = expectedError
+
+        serviceUnderTest.year = "2000"
+        serviceUnderTest.month = .january
+        serviceUnderTest.day = "01"
+        await serviceUnderTest.submitBirthday()
+
+        XCTAssertEqual(mockChargeCardContainer.transactionError,
+            .paystackResponse(message: expectedErrorMessage))
     }
 }
