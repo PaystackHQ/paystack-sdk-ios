@@ -8,6 +8,9 @@ public struct ChargeResponseData: Codable {
     public var reference: String
     public var domain: Domain
     public var redirectUrl: String?
+    public var url: String?
+    public var ussdCode: String?
+    public var qrCode: String?
     public var metadata: [String: String]?
     public var gatewayResponse: String?
     public var message: String?

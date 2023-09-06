@@ -22,6 +22,15 @@ public extension Paystack {
         return service.postSubmitCardCharge(request)
     }
 
+    // TODO: Update this description with the correct statues to use this
+    /// Checks the status of a charge that has already been initiated.
+    /// This should be used when a transaction returns the `timeout` status
+    /// - Parameter code: The access code of the transaction being queried
+    /// - Returns: A ``Service`` with the latest ``VerifyAccessCodeResponse`` response
+    func checkPendingCharge(forAccessCode code: String) -> Service<ChargeResponse> {
+        return service.getCheckPendingCharge(for: code)
+    }
+
     /// Verifies an access code for a transaction and returns information related to the transaction, including the supported payment channels
     /// - Parameter code: The access code for the current transaction
     /// - Returns: A ``Service`` with the ``VerifyAccessCodeResponse`` response
