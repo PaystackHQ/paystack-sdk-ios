@@ -102,4 +102,18 @@ final class CardDetailsViewModelTests: XCTestCase {
         XCTAssertEqual(mockChargeCardContainer.transactionResponse, .example)
     }
 
+    func testSubmittingCardDetailsWithErrorForwardsErrorToCardContainer() async {
+        let expectedErrorMessage = "Error Message"
+        let expectedError: PaystackError = .response(code: 400, message: expectedErrorMessage)
+        mockRepository.expectedErrorResponse = expectedError
+
+        serviceUnderTest.cardExpiry = "01 / 25"
+        serviceUnderTest.cardNumber = "1234 5678 9012 1234"
+        serviceUnderTest.cvv = "123"
+        await serviceUnderTest.submitCardDetails()
+
+        XCTAssertEqual(mockChargeCardContainer.transactionError,
+            .paystackResponse(message: expectedErrorMessage))
+    }
+
 }

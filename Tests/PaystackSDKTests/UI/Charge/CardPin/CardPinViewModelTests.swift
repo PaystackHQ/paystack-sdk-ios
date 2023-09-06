@@ -1,4 +1,5 @@
 import XCTest
+import PaystackCore
 @testable import PaystackUI
 
 final class CardPinViewModelTests: XCTestCase {
@@ -28,6 +29,18 @@ final class CardPinViewModelTests: XCTestCase {
 
         XCTAssertEqual(mockRepository.pinSubmitted.pin, expectedPin)
         XCTAssertEqual(mockChargeCardContainer.transactionResponse, .example)
+    }
+
+    func testSubmittingPinWithErrorForwardsErrorToCardContainer() async {
+        let expectedErrorMessage = "Error Message"
+        let expectedError: PaystackError = .response(code: 400, message: expectedErrorMessage)
+        mockRepository.expectedErrorResponse = expectedError
+
+        serviceUnderTest.pinText = "1234"
+        await serviceUnderTest.submitPin()
+
+        XCTAssertEqual(mockChargeCardContainer.transactionError,
+            .paystackResponse(message: expectedErrorMessage))
     }
 
 }

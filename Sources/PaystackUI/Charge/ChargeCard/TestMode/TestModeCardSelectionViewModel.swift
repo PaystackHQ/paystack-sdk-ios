@@ -41,8 +41,8 @@ class TestModeCardSelectionViewModel: ObservableObject {
                 card, publicEncryptionKey: encryptionKey, accessCode: chargeCardContainer.accessCode)
             await chargeCardContainer.processTransactionResponse(authenticationResult)
         } catch {
-            print(error)
-            // TODO: Determine error handling once we have further information
+            let error = ChargeError(error: error)
+            chargeCardContainer.displayTransactionError(error)
         }
     }
 

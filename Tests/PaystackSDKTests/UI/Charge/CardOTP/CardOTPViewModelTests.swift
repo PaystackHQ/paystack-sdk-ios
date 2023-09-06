@@ -1,4 +1,5 @@
 import XCTest
+import PaystackCore
 @testable import PaystackUI
 
 final class CardOTPViewModelTests: XCTestCase {
@@ -43,5 +44,17 @@ final class CardOTPViewModelTests: XCTestCase {
 
         XCTAssertEqual(mockRepository.otpSubmitted.otp, expectedOTP)
         XCTAssertEqual(mockChargeCardContainer.transactionResponse, .example)
+    }
+
+    func testSubmittingOTPWithErrorForwardsErrorToCardContainer() async {
+        let expectedErrorMessage = "Error Message"
+        let expectedError: PaystackError = .response(code: 400, message: expectedErrorMessage)
+        mockRepository.expectedErrorResponse = expectedError
+
+        serviceUnderTest.otp = "123456"
+        await serviceUnderTest.submitOTP()
+
+        XCTAssertEqual(mockChargeCardContainer.transactionError,
+            .paystackResponse(message: expectedErrorMessage))
     }
 }
