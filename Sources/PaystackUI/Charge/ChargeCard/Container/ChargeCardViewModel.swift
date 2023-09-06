@@ -49,7 +49,7 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
         case .sendBirthday:
             chargeCardState = .birthday
         case .sendPhone:
-            chargeCardState = .phoneNumber
+            handleSendPhone(with: response)
         case .sendOtp:
             handleSendOtp(with: response)
         case .sendPin:
@@ -85,12 +85,15 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
         chargeCardState = .address(states: states)
     }
 
+    private func handleSendPhone(with response: ChargeCardTransaction) {
+        let displayText = response.displayText ??
+        "Please enter your mobile phone number (at least 10 digits)"
+        chargeCardState = .phoneNumber(displayMessage: displayText)
+    }
+
     private func handleSendOtp(with response: ChargeCardTransaction) {
-        guard let phoneNumber = response.customerPhone else {
-            Logger.error("No customer phone number found in ChargeCardTransaction response")
-            chargeCardState = .error(.generic)
-            return
-        }
-        chargeCardState = .otp(phoneNumber: phoneNumber)
+        let displayText = response.displayText ??
+        "Please enter the OTP sent to your mobile number"
+        chargeCardState = .otp(displayMessage: displayText)
     }
 }
