@@ -14,7 +14,8 @@ class MockChargeCardRepository: ChargeCardRepository {
     var phoneSubmitted: (phone: String, accessCode: String) = ("", "")
     var otpSubmitted: (otp: String, accessCode: String) = ("", "")
     var addressSubmitted: (address: Address?, accessCode: String) = (nil, "")
-    var pinSubmitted: (pin: String, accessCode: String) = ("", "")
+    var pinSubmitted: (pin: String, accessCode: String,
+                       publicEncryptionKey: String) = ("", "", "")
 
     func submitCardDetails(_ card: CardCharge, publicEncryptionKey: String,
                            accessCode: String) async throws -> ChargeCardTransaction {
@@ -42,8 +43,9 @@ class MockChargeCardRepository: ChargeCardRepository {
         return try await mockedResponse()
     }
 
-    func submitPin(_ pin: String, accessCode: String) async throws -> ChargeCardTransaction {
-        pinSubmitted = (pin, accessCode)
+    func submitPin(_ pin: String, publicEncryptionKey: String,
+                   accessCode: String) async throws -> ChargeCardTransaction {
+        pinSubmitted = (pin, accessCode, publicEncryptionKey)
         return try await mockedResponse()
     }
 

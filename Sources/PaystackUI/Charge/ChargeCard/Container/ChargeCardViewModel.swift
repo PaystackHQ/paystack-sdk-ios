@@ -53,7 +53,7 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
         case .sendOtp:
             handleSendOtp(with: response)
         case .sendPin:
-            chargeCardState = .pin
+            chargeCardState = .pin(encryptionKey: transactionDetails.publicEncryptionKey)
         case .success:
             chargeContainer.processSuccessfulTransaction(details: transactionDetails)
         case .failed:

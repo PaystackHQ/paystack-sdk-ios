@@ -40,8 +40,10 @@ struct ChargeCardRepositoryImplementation: ChargeCardRepository {
         return ChargeCardTransaction.from(response)
     }
 
-    func submitPin(_ pin: String, accessCode: String) async throws -> ChargeCardTransaction {
+    func submitPin(_ pin: String, publicEncryptionKey: String,
+                   accessCode: String) async throws -> ChargeCardTransaction {
         let response = try await paystack.authenticateCharge(withPin: pin,
+                                                             publicEncryptionKey: publicEncryptionKey,
                                                              accessCode: accessCode).async()
         return ChargeCardTransaction.from(response)
     }

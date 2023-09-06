@@ -8,11 +8,14 @@ class CardPinViewModel: ObservableObject {
     @Published
     var showLoading = false
 
+    var encryptionKey: String
     var chargeCardContainer: ChargeCardContainer
     var repository: ChargeCardRepository
 
-    init(chargeCardContainer: ChargeCardContainer,
+    init(encryptionKey: String,
+         chargeCardContainer: ChargeCardContainer,
          repository: ChargeCardRepository = ChargeCardRepositoryImplementation()) {
+        self.encryptionKey = encryptionKey
         self.chargeCardContainer = chargeCardContainer
         self.repository = repository
     }
@@ -21,7 +24,7 @@ class CardPinViewModel: ObservableObject {
         showLoading = true
         do {
             let authenticationResult = try await repository.submitPin(
-                pinText, accessCode: chargeCardContainer.accessCode)
+                pinText, publicEncryptionKey: encryptionKey, accessCode: chargeCardContainer.accessCode)
             await chargeCardContainer.processTransactionResponse(authenticationResult)
         } catch {
             // TODO: Determine error handling once we have further information

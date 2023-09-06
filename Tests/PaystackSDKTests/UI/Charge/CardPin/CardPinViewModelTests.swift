@@ -4,6 +4,7 @@ import XCTest
 final class CardPinViewModelTests: XCTestCase {
 
     var serviceUnderTest: CardPinViewModel!
+    var mockEncryptionKey = "MOCK_ENCRYPTION_KEY"
     var mockRepository: MockChargeCardRepository!
     var mockChargeCardContainer: MockChargeCardContainer!
 
@@ -11,7 +12,8 @@ final class CardPinViewModelTests: XCTestCase {
         try super.setUpWithError()
         mockChargeCardContainer = MockChargeCardContainer()
         mockRepository = MockChargeCardRepository()
-        serviceUnderTest = CardPinViewModel(chargeCardContainer: mockChargeCardContainer,
+        serviceUnderTest = CardPinViewModel(encryptionKey: mockEncryptionKey,
+                                            chargeCardContainer: mockChargeCardContainer,
                                             repository: mockRepository)
     }
 

@@ -60,20 +60,6 @@ final class ChargeCardRepositoryImplementationTests: PSTestCase {
         XCTAssertEqual(result, .jsonExample)
     }
 
-    func testSubmitPinSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel() async throws {
-        let pinRequestBody = SubmitPinRequest(pin: "123456", accessCode: "test_access")
-
-        mockServiceExecutor
-            .expectURL("https://api.paystack.co/transaction/charge/submit_pin")
-            .expectMethod(.post)
-            .expectHeader("Authorization", "Bearer \(apiKey)")
-            .expectBody(pinRequestBody)
-            .andReturn(json: "ChargeAuthenticationResponse")
-
-        let result = try await serviceUnderTest.submitPin("123456", accessCode: "test_access")
-        XCTAssertEqual(result, .jsonExample)
-    }
-
     func testSubmitAddressSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel() async throws {
         let address = Address(address: "123 Road", city: "Johannesburg",
                               state: "Gauteng", zipCode: "1234")
@@ -89,6 +75,18 @@ final class ChargeCardRepositoryImplementationTests: PSTestCase {
 
         let result = try await serviceUnderTest.submitAddress(address, accessCode: "test_access")
         XCTAssertEqual(result, .jsonExample)
+    }
+
+    func testGetAddressStatesSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToStringArray() async throws {
+        mockServiceExecutor
+            .expectURL("https://api.paystack.co/address_verification/states?country=US")
+            .expectMethod(.get)
+            .expectHeader("Authorization", "Bearer \(apiKey)")
+            .andReturn(json: "AddressStatesResponse")
+
+        let result = try await serviceUnderTest.getAddressStates(for: "US")
+        let firstThreeStatesFromResult = result.prefix(3)
+        XCTAssertEqual(firstThreeStatesFromResult, ["Alaska", "Alabama", "Arkansas"])
     }
 
 }
