@@ -5,7 +5,7 @@ import PaystackCore
 struct ChargeCardTransaction: Equatable {
     var status: TransactionStatus
     var redirectUrl: String?
-    var customerPhone: String?
+    var displayText: String?
     var countryCode: String?
 }
 
@@ -14,7 +14,7 @@ extension ChargeCardTransaction {
     static func from(_ response: ChargeResponse) -> Self {
         ChargeCardTransaction(status: response.data.status,
                               redirectUrl: response.data.redirectUrl,
-                              customerPhone: response.data.customer?.phone,
+                              displayText: response.data.displayText,
                               countryCode: response.data.authorization?.countryCode)
     }
 

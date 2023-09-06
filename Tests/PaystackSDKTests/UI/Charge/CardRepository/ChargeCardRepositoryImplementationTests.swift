@@ -97,7 +97,6 @@ final class ChargeCardRepositoryImplementationTests: PSTestCase {
 private extension ChargeCardTransaction {
     static var jsonExample: ChargeCardTransaction {
         ChargeCardTransaction(status: .success,
-                              customerPhone: "+27123456789",
                               countryCode: "NG")
     }
 }
