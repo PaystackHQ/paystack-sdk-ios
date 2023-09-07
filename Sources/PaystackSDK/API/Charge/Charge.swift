@@ -18,10 +18,15 @@ public extension Paystack {
     /// Continues the Charge flow by authenticating a user with a Pin
     /// - Parameters:
     ///   - pin: The user's card pin
+    ///   - publicEncryptionKey: The public encryption key that will be used, this would be returned as part of ``VerifyAccessCodeResponse``
     ///   - accessCode: The access code for the current transaction
     /// - Returns: A ``Service`` with the results of the authentication
-    func authenticateCharge(withPin pin: String, accessCode: String) -> Service<ChargeResponse> {
-        let request = SubmitPinRequest(pin: pin, accessCode: accessCode)
+    func authenticateCharge(withPin pin: String,
+                            publicEncryptionKey: String,
+                            accessCode: String) throws -> Service<ChargeResponse> {
+        let encryptedPin = try Cryptography().encrypt(text: pin,
+                                                      publicKey: publicEncryptionKey)
+        let request = SubmitPinRequest(pin: encryptedPin, accessCode: accessCode)
         return service.postSubmitPin(request)
     }
 

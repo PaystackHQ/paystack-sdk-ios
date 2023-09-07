@@ -18,7 +18,7 @@ final class ChargeCardViewModelTests: PSTestCase {
     }
 
     func testRestartCardPaymentResetsStateToCardDetailsWithAmount() {
-        serviceUnderTest.chargeCardState = .pin
+        serviceUnderTest.chargeCardState = .birthday
         serviceUnderTest.restartCardPayment()
         XCTAssertEqual(serviceUnderTest.chargeCardState,
                        .cardDetails(amount: mockTransactionDetails.amountCurrency,
@@ -163,7 +163,8 @@ final class ChargeCardViewModelTests: PSTestCase {
     func testProcessResponseWithPinStatusSetsStateToPin() async {
         let pinResponse = ChargeCardTransaction(status: .sendPin)
         await serviceUnderTest.processTransactionResponse(pinResponse)
-        XCTAssertEqual(serviceUnderTest.chargeCardState, .pin)
+        XCTAssertEqual(serviceUnderTest.chargeCardState,
+            .pin(encryptionKey: "test_encryption_key"))
     }
 
     func testProcessResponseWithSuccessStatusCallsChargeContainerToUpdateStatus() async {

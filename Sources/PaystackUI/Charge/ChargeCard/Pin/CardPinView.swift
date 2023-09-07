@@ -6,9 +6,9 @@ struct CardPinView: View {
     @StateObject
     var viewModel: CardPinViewModel
 
-    init(chargeCardContainer: ChargeCardContainer) {
+    init(encryptionKey: String, chargeCardContainer: ChargeCardContainer) {
         self._viewModel = StateObject(wrappedValue: CardPinViewModel(
-            chargeCardContainer: chargeCardContainer))
+            encryptionKey: encryptionKey, chargeCardContainer: chargeCardContainer))
     }
 
     var body: some View {
@@ -50,7 +50,8 @@ struct CardPinView: View {
 @available(iOS 14.0, *)
 struct CardPinView_Previews: PreviewProvider {
     static var previews: some View {
-        CardPinView(chargeCardContainer: ChargeCardViewModel(
+        CardPinView(encryptionKey: "test_encryption_key",
+                    chargeCardContainer: ChargeCardViewModel(
             transactionDetails: .example,
             chargeContainer: ChargeViewModel(accessCode: "access_code")))
     }

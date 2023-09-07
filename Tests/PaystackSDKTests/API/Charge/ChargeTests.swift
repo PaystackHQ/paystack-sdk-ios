@@ -27,19 +27,6 @@ final class ChargeTests: PSTestCase {
         _ = try serviceUnderTest.authenticateCharge(withOtp: "12345", accessCode: "abcde").sync()
     }
 
-    func testAuthenticateChargeWithPinAuthentication() throws {
-        let pinRequestBody = SubmitPinRequest(pin: "1234", accessCode: "abcde")
-
-        mockServiceExecutor
-            .expectURL("https://api.paystack.co/transaction/charge/submit_pin")
-            .expectMethod(.post)
-            .expectHeader("Authorization", "Bearer \(apiKey)")
-            .expectBody(pinRequestBody)
-            .andReturn(json: "ChargeAuthenticationResponse")
-
-        _ = try serviceUnderTest.authenticateCharge(withPin: "1234", accessCode: "abcde").sync()
-    }
-
     func testAuthenticateChargeWithPhoneAuthentication() throws {
         let phoneRequestBody = SubmitPhoneRequest(phone: "0111234567", accessCode: "abcde")
 

@@ -24,8 +24,9 @@ struct ChargeCardView: View {
                                       encryptionKey: encryptionKey,
                                       chargeCardContainer: viewModel)
 
-        case .pin:
-            CardPinView(chargeCardContainer: viewModel)
+        case .pin(let encryptionKey):
+            CardPinView(encryptionKey: encryptionKey,
+                        chargeCardContainer: viewModel)
 
         case .phoneNumber:
             CardPhoneView(chargeCardContainer: viewModel)
