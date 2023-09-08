@@ -50,7 +50,13 @@ final class ChargeTests: PSTestCase {
             .expectBody(birthdayRequestBody)
             .andReturn(json: "ChargeAuthenticationResponse")
 
-        _ = try serviceUnderTest.authenticateCharge(withBirthday: "1990-01-01", accessCode: "abcde").sync()
+        guard let birthday = DateFormatter.toDate(usingFormat: "yyyy-MM-dd",
+                                                  from: "1990-01-01") else {
+            XCTFail("Failed to construct birthday")
+            return
+        }
+
+        _ = try serviceUnderTest.authenticateCharge(withBirthday: birthday, accessCode: "abcde").sync()
     }
 
     func testAuthenticateChargeWithAddressAuthentication() throws {

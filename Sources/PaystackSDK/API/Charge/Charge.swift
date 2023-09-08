@@ -43,12 +43,13 @@ public extension Paystack {
 
     /// Continues the Charge flow by authenticating a user with their birthday
     /// - Parameters:
-    ///   - birthday: The user's birthday in ISO 8601 format
+    ///   - birthday: The user's birthday as a ``Date`` object
     ///   - accessCode: The access code for the current transaction
     /// - Returns: A ``Service`` with the results of the authentication
-    func authenticateCharge(withBirthday birthday: String,
+    func authenticateCharge(withBirthday birthday: Date,
                             accessCode: String) -> Service<ChargeResponse> {
-        let request = SubmitBirthdayRequest(birthday: birthday, accessCode: accessCode)
+        let birthdayString = DateFormatter.toString(usingFormat: "yyyy-MM-dd", from: birthday)
+        let request = SubmitBirthdayRequest(birthday: birthdayString, accessCode: accessCode)
         return service.postSubmitBirthday(request)
     }
 

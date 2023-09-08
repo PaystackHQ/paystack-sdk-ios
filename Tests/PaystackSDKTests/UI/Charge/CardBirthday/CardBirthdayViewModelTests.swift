@@ -29,30 +29,41 @@ final class CardBirthdayViewModelTests: XCTestCase {
     }
 
     func testFormIsInvalidWhenSomeFieldsAreEmpty() {
-        serviceUnderTest.year = "2000"
+        serviceUnderTest.year = "00"
         serviceUnderTest.day = "01"
         serviceUnderTest.month = nil
         XCTAssertFalse(serviceUnderTest.isValid)
     }
 
     func testFormIsValidIfAllFieldsAreNotEmpty() {
-        serviceUnderTest.year = "2000"
+        serviceUnderTest.year = "00"
         serviceUnderTest.day = "01"
         serviceUnderTest.month = .january
         XCTAssertTrue(serviceUnderTest.isValid)
     }
 
-    func testSubmittingBirthdayFormatsBirthdayCorrectlyAndSendsRepoResultToCardContainer() async throws {
-        serviceUnderTest.year = "2000"
+    func testSubmittingBirthdayConstructsBirthdayCorrectlyAndSendsRepoResultToCardContainer() async throws {
+        serviceUnderTest.year = "20"
         serviceUnderTest.month = .january
         serviceUnderTest.day = "01"
 
         mockRepository.expectedChargeCardTransaction = .example
         await serviceUnderTest.submitBirthday()
 
-        let expectedBirthdayFormat = "2000-01-01"
-        XCTAssertEqual(mockRepository.birthdaySubmitted.birthday, expectedBirthdayFormat)
+        let birthdayString = DateFormatter.toString(usingFormat: "yyyy-MM-dd",
+                                                    from: mockRepository.birthdaySubmitted.birthday!)
+        XCTAssertEqual(birthdayString, "2020-01-01")
         XCTAssertEqual(mockChargeCardContainer.transactionResponse, .example)
+    }
+
+    func testSubmittingBirthdayThrowsErrorWhenBirthdayIsNotValid() async {
+        serviceUnderTest.year = "123"
+        serviceUnderTest.month = .january
+        serviceUnderTest.day = "01"
+
+        await serviceUnderTest.submitBirthday()
+
+        XCTAssertEqual(mockChargeCardContainer.transactionError, .generic)
     }
 
     func testSubmittingBirthdayWithErrorForwardsErrorToCardContainer() async {

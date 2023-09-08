@@ -26,7 +26,13 @@ final class ChargeCardRepositoryImplementationTests: PSTestCase {
             .expectBody(birthdayRequestBody)
             .andReturn(json: "ChargeAuthenticationResponse")
 
-        let result = try await serviceUnderTest.submitBirthday("1990-01-01",
+        guard let birthday = DateFormatter.toDate(usingFormat: "yyyy-MM-dd",
+                                                  from: "1990-01-01") else {
+            XCTFail("Failed to construct birthday")
+            return
+        }
+
+        let result = try await serviceUnderTest.submitBirthday(birthday,
                                                                accessCode: "test_access")
         XCTAssertEqual(result, .jsonExample)
     }

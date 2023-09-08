@@ -10,7 +10,7 @@ class MockChargeCardRepository: ChargeCardRepository {
 
     var cardDetailsSubmitted: (card: CardCharge?, accessCode: String,
                                publicEncryptionKey: String) = (nil, "", "")
-    var birthdaySubmitted: (birthday: String, accessCode: String) = ("", "")
+    var birthdaySubmitted: (birthday: Date?, accessCode: String) = (nil, "")
     var phoneSubmitted: (phone: String, accessCode: String) = ("", "")
     var otpSubmitted: (otp: String, accessCode: String) = ("", "")
     var addressSubmitted: (address: Address?, accessCode: String) = (nil, "")
@@ -23,7 +23,7 @@ class MockChargeCardRepository: ChargeCardRepository {
         return try await mockedResponse()
     }
 
-    func submitBirthday(_ birthday: String, accessCode: String) async throws -> ChargeCardTransaction {
+    func submitBirthday(_ birthday: Date, accessCode: String) async throws -> ChargeCardTransaction {
         birthdaySubmitted = (birthday, accessCode)
         return try await mockedResponse()
     }

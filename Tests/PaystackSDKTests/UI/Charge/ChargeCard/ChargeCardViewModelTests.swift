@@ -179,9 +179,9 @@ final class ChargeCardViewModelTests: PSTestCase {
         XCTAssertEqual(serviceUnderTest.chargeCardState, .failed)
     }
 
-    func testCallingDisplayTransactionErrorSetsStateToErrorStateWithTheAccompanyingError() {
+    func testCallingDisplayTransactionErrorSetsStateToErrorStateWithTheAccompanyingError() async {
         let error = ChargeError(message: "Test")
-        serviceUnderTest.displayTransactionError(error)
+        await serviceUnderTest.displayTransactionError(error)
         XCTAssertEqual(serviceUnderTest.chargeCardState, .error(error))
     }
 }
