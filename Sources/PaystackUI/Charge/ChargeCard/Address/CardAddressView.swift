@@ -6,8 +6,13 @@ struct CardAddressView: View {
     @StateObject
     var viewModel: CardAddressViewModel
 
+    let displayMessage: String
+
     init(states: [String],
+         displayMessage: String?,
          chargeCardContainer: ChargeCardContainer) {
+        self.displayMessage = displayMessage ??
+        "Enter your billing address to complete this payment"
         self._viewModel = StateObject(
             wrappedValue: CardAddressViewModel(states: states,
                                                chargeCardContainer: chargeCardContainer))
@@ -17,7 +22,7 @@ struct CardAddressView: View {
         ScrollView {
             VStack(spacing: .triplePadding) {
 
-                Text("Enter your billing address to complete this payment")
+                Text(displayMessage)
                     .font(.body16M)
                     .foregroundColor(.stackBlue)
                     .multilineTextAlignment(.center)
@@ -72,7 +77,7 @@ struct CardAddressView: View {
 @available(iOS 14.0, *)
 struct CardAddressView_Previews: PreviewProvider {
     static var previews: some View {
-        CardAddressView(states: [],
+        CardAddressView(states: [], displayMessage: nil,
                         chargeCardContainer: ChargeCardViewModel(
                             transactionDetails: .example,
                             chargeContainer: ChargeViewModel(accessCode: "access_code")))

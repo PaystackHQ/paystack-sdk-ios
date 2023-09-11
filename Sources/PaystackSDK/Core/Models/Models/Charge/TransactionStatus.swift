@@ -10,5 +10,5 @@ public enum TransactionStatus: String, Codable {
     case sendPin = "send_pin"
     case sendPhone = "send_phone"
     case sendAddress = "send_address"
-    case redirect
+    case openUrl = "open_url"
 }

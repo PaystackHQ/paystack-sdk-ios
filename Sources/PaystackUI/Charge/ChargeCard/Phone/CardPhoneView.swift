@@ -10,8 +10,12 @@ struct CardPhoneView: View {
 
     @State
     private var showPhoneNumberError = false
+    let displayMessage: String
 
-    init(chargeCardContainer: ChargeCardContainer) {
+    init(displayMessage: String?,
+         chargeCardContainer: ChargeCardContainer) {
+        self.displayMessage = displayMessage ??
+        "Please enter your mobile phone number (at least 10 digits)"
         self._viewModel = StateObject(wrappedValue: CardPhoneViewModel(
             chargeCardContainer: chargeCardContainer))
     }
@@ -20,7 +24,7 @@ struct CardPhoneView: View {
         VStack(spacing: .triplePadding) {
             Image.otpIcon
 
-            Text("Please enter your mobile phone number (at least 10 digits)")
+            Text(displayMessage)
                 .font(.body16M)
                 .foregroundColor(.stackBlue)
                 .multilineTextAlignment(.center)
@@ -51,7 +55,8 @@ struct CardPhoneView: View {
 @available(iOS 14.0, *)
 struct CardPhoneView_Previews: PreviewProvider {
     static var previews: some View {
-        CardPhoneView(chargeCardContainer: ChargeCardViewModel(
+        CardPhoneView(displayMessage: nil,
+                      chargeCardContainer: ChargeCardViewModel(
             transactionDetails: .example,
             chargeContainer: ChargeViewModel(accessCode: "access_code")))
     }

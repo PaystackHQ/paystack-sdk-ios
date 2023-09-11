@@ -43,15 +43,16 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
 
     @MainActor
     func processTransactionResponse(_ response: ChargeCardTransaction) async {
+        let displayText = response.displayText
         switch response.status {
         case .sendAddress:
             await handleSendAddress(with: response)
         case .sendBirthday:
-            chargeCardState = .birthday
+            chargeCardState = .birthday(displayMessage: displayText)
         case .sendPhone:
-            handleSendPhone(with: response)
+            chargeCardState = .phoneNumber(displayMessage: displayText)
         case .sendOtp:
-            handleSendOtp(with: response)
+            chargeCardState = .otp(displayMessage: displayText)
         case .sendPin:
             chargeCardState = .pin(encryptionKey: transactionDetails.publicEncryptionKey)
         case .success:
@@ -61,7 +62,7 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
         case .pending:
             // TODO: Add logic for pending state
             break
-        case .redirect:
+        case .openUrl:
             // TODO: Add logic for 3DS
             break
         case .timeout:
@@ -83,18 +84,6 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
             chargeCardState = .error(.generic)
             return
         }
-        chargeCardState = .address(states: states)
-    }
-
-    private func handleSendPhone(with response: ChargeCardTransaction) {
-        let displayText = response.displayText ??
-        "Please enter your mobile phone number (at least 10 digits)"
-        chargeCardState = .phoneNumber(displayMessage: displayText)
-    }
-
-    private func handleSendOtp(with response: ChargeCardTransaction) {
-        let displayText = response.displayText ??
-        "Please enter the OTP sent to your mobile number"
-        chargeCardState = .otp(displayMessage: displayText)
+        chargeCardState = .address(states: states, displayMessage: response.displayText)
     }
 }

@@ -18,7 +18,7 @@ final class ChargeCardViewModelTests: PSTestCase {
     }
 
     func testRestartCardPaymentResetsStateToCardDetailsWithAmount() {
-        serviceUnderTest.chargeCardState = .birthday
+        serviceUnderTest.chargeCardState = .birthday(displayMessage: "Test")
         serviceUnderTest.restartCardPayment()
         XCTAssertEqual(serviceUnderTest.chargeCardState,
                        .cardDetails(amount: mockTransactionDetails.amountCurrency,
@@ -95,13 +95,17 @@ final class ChargeCardViewModelTests: PSTestCase {
     }
 
     func testProcessResponseWithAddressStatusSetsStateToAddressAndFetchesAddreses() async {
-        let addressResponse = ChargeCardTransaction(status: .sendAddress, countryCode: "US")
+        let expectedDisplayText = "Test Display Text"
+        let addressResponse = ChargeCardTransaction(status: .sendAddress,
+                                                    displayText: expectedDisplayText,
+                                                    countryCode: "US")
         let mockStates = ["Test State A", "Test State B"]
 
         mockRepository.expectedAddressStates = mockStates
 
         await serviceUnderTest.processTransactionResponse(addressResponse)
-        XCTAssertEqual(serviceUnderTest.chargeCardState, .address(states: mockStates))
+        XCTAssertEqual(serviceUnderTest.chargeCardState, .address(states: mockStates,
+                                                                  displayMessage: expectedDisplayText))
     }
 
     func testProcessResponseWithAddressStatusSetsStatusToGenericErrorIfCountryCodeIsNotPresent() async {
@@ -122,9 +126,12 @@ final class ChargeCardViewModelTests: PSTestCase {
     }
 
     func testProcessResponseWithBirthdayStatusSetsStateToBirthday() async {
-        let birthdayResponse = ChargeCardTransaction(status: .sendBirthday)
+        let expectedDisplayText = "Test Display Text"
+        let birthdayResponse = ChargeCardTransaction(status: .sendBirthday,
+                                                     displayText: expectedDisplayText)
         await serviceUnderTest.processTransactionResponse(birthdayResponse)
-        XCTAssertEqual(serviceUnderTest.chargeCardState, .birthday)
+        XCTAssertEqual(serviceUnderTest.chargeCardState,
+            .birthday(displayMessage: expectedDisplayText))
     }
 
     func testProcessResponseWithPhoneStatusSetsStateToPhone() async {
@@ -136,28 +143,12 @@ final class ChargeCardViewModelTests: PSTestCase {
             .phoneNumber(displayMessage: expectedDisplayText))
     }
 
-    func testProcessResponseWithPhoneStatusDisplaysAGenericDisplayMessageWhenDisplayTextIsNull() async {
-        let genericExpectedOTPMessage = "Please enter your mobile phone number (at least 10 digits)"
-        let otpResponse = ChargeCardTransaction(status: .sendPhone)
-        await serviceUnderTest.processTransactionResponse(otpResponse)
-        XCTAssertEqual(serviceUnderTest.chargeCardState,
-            .phoneNumber(displayMessage: genericExpectedOTPMessage))
-    }
-
     func testProcessResponseWithOTPStatusSetsStateToOTP() async {
         let expectedDisplayText = "Test Display Text"
         let otpResponse = ChargeCardTransaction(status: .sendOtp, displayText: expectedDisplayText)
         await serviceUnderTest.processTransactionResponse(otpResponse)
         XCTAssertEqual(serviceUnderTest.chargeCardState,
             .otp(displayMessage: expectedDisplayText))
-    }
-
-    func testProcessResponseWithOTPStatusDisplaysAGenericDisplayMessageWhenDisplayTextIsNull() async {
-        let genericExpectedOTPMessage = "Please enter the OTP sent to your mobile number"
-        let otpResponse = ChargeCardTransaction(status: .sendOtp)
-        await serviceUnderTest.processTransactionResponse(otpResponse)
-        XCTAssertEqual(serviceUnderTest.chargeCardState,
-            .otp(displayMessage: genericExpectedOTPMessage))
     }
 
     func testProcessResponseWithPinStatusSetsStateToPin() async {
