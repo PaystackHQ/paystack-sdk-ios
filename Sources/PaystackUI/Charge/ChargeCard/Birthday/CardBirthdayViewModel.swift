@@ -27,14 +27,23 @@ class CardBirthdayViewModel: ObservableObject {
 
     func submitBirthday() async {
         do {
-            let formattedBirthday = "\(year)-\(month?.formattedRepresentation ?? "00")-\(day)"
+            let birthday = try constructBirthday()
             let authenticationResult = try await repository.submitBirthday(
-                formattedBirthday, accessCode: chargeCardContainer.accessCode)
+                birthday, accessCode: chargeCardContainer.accessCode)
             await chargeCardContainer.processTransactionResponse(authenticationResult)
         } catch {
             let error = ChargeError(error: error)
             chargeCardContainer.displayTransactionError(error)
         }
+    }
+
+    private func constructBirthday() throws -> Date {
+        guard let monthString = month?.formattedRepresentation,
+              let date = DateFormatter.toDate(usingFormat: "yy-MM-dd",
+                                              from: "\(year)-\(monthString)-\(day)") else {
+            throw ChargeError.generic
+        }
+        return date
     }
 
     func cancelTransaction() {

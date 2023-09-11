@@ -1,3 +1,4 @@
+import Foundation
 import PaystackCore
 
 struct ChargeCardRepositoryImplementation: ChargeCardRepository {
@@ -16,7 +17,7 @@ struct ChargeCardRepositoryImplementation: ChargeCardRepository {
         return ChargeCardTransaction.from(response)
     }
 
-    func submitBirthday(_ birthday: String, accessCode: String) async throws -> ChargeCardTransaction {
+    func submitBirthday(_ birthday: Date, accessCode: String) async throws -> ChargeCardTransaction {
         let response = try await paystack.authenticateCharge(withBirthday: birthday,
                                                              accessCode: accessCode).async()
         return ChargeCardTransaction.from(response)
