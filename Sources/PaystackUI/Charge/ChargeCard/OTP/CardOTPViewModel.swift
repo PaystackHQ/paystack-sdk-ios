@@ -5,15 +5,12 @@ class CardOTPViewModel: ObservableObject {
 
     var chargeCardContainer: ChargeCardContainer
     var repository: ChargeCardRepository
-    var phoneNumber: String
 
     @Published
     var otp: String = ""
 
-    init(phoneNumber: String,
-         chargeCardContainer: ChargeCardContainer,
+    init(chargeCardContainer: ChargeCardContainer,
          repository: ChargeCardRepository = ChargeCardRepositoryImplementation()) {
-        self.phoneNumber = phoneNumber
         self.chargeCardContainer = chargeCardContainer
         self.repository = repository
     }

@@ -7,10 +7,12 @@ struct CardOTPVIew: View {
     @StateObject
     var viewModel: CardOTPViewModel
 
-    init(phoneNumber: String,
+    let displayMessage: String
+
+    init(displayMessage: String?,
          chargeCardContainer: ChargeCardContainer) {
+        self.displayMessage = displayMessage ?? "Please enter the OTP sent to your mobile number"
         self._viewModel = StateObject(wrappedValue: CardOTPViewModel(
-            phoneNumber: phoneNumber,
             chargeCardContainer: chargeCardContainer))
     }
 
@@ -19,7 +21,7 @@ struct CardOTPVIew: View {
             VStack(spacing: .triplePadding) {
                 Image.otpIcon
 
-                Text("Please enter the OTP sent to \(viewModel.phoneNumber)")
+                Text(displayMessage)
                     .font(.body16M)
                     .foregroundColor(.stackBlue)
                     .multilineTextAlignment(.center)
@@ -48,7 +50,7 @@ struct CardOTPVIew: View {
 @available(iOS 14.0, *)
 struct CardOTPVIew_Previews: PreviewProvider {
     static var previews: some View {
-        CardOTPVIew(phoneNumber: "+234801****5678",
+        CardOTPVIew(displayMessage: nil,
                     chargeCardContainer: ChargeCardViewModel(
                         transactionDetails: .example,
                         chargeContainer: ChargeViewModel(accessCode: "access_code")))

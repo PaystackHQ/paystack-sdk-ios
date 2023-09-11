@@ -15,7 +15,12 @@ struct CardBirthdayView: View {
     @State
     private var showYearError = false
 
-    init(chargeCardContainer: ChargeCardContainer) {
+    let displayMessage: String
+
+    init(displayMessage: String?,
+         chargeCardContainer: ChargeCardContainer) {
+        self.displayMessage = displayMessage ??
+        "Verify your date of birth to use this bank account with Paystack"
         self._viewModel = StateObject(
             wrappedValue: CardBirthdayViewModel(chargeCardContainer: chargeCardContainer))
     }
@@ -24,7 +29,7 @@ struct CardBirthdayView: View {
         VStack(spacing: .triplePadding) {
             Image.birthdayIcon
 
-            Text("Verify your date of birth to use this bank account with Paystack")
+            Text(displayMessage)
                 .font(.body16M)
                 .foregroundColor(.stackBlue)
                 .multilineTextAlignment(.center)
@@ -76,7 +81,8 @@ struct CardBirthdayView: View {
 @available(iOS 14.0, *)
 struct CardBirthdayView_Previews: PreviewProvider {
     static var previews: some View {
-        CardBirthdayView(chargeCardContainer: ChargeCardViewModel(
+        CardBirthdayView(displayMessage: nil,
+                         chargeCardContainer: ChargeCardViewModel(
             transactionDetails: .example,
             chargeContainer: ChargeViewModel(accessCode: "access_code")))
     }

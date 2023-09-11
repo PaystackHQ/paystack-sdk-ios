@@ -28,19 +28,22 @@ struct ChargeCardView: View {
             CardPinView(encryptionKey: encryptionKey,
                         chargeCardContainer: viewModel)
 
-        case .phoneNumber:
-            CardPhoneView(chargeCardContainer: viewModel)
+        case .phoneNumber(let displayMessage):
+            CardPhoneView(displayMessage: displayMessage,
+                          chargeCardContainer: viewModel)
 
-        case .otp(let phoneNumber):
-            CardOTPVIew(phoneNumber: phoneNumber,
+        case .otp(let displayMessage):
+            CardOTPVIew(displayMessage: displayMessage,
                         chargeCardContainer: viewModel)
 
-        case .address(let states):
+        case .address(let states, let displayMessage):
             CardAddressView(states: states,
+                            displayMessage: displayMessage,
                             chargeCardContainer: viewModel)
 
-        case .birthday:
-            CardBirthdayView(chargeCardContainer: viewModel)
+        case .birthday(let displayMessage):
+            CardBirthdayView(displayMessage: displayMessage,
+                             chargeCardContainer: viewModel)
 
         case .error(let error):
             errorView(message: error.message)

@@ -7,14 +7,12 @@ final class CardOTPViewModelTests: XCTestCase {
     var serviceUnderTest: CardOTPViewModel!
     var mockChargeCardContainer: MockChargeCardContainer!
     var mockRepository: MockChargeCardRepository!
-    let mockPhoneNumber = "+234801****5678"
 
     override func setUpWithError() throws {
         try super.setUpWithError()
         mockChargeCardContainer = MockChargeCardContainer()
         mockRepository = MockChargeCardRepository()
-        serviceUnderTest = CardOTPViewModel(phoneNumber: mockPhoneNumber,
-                                            chargeCardContainer: mockChargeCardContainer,
+        serviceUnderTest = CardOTPViewModel(chargeCardContainer: mockChargeCardContainer,
                                             repository: mockRepository)
     }
 
