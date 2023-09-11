@@ -6,8 +6,10 @@ enum ChargeError: Error, Equatable {
     case generic
 
     init(error: Error) {
-        if let error = error as? PaystackError,
-           case let .response(_, message) = error {
+        if let error = error as? ChargeError {
+            self = error
+        } else if let error = error as? PaystackError,
+                  case let .response(_, message) = error {
             self = .paystackResponse(message: message)
         } else {
             self = .generic

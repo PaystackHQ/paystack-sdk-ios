@@ -28,8 +28,11 @@ struct ChargeView: View {
             switch viewModel.transactionState {
             case .loading(let message):
                 LoadingView(message: message)
-            case .error:
-                Text("Something went wrong")
+            case .error(let error):
+                // TODO: Update once we have new designs for this error screen
+                ErrorView(message: error.message,
+                          buttonText: "",
+                          buttonAction: {})
             case .payment(let type):
                 paymentFlowView(for: type)
             case .success(let amount, let merchant):
