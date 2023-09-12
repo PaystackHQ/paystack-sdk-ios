@@ -48,8 +48,8 @@ struct ChargeCardView: View {
         case .error(let error):
             errorView(message: error.message)
 
-        case .failed:
-            errorView(message: "Declined")
+        case .failed(let message):
+            errorView(message: message ?? "Declined")
         }
     }
 

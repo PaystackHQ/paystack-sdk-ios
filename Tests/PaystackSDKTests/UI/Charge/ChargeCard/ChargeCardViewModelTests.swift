@@ -165,9 +165,11 @@ final class ChargeCardViewModelTests: PSTestCase {
     }
 
     func testProcessResponseWithFailureSetsStateToFailed() async {
-        let successResponse = ChargeCardTransaction(status: .failed)
+        let expectedFailureMessage = "Declined"
+        let successResponse = ChargeCardTransaction(status: .failed, message: expectedFailureMessage)
         await serviceUnderTest.processTransactionResponse(successResponse)
-        XCTAssertEqual(serviceUnderTest.chargeCardState, .failed)
+        XCTAssertEqual(serviceUnderTest.chargeCardState,
+            .failed(displayMessage: expectedFailureMessage))
     }
 
     func testCallingDisplayTransactionErrorSetsStateToErrorStateWithTheAccompanyingError() async {
@@ -186,18 +188,18 @@ extension ChargeCardState: Equatable {
             return first == second
         case (.pin, .pin):
             return true
-        case (.phoneNumber, .phoneNumber):
-            return true
+        case (.phoneNumber(let first), .phoneNumber(let second)):
+            return first == second
         case (.otp(let first), .otp(let second)):
             return first == second
         case (.address(let first), .address(let second)):
             return first == second
-        case (.birthday, .birthday):
-            return true
+        case (.birthday(let first), .birthday(let second)):
+            return first == second
         case (.error(let first), .error(let second)):
             return first == second
-        case (.failed, .failed):
-            return true
+        case (.failed(let first), .failed(let second)):
+            return first == second
         default:
             return false
         }
