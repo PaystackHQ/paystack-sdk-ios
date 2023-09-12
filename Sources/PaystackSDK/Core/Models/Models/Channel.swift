@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 public enum Channel: String, Codable {
     case card = "card"
     case bank = "bank"
