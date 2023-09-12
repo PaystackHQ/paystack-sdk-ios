@@ -9,13 +9,13 @@ public struct VerifyAccessCodeData: Decodable {
     public var merchantName: String
     public var domain: Domain
     public var currency: String
-    public var channels: [String]
+    public var channels: [Channel]
     public var channelOptions: ChannelOptions
     public var publicEncryptionKey: String
 
     public init(email: String, amount: Decimal, reference: String, accessCode: String,
                 merchantLogo: String? = nil, merchantName: String, domain: Domain,
-                currency: String, channels: [String], channelOptions: ChannelOptions,
+                currency: String, channels: [Channel], channelOptions: ChannelOptions,
                 publicEncryptionKey: String) {
         self.email = email
         self.amount = amount

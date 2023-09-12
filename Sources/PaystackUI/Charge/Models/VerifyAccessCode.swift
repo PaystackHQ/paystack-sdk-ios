@@ -5,8 +5,7 @@ struct VerifyAccessCode: Equatable {
     var amount: Decimal
     var currency: String
     var accessCode: String
-    // TODO: Use enum once we see example responses
-    var paymentChannels: [String]
+    var paymentChannels: [Channel]
     var domain: Domain
     var merchantName: String
     var publicEncryptionKey: String
@@ -36,7 +35,7 @@ extension VerifyAccessCode {
         .init(amount: 10000,
               currency: "USD",
               accessCode: "test_access",
-              paymentChannels: [],
+              paymentChannels: [.card],
               domain: .test,
               merchantName: "Test Merchant",
               publicEncryptionKey: "test_encryption_key")

@@ -20,9 +20,24 @@ final class ChargeViewModelTests: PSTestCase {
     }
 
     func testVerifyAccessCodeSetsViewStateAsErrorWhenUnsuccessful() async {
-        mockRepo.expectedErrorResponse = MockError.general
+        mockRepo.expectedErrorResponse = ChargeError.generic
         await serviceUnderTest.verifyAccessCodeAndProceedWithCard()
-        XCTAssertEqual(serviceUnderTest.transactionState, .error(MockError.general))
+        XCTAssertEqual(serviceUnderTest.transactionState, .error(.generic))
+    }
+
+    func testVerifyAccessCodeSetsViewStateAsErrorWhenCardIsNotASupportedPaymentChannel() async {
+        let expectedMessage = "Card payments are not supported. " +
+        "Please reach out to your merchant for further information"
+        mockRepo.expectedVerifyAccessCode = .init(amount: 10000,
+                                                  currency: "USD",
+                                                  accessCode: "test_access",
+                                                  paymentChannels: [.ussd],
+                                                  domain: .test,
+                                                  merchantName: "Test Merchant",
+                                                  publicEncryptionKey: "test_encryption_key")
+        await serviceUnderTest.verifyAccessCodeAndProceedWithCard()
+        XCTAssertEqual(serviceUnderTest.transactionState, .error(.custom(message: expectedMessage)))
+
     }
 
     func testViewShouldBeCenteredForSpecifiedStates() {

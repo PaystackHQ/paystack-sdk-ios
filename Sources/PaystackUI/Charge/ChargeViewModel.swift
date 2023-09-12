@@ -22,9 +22,16 @@ class ChargeViewModel: ObservableObject {
         do {
             transactionState = .loading()
             let accessCodeResponse = try await repository.verifyAccessCode(accessCode)
+            guard accessCodeResponse.paymentChannels.contains(where: { $0 == .card }) else {
+                let errorMessage = "Card payments are not supported. " +
+                "Please reach out to your merchant for further information"
+                throw ChargeError(message: errorMessage)
+            }
+
             self.transactionDetails = accessCodeResponse
             transactionState = .payment(type: .card(transactionInformation: accessCodeResponse))
         } catch {
+            let error = ChargeError(error: error)
             transactionState = .error(error)
         }
     }

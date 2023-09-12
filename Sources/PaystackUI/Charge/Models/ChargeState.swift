@@ -1,9 +1,9 @@
 import Foundation
 
-// TODO: Add state for select payment channel and payment failure
+// TODO: Add state for select payment channel
 enum ChargeState {
     case loading(message: String? = nil)
     case payment(type: ChargePaymentType)
-    case error(Error)
+    case error(ChargeError)
     case success(amount: AmountCurrency, merchant: String)
 }
