@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		173186022AB0B4C500723326 /* PaystackCore in Frameworks */ = {isa = PBXBuildFile; productRef = 173186012AB0B4C500723326 /* PaystackCore */; };
+		173186042AB0B4C800723326 /* PaystackUI in Frameworks */ = {isa = PBXBuildFile; productRef = 173186032AB0B4C800723326 /* PaystackUI */; };
 		175F20B52AAF34C400511F95 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F20B42AAF34C400511F95 /* AppDelegate.swift */; };
 		175F20B72AAF34C400511F95 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F20B62AAF34C400511F95 /* SceneDelegate.swift */; };
 		175F20B92AAF34C400511F95 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175F20B82AAF34C400511F95 /* ViewController.swift */; };
 		175F20BC2AAF34C400511F95 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 175F20BA2AAF34C400511F95 /* Main.storyboard */; };
 		175F20BE2AAF34C600511F95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 175F20BD2AAF34C600511F95 /* Assets.xcassets */; };
 		175F20C12AAF34C600511F95 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 175F20BF2AAF34C600511F95 /* LaunchScreen.storyboard */; };
-		175F20CC2AAF36FA00511F95 /* PaystackCore in Frameworks */ = {isa = PBXBuildFile; productRef = 175F20CB2AAF36FA00511F95 /* PaystackCore */; };
-		175F20CE2AAF36FE00511F95 /* PaystackUI in Frameworks */ = {isa = PBXBuildFile; productRef = 175F20CD2AAF36FE00511F95 /* PaystackUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,8 +34,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				175F20CE2AAF36FE00511F95 /* PaystackUI in Frameworks */,
-				175F20CC2AAF36FA00511F95 /* PaystackCore in Frameworks */,
+				173186042AB0B4C800723326 /* PaystackUI in Frameworks */,
+				173186022AB0B4C500723326 /* PaystackCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,8 +106,8 @@
 			);
 			name = "UIKit Example";
 			packageProductDependencies = (
-				175F20CB2AAF36FA00511F95 /* PaystackCore */,
-				175F20CD2AAF36FE00511F95 /* PaystackUI */,
+				173186012AB0B4C500723326 /* PaystackCore */,
+				173186032AB0B4C800723326 /* PaystackUI */,
 			);
 			productName = "UIKit Example";
 			productReference = 175F20B12AAF34C400511F95 /* UIKit Example.app */;
@@ -384,11 +384,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		175F20CB2AAF36FA00511F95 /* PaystackCore */ = {
+		173186012AB0B4C500723326 /* PaystackCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PaystackCore;
 		};
-		175F20CD2AAF36FE00511F95 /* PaystackUI */ = {
+		173186032AB0B4C800723326 /* PaystackUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PaystackUI;
 		};
