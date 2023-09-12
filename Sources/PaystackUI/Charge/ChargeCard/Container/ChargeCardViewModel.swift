@@ -66,8 +66,9 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
             // TODO: Add logic for 3DS
             break
         case .timeout:
-            // TODO: Add logic for timeout
-            break
+            let timeoutMessage = response.displayText ?? "Payment timed out"
+            chargeCardState = .fatalError(message: timeoutMessage,
+                                          error: .transactionTimedOut)
         }
     }
 

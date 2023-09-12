@@ -13,7 +13,6 @@ public enum TransactionResult {
     /// The customer canceled the payment attempt.
     case cancelled
 
-    // TODO: Pass a custom error type here later and provide a better description
     /// An unexpected error occurred whilst attempting payment.
-    case error(Error)
+    case error(TransactionError)
 }

@@ -166,10 +166,19 @@ final class ChargeCardViewModelTests: PSTestCase {
 
     func testProcessResponseWithFailureSetsStateToFailed() async {
         let expectedFailureMessage = "Declined"
-        let successResponse = ChargeCardTransaction(status: .failed, message: expectedFailureMessage)
-        await serviceUnderTest.processTransactionResponse(successResponse)
+        let failedResponse = ChargeCardTransaction(status: .failed, message: expectedFailureMessage)
+        await serviceUnderTest.processTransactionResponse(failedResponse)
         XCTAssertEqual(serviceUnderTest.chargeCardState,
             .failed(displayMessage: expectedFailureMessage))
+    }
+
+    func testProcessResponseWithTimeoutSetsStateToFatalError() async {
+        let expectedFailureMessage = "Timeout"
+        let expectedError = TransactionError.transactionTimedOut
+        let timeoutResponse = ChargeCardTransaction(status: .timeout, displayText: expectedFailureMessage)
+        await serviceUnderTest.processTransactionResponse(timeoutResponse)
+        XCTAssertEqual(serviceUnderTest.chargeCardState,
+                       .fatalError(message: expectedFailureMessage, error: expectedError))
     }
 
     func testCallingDisplayTransactionErrorSetsStateToErrorStateWithTheAccompanyingError() async {
@@ -197,6 +206,8 @@ extension ChargeCardState: Equatable {
         case (.birthday(let first), .birthday(let second)):
             return first == second
         case (.error(let first), .error(let second)):
+            return first == second
+        case (.fatalError(let first), .fatalError(let second)):
             return first == second
         case (.failed(let first), .failed(let second)):
             return first == second
