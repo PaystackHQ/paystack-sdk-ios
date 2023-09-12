@@ -101,6 +101,7 @@ final class ChargeCardRepositoryImplementationTests: PSTestCase {
 private extension ChargeCardTransaction {
     static var jsonExample: ChargeCardTransaction {
         ChargeCardTransaction(status: .success,
+                              message: "madePayment",
                               countryCode: "NG")
     }
 }
