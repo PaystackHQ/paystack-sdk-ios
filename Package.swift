@@ -20,7 +20,8 @@ let package = Package(
             dependencies: [.product(name: "PusherSwift", package: "pusher-websocket-swift")],
             path: "Sources/PaystackSDK",
             resources: [
-                .process("Versioning/versions.plist")
+                .process("Versioning/versions.plist"),
+                .process("Core/Service/Subscription/secrets.plist")
             ]),
         .target(
             name: "PaystackUI",

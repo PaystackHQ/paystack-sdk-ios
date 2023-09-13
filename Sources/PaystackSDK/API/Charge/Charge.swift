@@ -67,7 +67,7 @@ public extension Paystack {
     /// Listens for a response after presenting a 3DS URL in a webview for authentication
     /// - Parameter transactionId:The ID of the current transaction that is being authenticated
     /// - Returns: A ``Service`` with the results of the authentication
-    func listenFor3DSResponse(for transactionId: String) -> Service<ChargeResponse> {
+    func listenFor3DSResponse(for transactionId: Int) -> Service<ChargeResponse> {
         let channelName = "3DS_\(transactionId)"
         let subscription: any Subscription = PusherSubscription(channelName: channelName, eventName: "response")
         return Service(subscription)
