@@ -174,11 +174,11 @@ final class ChargeCardViewModelTests: PSTestCase {
 
     func testProcessResponseWithTimeoutSetsStateToFatalError() async {
         let expectedFailureMessage = "Timeout"
-        let expectedError = TransactionError.transactionTimedOut
+        let expectedError = ChargeError(message: expectedFailureMessage)
         let timeoutResponse = ChargeCardTransaction(status: .timeout, displayText: expectedFailureMessage)
         await serviceUnderTest.processTransactionResponse(timeoutResponse)
         XCTAssertEqual(serviceUnderTest.chargeCardState,
-                       .fatalError(message: expectedFailureMessage, error: expectedError))
+                       .fatalError(error: expectedError))
     }
 
     func testCallingDisplayTransactionErrorSetsStateToErrorStateWithTheAccompanyingError() async {

@@ -4,29 +4,39 @@ import PaystackCore
 
 final class ChargeErrorTests: PSTestCase {
 
-    func testInitializingWithMessageBuildsErrorAsCustom() {
+    func testInitializingWithMessage() {
         let expectedMessage = "Error Message"
         let error = ChargeError(message: expectedMessage)
-        XCTAssertEqual(error, .custom(message: expectedMessage))
+        XCTAssertEqual(error, .init(message: expectedMessage))
     }
 
-    func testInitializingWithNonPaystackErrorBuildsErrorAsGeneric() {
+    func testInitializingWithChargeErrorInitializesAsSelf() {
+        let expectedMessage = "Error Message"
+        let chargeError = ChargeError(message: expectedMessage)
+        let error = ChargeError(error: chargeError)
+        XCTAssertEqual(error, chargeError)
+    }
+
+    func testInitializingWithNonPaystackErrorAddsErrorToInnerErrorAndSetsGenericMessage() {
         let errorResponse = MockError.general
         let error = ChargeError(error: errorResponse)
-        XCTAssertEqual(error, .generic)
+        XCTAssertEqual(error.message, "Something went wrong")
+        XCTAssertEqual(error.innerError as? MockError, errorResponse)
     }
 
-    func testInitializingWithPaystackErrorWithoutMessageBuildsErrorAsGeneric() {
+    func testInitializingWithPaystackErrorWithoutMessageAddsErrorToInnerErrorAndSetsGenericMessage() {
         let errorResponse = PaystackError.technical
         let error = ChargeError(error: errorResponse)
-        XCTAssertEqual(error, .generic)
+        XCTAssertEqual(error.message, "Something went wrong")
+        XCTAssertEqual(error.innerError as? PaystackError, errorResponse)
     }
 
-    func testInitializingWithPaystackErrorWithMessageBuildsErrorAsPaystackResponse() {
+    func testInitializingWithPaystackErrorWithMessageAddsErrorToInnerErrorAndSetsMessage() {
         let expectedMessage = "Error Message"
         let errorResponse = PaystackError.response(code: 400, message: expectedMessage)
         let error = ChargeError(error: errorResponse)
-        XCTAssertEqual(error, .paystackResponse(message: expectedMessage))
+        XCTAssertEqual(error.message, expectedMessage)
+        XCTAssertEqual(error.innerError as? PaystackError, errorResponse)
     }
 
 }

@@ -14,5 +14,5 @@ public enum TransactionResult {
     case cancelled
 
     /// An unexpected error occurred whilst attempting payment.
-    case error(TransactionError)
+    case error(ChargeError)
 }

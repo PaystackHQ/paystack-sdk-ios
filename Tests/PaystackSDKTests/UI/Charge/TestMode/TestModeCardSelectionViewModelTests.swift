@@ -59,6 +59,6 @@ final class TestModeCardSelectionViewModelTests: XCTestCase {
         await serviceUnderTest.proceedWithTestCard()
 
         XCTAssertEqual(mockChargeCardContainer.transactionError,
-            .paystackResponse(message: expectedErrorMessage))
+                       .init(message: expectedErrorMessage))
     }
 }

@@ -9,6 +9,6 @@ enum ChargeCardState {
     case address(states: [String], displayMessage: String?)
     case birthday(displayMessage: String?)
     case error(ChargeError)
-    case fatalError(message: String, error: TransactionError)
+    case fatalError(error: ChargeError)
     case failed(displayMessage: String?)
 }

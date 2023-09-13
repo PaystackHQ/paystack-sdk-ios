@@ -6,7 +6,7 @@ struct ErrorView: View {
     var message: String
     var buttonText: String?
     var buttonAction: (() -> Void)?
-    var dismissWithError: TransactionError?
+    var dismissWithError: ChargeError?
 
     @EnvironmentObject
     var visibilityContainer: ViewVisibilityContainer
@@ -14,7 +14,7 @@ struct ErrorView: View {
     init(message: String,
          buttonText: String? = nil,
          buttonAction: (() -> Void)? = nil,
-         automaticallyDismissWithError error: TransactionError? = nil) {
+         automaticallyDismissWithError error: ChargeError? = nil) {
         self.message = message
         self.buttonText = buttonText
         self.buttonAction = buttonAction

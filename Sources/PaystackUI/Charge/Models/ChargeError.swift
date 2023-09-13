@@ -1,35 +1,36 @@
 import PaystackCore
 
-enum ChargeError: Error, Equatable {
-    case paystackResponse(message: String)
-    case custom(message: String)
-    case generic
+public struct ChargeError: Error {
+    public var innerError: Error?
+    public var message: String
 
     init(error: Error) {
         if let error = error as? ChargeError {
             self = error
         } else if let error = error as? PaystackError,
                   case let .response(_, message) = error {
-            self = .paystackResponse(message: message)
+            self.innerError = error
+            self.message = message
         } else {
-            self = .generic
+            self.innerError = error
+            self.message = "Something went wrong"
         }
     }
 
     init(message: String) {
-        self = .custom(message: message)
+        self.message = message
     }
+
+    static var generic: Self {
+        .init(message: "Something went wrong")
+    }
+    
 }
 
-extension ChargeError {
-    var message: String {
-        switch self {
-        case .paystackResponse(let message):
-            return message
-        case .custom(let message):
-            return message
-        case .generic:
-            return "Something went wrong"
-        }
+extension ChargeError: Equatable {
+
+    public static func == (lhs: ChargeError, rhs: ChargeError) -> Bool {
+        lhs.message == rhs.message
     }
+
 }

@@ -36,7 +36,7 @@ final class ChargeViewModelTests: PSTestCase {
                                                   merchantName: "Test Merchant",
                                                   publicEncryptionKey: "test_encryption_key")
         await serviceUnderTest.verifyAccessCodeAndProceedWithCard()
-        XCTAssertEqual(serviceUnderTest.transactionState, .error(.custom(message: expectedMessage)))
+        XCTAssertEqual(serviceUnderTest.transactionState, .error(.init(message: expectedMessage)))
 
     }
 

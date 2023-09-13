@@ -67,8 +67,7 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
             break
         case .timeout:
             let timeoutMessage = response.displayText ?? "Payment timed out"
-            chargeCardState = .fatalError(message: timeoutMessage,
-                                          error: .transactionTimedOut)
+            chargeCardState = .fatalError(error: .init(message: timeoutMessage))
         }
     }
 

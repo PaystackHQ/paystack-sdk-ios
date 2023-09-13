@@ -53,6 +53,6 @@ final class CardOTPViewModelTests: XCTestCase {
         await serviceUnderTest.submitOTP()
 
         XCTAssertEqual(mockChargeCardContainer.transactionError,
-            .paystackResponse(message: expectedErrorMessage))
+                       .init(message: expectedErrorMessage))
     }
 }

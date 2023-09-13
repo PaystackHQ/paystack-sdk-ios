@@ -76,7 +76,7 @@ final class CardAddressViewModelTests: XCTestCase {
         await serviceUnderTest.submitAddress()
 
         XCTAssertEqual(mockChargeCardContainer.transactionError,
-            .paystackResponse(message: expectedErrorMessage))
+                       .init(message: expectedErrorMessage))
     }
 
 }
