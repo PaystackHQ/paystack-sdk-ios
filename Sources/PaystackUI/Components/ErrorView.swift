@@ -4,13 +4,21 @@ import SwiftUI
 struct ErrorView: View {
 
     var message: String
-    var buttonText: String
-    var buttonAction: () -> Void
+    var buttonText: String?
+    var buttonAction: (() -> Void)?
+    var dismissWithError: ChargeError?
 
-    init(message: String, buttonText: String, buttonAction: @escaping () -> Void) {
+    @EnvironmentObject
+    var visibilityContainer: ViewVisibilityContainer
+
+    init(message: String,
+         buttonText: String? = nil,
+         buttonAction: (() -> Void)? = nil,
+         automaticallyDismissWithError error: ChargeError? = nil) {
         self.message = message
         self.buttonText = buttonText
         self.buttonAction = buttonAction
+        self.dismissWithError = error
     }
 
     var body: some View {
@@ -22,10 +30,20 @@ struct ErrorView: View {
                 .foregroundColor(.stackBlue)
                 .padding(.bottom, .singlePadding)
 
-            Button(buttonText, action: buttonAction)
-                .buttonStyle(SecondaryButtonStyle())
+            if let buttonText, let buttonAction {
+                Button(buttonText, action: buttonAction)
+                    .buttonStyle(SecondaryButtonStyle())
+            }
+
         }
         .padding(.doublePadding)
+        .task(dismissIfNecessary)
+    }
+
+    func dismissIfNecessary() async {
+        guard let error = dismissWithError else { return }
+        try? await Task.sleep(nanoseconds: 3_000_000_000)
+        visibilityContainer.completeAndDismiss(with: .error(error))
     }
 }
 

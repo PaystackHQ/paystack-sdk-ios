@@ -77,6 +77,6 @@ final class CardBirthdayViewModelTests: XCTestCase {
         await serviceUnderTest.submitBirthday()
 
         XCTAssertEqual(mockChargeCardContainer.transactionError,
-            .paystackResponse(message: expectedErrorMessage))
+                       .init(message: expectedErrorMessage))
     }
 }

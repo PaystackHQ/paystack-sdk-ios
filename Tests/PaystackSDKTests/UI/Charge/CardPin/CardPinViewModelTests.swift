@@ -42,7 +42,7 @@ final class CardPinViewModelTests: XCTestCase {
         await serviceUnderTest.submitPin()
 
         XCTAssertEqual(mockChargeCardContainer.transactionError,
-            .paystackResponse(message: expectedErrorMessage))
+                       .init(message: expectedErrorMessage))
     }
 
 }

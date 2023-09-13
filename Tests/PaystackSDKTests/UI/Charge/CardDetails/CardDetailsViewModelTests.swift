@@ -113,7 +113,7 @@ final class CardDetailsViewModelTests: XCTestCase {
         await serviceUnderTest.submitCardDetails()
 
         XCTAssertEqual(mockChargeCardContainer.transactionError,
-            .paystackResponse(message: expectedErrorMessage))
+                       .init(message: expectedErrorMessage))
     }
 
 }

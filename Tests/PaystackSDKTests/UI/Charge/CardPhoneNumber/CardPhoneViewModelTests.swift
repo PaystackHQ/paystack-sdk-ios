@@ -53,6 +53,6 @@ final class CardPhoneViewModelTests: XCTestCase {
         await serviceUnderTest.submitPhoneNumber()
 
         XCTAssertEqual(mockChargeCardContainer.transactionError,
-            .paystackResponse(message: expectedErrorMessage))
+            .init(message: expectedErrorMessage))
     }
 }
