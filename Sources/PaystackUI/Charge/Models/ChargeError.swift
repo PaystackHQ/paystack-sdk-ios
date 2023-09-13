@@ -24,7 +24,7 @@ public struct ChargeError: Error {
     static var generic: Self {
         .init(message: "Something went wrong")
     }
-    
+
 }
 
 extension ChargeError: Equatable {
