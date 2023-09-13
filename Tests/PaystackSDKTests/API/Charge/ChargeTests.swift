@@ -76,7 +76,7 @@ final class ChargeTests: PSTestCase {
     }
 
     func testListenFor3DS() throws {
-        let transactionId = "1234"
+        let transactionId = 1234
         let mockSubscription = PusherSubscription(channelName: "3DS_\(transactionId)",
                                                   eventName: "response")
 
