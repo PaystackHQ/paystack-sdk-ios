@@ -16,6 +16,7 @@ class MockChargeCardRepository: ChargeCardRepository {
     var addressSubmitted: (address: Address?, accessCode: String) = (nil, "")
     var pinSubmitted: (pin: String, accessCode: String,
                        publicEncryptionKey: String) = ("", "", "")
+    var redirectTranactionId: Int?
 
     func submitCardDetails(_ card: CardCharge, publicEncryptionKey: String,
                            accessCode: String) async throws -> ChargeCardTransaction {
@@ -54,6 +55,11 @@ class MockChargeCardRepository: ChargeCardRepository {
             throw expectedErrorResponse ?? MockError.stubNotProvided
         }
         return expectedAddressStates
+    }
+
+    func listenFor3DS(for transactionId: Int) async throws -> ChargeCardTransaction {
+        self.redirectTranactionId = transactionId
+        return try await mockedResponse()
     }
 
     private func mockedResponse() async throws -> ChargeCardTransaction {

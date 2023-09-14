@@ -54,4 +54,9 @@ struct ChargeCardRepositoryImplementation: ChargeCardRepository {
         let states = response.data.compactMap { $0.name }
         return states
     }
+
+    func listenFor3DS(for transactionId: Int) async throws -> ChargeCardTransaction {
+        let response = try await paystack.listenFor3DSResponse(for: transactionId).async()
+        return ChargeCardTransaction.from(response)
+    }
 }
