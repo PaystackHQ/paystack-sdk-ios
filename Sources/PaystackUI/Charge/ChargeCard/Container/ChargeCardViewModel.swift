@@ -80,7 +80,7 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
         guard let countryCode = response.countryCode,
               let states = try? await repository.getAddressStates(for: countryCode) else {
             Logger.error("Unable to retrieve address states")
-            chargeCardState = .error(.generic)
+            chargeCardState = .fatalError(error: .generic)
             return
         }
         chargeCardState = .address(states: states, displayMessage: response.displayText)
@@ -91,7 +91,8 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
         guard let url = response.url,
         let transactionId = transactionDetails.transactionId else {
             Logger.error("Field requireds for 3DS missing from response")
-            chargeCardState = .error(.generic)
+            // TODO: Determine if we want to pass a more explicit error to the user
+            chargeCardState = .fatalError(error: .generic)
             return
         }
         chargeCardState = .redirect(urlString: url,
