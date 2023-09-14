@@ -11,4 +11,5 @@ enum ChargeCardState {
     case error(ChargeError)
     case fatalError(error: ChargeError)
     case failed(displayMessage: String?)
+    case redirect(urlString: String, transactionId: Int)
 }

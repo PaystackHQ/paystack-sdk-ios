@@ -108,21 +108,21 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                                   displayMessage: expectedDisplayText))
     }
 
-    func testProcessResponseWithAddressStatusSetsStatusToGenericErrorIfCountryCodeIsNotPresent() async {
+    func testProcessResponseWithAddressStatusSetsStatusToFatalErrorIfCountryCodeIsNotPresent() async {
         let addressResponse = ChargeCardTransaction(status: .sendAddress)
         mockRepository.expectedAddressStates = ["Test State A", "Test State B"]
 
         await serviceUnderTest.processTransactionResponse(addressResponse)
-        XCTAssertEqual(serviceUnderTest.chargeCardState, .error(.generic))
+        XCTAssertEqual(serviceUnderTest.chargeCardState, .fatalError(error: .generic))
     }
 
-    func testProcessResponseWithAddressStatusSetsStatusToGenericErrorIfFetchingAddressStatesFails() async {
+    func testProcessResponseWithAddressStatusSetsStatusToFatalErrorIfFetchingAddressStatesFails() async {
         let addressResponse = ChargeCardTransaction(status: .sendAddress)
 
         mockRepository.expectedErrorResponse = MockError.general
 
         await serviceUnderTest.processTransactionResponse(addressResponse)
-        XCTAssertEqual(serviceUnderTest.chargeCardState, .error(.generic))
+        XCTAssertEqual(serviceUnderTest.chargeCardState, .fatalError(error: .generic))
     }
 
     func testProcessResponseWithBirthdayStatusSetsStateToBirthday() async {
@@ -181,6 +181,59 @@ final class ChargeCardViewModelTests: PSTestCase {
                        .fatalError(error: expectedError))
     }
 
+    func testProcessValidResponseWithOpenUrlSetsStateToRedirect() async {
+        let expectedTransactionId = 1234
+        let expectedUrl = "redirect.url.com"
+        let transactionDetails: VerifyAccessCode = .init(amount: 10000,
+                                                         currency: "USD",
+                                                         accessCode: "test_access",
+                                                         paymentChannels: [], domain: .test,
+                                                         merchantName: "Test Merchant",
+                                                         publicEncryptionKey: "test_encryption_key",
+                                                         transactionId: expectedTransactionId)
+
+        serviceUnderTest.transactionDetails = transactionDetails
+        let redirectResponse = ChargeCardTransaction(status: .openUrl,
+                                                     url: expectedUrl)
+        await serviceUnderTest.processTransactionResponse(redirectResponse)
+        XCTAssertEqual(serviceUnderTest.chargeCardState,
+                       .redirect(urlString: expectedUrl, transactionId: expectedTransactionId))
+    }
+
+    func testProcessResponseWithOpenUrlButMissingUrlInResponseSetsStateToFatalError() async {
+        let expectedTransactionId = 1234
+        let transactionDetails: VerifyAccessCode = .init(amount: 10000,
+                                                         currency: "USD",
+                                                         accessCode: "test_access",
+                                                         paymentChannels: [], domain: .test,
+                                                         merchantName: "Test Merchant",
+                                                         publicEncryptionKey: "test_encryption_key",
+                                                         transactionId: expectedTransactionId)
+
+        serviceUnderTest.transactionDetails = transactionDetails
+        let redirectResponse = ChargeCardTransaction(status: .openUrl)
+        await serviceUnderTest.processTransactionResponse(redirectResponse)
+        XCTAssertEqual(serviceUnderTest.chargeCardState,
+                       .fatalError(error: .generic))
+    }
+
+    func testProcessResponseWithOpenUrlButMissingTransactionIdSetsStateToFatalError() async {
+        let expectedUrl = "redirect.url.com"
+        let transactionDetails: VerifyAccessCode = .init(amount: 10000,
+                                                         currency: "USD",
+                                                         accessCode: "test_access",
+                                                         paymentChannels: [], domain: .test,
+                                                         merchantName: "Test Merchant",
+                                                         publicEncryptionKey: "test_encryption_key")
+
+        serviceUnderTest.transactionDetails = transactionDetails
+        let redirectResponse = ChargeCardTransaction(status: .openUrl,
+                                                     url: expectedUrl)
+        await serviceUnderTest.processTransactionResponse(redirectResponse)
+        XCTAssertEqual(serviceUnderTest.chargeCardState,
+                       .fatalError(error: .generic))
+    }
+
     func testCallingDisplayTransactionErrorSetsStateToErrorStateWithTheAccompanyingError() async {
         let error = ChargeError(message: "Test")
         await serviceUnderTest.displayTransactionError(error)
@@ -210,6 +263,8 @@ extension ChargeCardState: Equatable {
         case (.fatalError(let first), .fatalError(let second)):
             return first == second
         case (.failed(let first), .failed(let second)):
+            return first == second
+        case (.redirect(let first), .redirect(let second)):
             return first == second
         default:
             return false
