@@ -17,6 +17,7 @@ class MockChargeCardRepository: ChargeCardRepository {
     var pinSubmitted: (pin: String, accessCode: String,
                        publicEncryptionKey: String) = ("", "", "")
     var redirectTranactionId: Int?
+    var pendingChargeAccessCode: String?
 
     func submitCardDetails(_ card: CardCharge, publicEncryptionKey: String,
                            accessCode: String) async throws -> ChargeCardTransaction {
@@ -59,6 +60,11 @@ class MockChargeCardRepository: ChargeCardRepository {
 
     func listenFor3DS(for transactionId: Int) async throws -> ChargeCardTransaction {
         self.redirectTranactionId = transactionId
+        return try await mockedResponse()
+    }
+
+    func checkPendingCharge(with accessCode: String) async throws -> ChargeCardTransaction {
+        pendingChargeAccessCode = accessCode
         return try await mockedResponse()
     }
 

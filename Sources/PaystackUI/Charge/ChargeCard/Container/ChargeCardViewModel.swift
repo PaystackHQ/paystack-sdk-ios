@@ -60,8 +60,7 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
         case .failed:
             chargeCardState = .failed(displayMessage: response.message)
         case .pending:
-            // TODO: Add logic for pending state
-            break
+            await checkPendingCharge()
         case .openUrl:
             handle3DS(with: response)
         case .timeout:
@@ -97,5 +96,18 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
         }
         chargeCardState = .redirect(urlString: url,
                                     transactionId: transactionId)
+    }
+
+    @MainActor
+    private func checkPendingCharge() async {
+        do {
+            chargeCardState = .loading(message: "Checking transaction status")
+            let authenticationResult = try await repository.checkPendingCharge(
+                with: transactionDetails.accessCode)
+            await processTransactionResponse(authenticationResult)
+        } catch {
+            let error = ChargeError(error: error)
+            displayTransactionError(error)
+        }
     }
 }

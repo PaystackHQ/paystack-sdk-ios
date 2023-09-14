@@ -83,6 +83,17 @@ final class ChargeCardRepositoryImplementationTests: PSTestCase {
         XCTAssertEqual(result, .jsonExample)
     }
 
+    func testCheckPendingChargeSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel() async throws {
+        mockServiceExecutor
+            .expectURL("https://api.paystack.co/transaction/charge/access_code_test")
+            .expectMethod(.get)
+            .expectHeader("Authorization", "Bearer \(apiKey)")
+            .andReturn(json: "ChargeAuthenticationResponse")
+
+        let result = try await serviceUnderTest.checkPendingCharge(with: "access_code_test")
+        XCTAssertEqual(result, .jsonExample)
+    }
+
     func testListenFor3DSResponseListensUsingThePaystackObjectAndMapsCorrectlyToModel() async throws {
         let transactionId = 1234
         let mockSubscription = PusherSubscription(channelName: "3DS_\(transactionId)",

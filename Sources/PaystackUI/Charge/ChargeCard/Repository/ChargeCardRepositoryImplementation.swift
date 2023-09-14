@@ -59,4 +59,9 @@ struct ChargeCardRepositoryImplementation: ChargeCardRepository {
         let response = try await paystack.listenFor3DSResponse(for: transactionId).async()
         return ChargeCardTransaction.from(response)
     }
+
+    func checkPendingCharge(with accessCode: String) async throws -> ChargeCardTransaction {
+        let response = try await paystack.checkPendingCharge(forAccessCode: accessCode).async()
+        return ChargeCardTransaction.from(response)
+    }
 }

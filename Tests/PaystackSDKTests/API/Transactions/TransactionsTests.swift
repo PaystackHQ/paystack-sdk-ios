@@ -24,7 +24,7 @@ class TransactionsTests: PSTestCase {
         _ = try await serviceUnderTest.verifyAccessCode("access_code_test").async()
     }
 
-    func testChechPendingCharge() async throws {
+    func testCheckPendingCharge() async throws {
         mockServiceExecutor
             .expectURL("https://api.paystack.co/transaction/charge/access_code_test")
             .expectMethod(.get)
