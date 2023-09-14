@@ -1,6 +1,7 @@
 import Foundation
 
 enum ChargeCardState {
+    case loading(message: String? = nil)
     case cardDetails(amount: AmountCurrency, encryptionKey: String)
     case testModeCardSelection(amount: AmountCurrency, encryptionKey: String)
     case pin(encryptionKey: String)

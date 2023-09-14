@@ -234,6 +234,17 @@ final class ChargeCardViewModelTests: PSTestCase {
                        .fatalError(error: .generic))
     }
 
+    func testProcessResponseWithPendingUrlChecksPendingChargeStatusAndUpdatesWithTheNewStatus() async {
+        let pendingResponse = ChargeCardTransaction(status: .pending)
+
+        let expectedOTPDisplayText = "Test Display Text"
+        let otpResponse = ChargeCardTransaction(status: .sendOtp, displayText: expectedOTPDisplayText)
+        mockRepository.expectedChargeCardTransaction = otpResponse
+
+        await serviceUnderTest.processTransactionResponse(pendingResponse)
+        XCTAssertEqual(serviceUnderTest.chargeCardState, .otp(displayMessage: expectedOTPDisplayText))
+    }
+
     func testCallingDisplayTransactionErrorSetsStateToErrorStateWithTheAccompanyingError() async {
         let error = ChargeError(message: "Test")
         await serviceUnderTest.displayTransactionError(error)

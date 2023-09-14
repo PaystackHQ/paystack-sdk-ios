@@ -14,6 +14,9 @@ struct ChargeCardView: View {
 
     var body: some View {
         switch viewModel.chargeCardState {
+        case .loading(let message):
+            LoadingView(message: message)
+
         case .cardDetails(let amount, let encryptionKey):
             CardDetailsView(amountDetails: amount,
                             encryptionKey: encryptionKey,
