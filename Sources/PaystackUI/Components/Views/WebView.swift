@@ -23,7 +23,6 @@ import WebKit
  */
 public struct WebView: WebViewRepresentable {
 
-
     // MARK: - Initializers
 
     /**
@@ -48,13 +47,11 @@ public struct WebView: WebViewRepresentable {
         self.viewConfiguration = viewConfiguration
     }
 
-
     // MARK: - Properties
 
     private let url: URL?
     private let webConfiguration: WKWebViewConfiguration?
     private let viewConfiguration: (WKWebView) -> Void
-
 
     // MARK: - Functions
 

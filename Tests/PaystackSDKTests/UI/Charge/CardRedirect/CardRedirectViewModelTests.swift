@@ -30,7 +30,7 @@ final class CardRedirectViewModelTests: PSTestCase {
         let expectedErrorMessage = "Error Message"
         let expectedError: PaystackError = .response(code: 400, message: expectedErrorMessage)
         mockRepository.expectedErrorResponse = expectedError
-        
+
         await serviceUnderTest.awaitAuthenticationResponse()
         XCTAssertEqual(mockChargeCardContainer.transactionError,
                        .init(message: expectedErrorMessage))
