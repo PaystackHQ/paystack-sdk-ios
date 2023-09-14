@@ -88,6 +88,7 @@ final class ChargeCardRepositoryImplementationTests: PSTestCase {
         let mockSubscription = PusherSubscription(channelName: "3DS_\(transactionId)",
                                                   eventName: "response")
 
+        // swiftlint:disable:next line_length
         let responseString = "{\"redirecturl\":\"?trxref=2wdckavunc&reference=2wdckavunc\",\"trans\":\"1234\",\"trxref\":\"2wdckavunc\",\"reference\":\"2wdckavunc\",\"status\":\"success\",\"message\":\"Success\",\"response\":\"Approved\"}"
 
         mockSubscriptionListener
