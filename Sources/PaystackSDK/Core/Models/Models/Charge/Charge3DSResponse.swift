@@ -15,4 +15,3 @@ public struct Charge3DSResponse: Decodable {
         case transactionReference = "trxref"
     }
 }
-

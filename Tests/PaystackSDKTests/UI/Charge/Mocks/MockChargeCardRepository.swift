@@ -16,7 +16,7 @@ class MockChargeCardRepository: ChargeCardRepository {
     var addressSubmitted: (address: Address?, accessCode: String) = (nil, "")
     var pinSubmitted: (pin: String, accessCode: String,
                        publicEncryptionKey: String) = ("", "", "")
-    var redirectTranactionId: Int? = nil
+    var redirectTranactionId: Int?
 
     func submitCardDetails(_ card: CardCharge, publicEncryptionKey: String,
                            accessCode: String) async throws -> ChargeCardTransaction {
