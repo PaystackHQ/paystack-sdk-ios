@@ -45,6 +45,11 @@ struct ChargeCardView: View {
             CardBirthdayView(displayMessage: displayMessage,
                              chargeCardContainer: viewModel)
 
+        case .redirect(let urlString, let transactionId):
+            CardRedirectView(urlString: urlString,
+                             transactionId: transactionId,
+                             chargeCardContainer: viewModel)
+
         case .error(let error):
             errorView(message: error.message)
 

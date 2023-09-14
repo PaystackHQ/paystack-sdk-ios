@@ -63,8 +63,7 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
             // TODO: Add logic for pending state
             break
         case .openUrl:
-            // TODO: Add logic for 3DS
-            break
+            handle3DS(with: response)
         case .timeout:
             let timeoutMessage = response.displayText ?? "Payment timed out"
             chargeCardState = .fatalError(error: .init(message: timeoutMessage))
@@ -85,5 +84,17 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
             return
         }
         chargeCardState = .address(states: states, displayMessage: response.displayText)
+    }
+
+    @MainActor
+    private func handle3DS(with response: ChargeCardTransaction) {
+        guard let url = response.url,
+        let transactionId = transactionDetails.transactionId else {
+            Logger.error("Field requireds for 3DS missing from response")
+            chargeCardState = .error(.generic)
+            return
+        }
+        chargeCardState = .redirect(urlString: url,
+                                    transactionId: transactionId)
     }
 }
