@@ -11,4 +11,5 @@ protocol ChargeCardRepository {
     func submitPin(_ pin: String, publicEncryptionKey: String,
                    accessCode: String) async throws -> ChargeCardTransaction
     func getAddressStates(for countryCode: String) async throws -> [String]
+    func listenFor3DS(for transactionId: Int) async throws -> ChargeCardTransaction
 }

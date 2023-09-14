@@ -20,6 +20,11 @@ extension ChargeCardTransaction {
                               countryCode: response.data.authorization?.countryCode)
     }
 
+    static func from(_ response: Charge3DSResponse) -> Self {
+        let status: TransactionStatus = response.status == .success ? .success : .failed
+        return ChargeCardTransaction(status: status)
+    }
+
 }
 
 // MARK: - Previews
