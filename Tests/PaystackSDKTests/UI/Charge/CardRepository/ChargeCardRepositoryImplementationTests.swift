@@ -83,6 +83,21 @@ final class ChargeCardRepositoryImplementationTests: PSTestCase {
         XCTAssertEqual(result, .jsonExample)
     }
 
+    func testListenFor3DSResponseListensUsingThePaystackObjectAndMapsCorrectlyToModel() async throws {
+        let transactionId = 1234
+        let mockSubscription = PusherSubscription(channelName: "3DS_\(transactionId)",
+                                                  eventName: "response")
+
+        let responseString = "{\"redirecturl\":\"?trxref=2wdckavunc&reference=2wdckavunc\",\"trans\":\"1234\",\"trxref\":\"2wdckavunc\",\"reference\":\"2wdckavunc\",\"status\":\"success\",\"message\":\"Success\",\"response\":\"Approved\"}"
+
+        mockSubscriptionListener
+            .expectSubscription(mockSubscription)
+            .andReturnString(responseString)
+
+        let result = try await serviceUnderTest.listenFor3DS(for: transactionId)
+        XCTAssertEqual(result, .init(status: .success))
+    }
+
     func testGetAddressStatesSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToStringArray() async throws {
         mockServiceExecutor
             .expectURL("https://api.paystack.co/address_verification/states?country=US")
