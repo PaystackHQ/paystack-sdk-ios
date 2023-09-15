@@ -10,7 +10,7 @@ public struct VerifyAccessCodeData: Decodable {
     public var merchantName: String
     public var domain: Domain
     public var currency: String
-    public var channels: [Channel?]
+    public var channels: [Channel]
     public var channelOptions: ChannelOptions
     public var publicEncryptionKey: String
 

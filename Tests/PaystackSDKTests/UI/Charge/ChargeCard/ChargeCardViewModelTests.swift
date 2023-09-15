@@ -241,6 +241,7 @@ final class ChargeCardViewModelTests: PSTestCase {
         let otpResponse = ChargeCardTransaction(status: .sendOtp, displayText: expectedOTPDisplayText)
         mockRepository.expectedChargeCardTransaction = otpResponse
 
+        serviceUnderTest.checkPendingChargeDelay = 0
         await serviceUnderTest.processTransactionResponse(pendingResponse)
         XCTAssertEqual(serviceUnderTest.chargeCardState, .otp(displayMessage: expectedOTPDisplayText))
     }

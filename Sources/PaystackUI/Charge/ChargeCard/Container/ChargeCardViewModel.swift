@@ -10,6 +10,8 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
     var chargeContainer: ChargeContainer
     var repository: ChargeCardRepository
 
+    var checkPendingChargeDelay: UInt64 = 5_000_000_000
+
     init(transactionDetails: VerifyAccessCode,
          chargeContainer: ChargeContainer,
          repository: ChargeCardRepository = ChargeCardRepositoryImplementation()) {
@@ -102,6 +104,7 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
     private func checkPendingCharge() async {
         do {
             chargeCardState = .loading(message: "Checking transaction status")
+            try await Task.sleep(nanoseconds: checkPendingChargeDelay)
             let authenticationResult = try await repository.checkPendingCharge(
                 with: transactionDetails.accessCode)
             await processTransactionResponse(authenticationResult)

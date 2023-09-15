@@ -14,7 +14,8 @@
     "channels": [
       "card",
       "qr",
-      "ussd"
+      "ussd",
+      "eft"
     ],
     "channel_options": {
       "qr": [
