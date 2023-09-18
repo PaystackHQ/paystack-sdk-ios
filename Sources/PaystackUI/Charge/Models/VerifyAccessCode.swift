@@ -22,7 +22,7 @@ extension VerifyAccessCode {
         VerifyAccessCode(amount: response.data.amount,
                          currency: response.data.currency,
                          accessCode: response.data.accessCode,
-                         paymentChannels: response.data.channels.compactMap {$0},
+                         paymentChannels: response.data.channels.filter { $0 != .unsupportedChannel },
                          domain: response.data.domain,
                          merchantName: response.data.merchantName,
                          publicEncryptionKey: response.data.publicEncryptionKey,
