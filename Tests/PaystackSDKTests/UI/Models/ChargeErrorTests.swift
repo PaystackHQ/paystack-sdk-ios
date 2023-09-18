@@ -10,6 +10,15 @@ final class ChargeErrorTests: PSTestCase {
         XCTAssertEqual(error, .init(message: expectedMessage))
     }
 
+    func testInitializingWithMessageAndCause() {
+        let expectedMessage = "Error Message"
+        let expectedCauseMessage = "Cause Message"
+
+        let error = ChargeError(displayMessage: expectedMessage, causeMessage: expectedCauseMessage)
+        XCTAssertEqual(error.message, expectedMessage)
+        XCTAssertEqual(error.cause?.localizedDescription, expectedCauseMessage)
+    }
+
     func testInitializingWithChargeErrorInitializesAsSelf() {
         let expectedMessage = "Error Message"
         let chargeError = ChargeError(message: expectedMessage)
@@ -21,14 +30,14 @@ final class ChargeErrorTests: PSTestCase {
         let errorResponse = MockError.general
         let error = ChargeError(error: errorResponse)
         XCTAssertEqual(error.message, "Something went wrong")
-        XCTAssertEqual(error.innerError as? MockError, errorResponse)
+        XCTAssertEqual(error.cause as? MockError, errorResponse)
     }
 
     func testInitializingWithPaystackErrorWithoutMessageAddsErrorToInnerErrorAndSetsGenericMessage() {
         let errorResponse = PaystackError.technical
         let error = ChargeError(error: errorResponse)
         XCTAssertEqual(error.message, "Something went wrong")
-        XCTAssertEqual(error.innerError as? PaystackError, errorResponse)
+        XCTAssertEqual(error.cause as? PaystackError, errorResponse)
     }
 
     func testInitializingWithPaystackErrorWithMessageAddsErrorToInnerErrorAndSetsMessage() {
@@ -36,7 +45,7 @@ final class ChargeErrorTests: PSTestCase {
         let errorResponse = PaystackError.response(code: 400, message: expectedMessage)
         let error = ChargeError(error: errorResponse)
         XCTAssertEqual(error.message, expectedMessage)
-        XCTAssertEqual(error.innerError as? PaystackError, errorResponse)
+        XCTAssertEqual(error.cause as? PaystackError, errorResponse)
     }
 
 }
