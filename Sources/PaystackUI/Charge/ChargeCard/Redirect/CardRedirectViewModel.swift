@@ -17,6 +17,7 @@ class CardRedirectViewModel: ObservableObject {
         self.repository = repository
     }
 
+    @MainActor
     func initiateAndAwaitBankAuthentication() async {
         do {
             displayWebview = true
