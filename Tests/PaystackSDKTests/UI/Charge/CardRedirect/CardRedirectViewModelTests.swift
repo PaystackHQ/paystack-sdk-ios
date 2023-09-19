@@ -18,10 +18,11 @@ final class CardRedirectViewModelTests: PSTestCase {
                                                  repository: mockRepository)
     }
 
-    func testAwaiting3DSResponseSendsResultToContainerWhenReceived() async throws {
+    func testAwaiting3DSResponseDisplaysWebviewAndSendsResultToContainerWhenReceived() async throws {
         mockRepository.expectedChargeCardTransaction = .example
-        await serviceUnderTest.awaitAuthenticationResponse()
+        await serviceUnderTest.initiateAndAwaitBankAuthentication()
 
+        XCTAssertTrue(serviceUnderTest.displayWebview)
         XCTAssertEqual(mockRepository.redirectTranactionId, expectedTransactionId)
         XCTAssertEqual(mockChargeCardContainer.transactionResponse, .example)
     }
@@ -31,9 +32,14 @@ final class CardRedirectViewModelTests: PSTestCase {
         let expectedError: PaystackError = .response(code: 400, message: expectedErrorMessage)
         mockRepository.expectedErrorResponse = expectedError
 
-        await serviceUnderTest.awaitAuthenticationResponse()
+        await serviceUnderTest.initiateAndAwaitBankAuthentication()
         XCTAssertEqual(mockChargeCardContainer.transactionError,
                        .init(message: expectedErrorMessage))
+    }
+
+    func testCancelTransactionCallsContainerToRestartCardFlow() {
+        serviceUnderTest.cancelTransaction()
+        XCTAssertTrue(mockChargeCardContainer.cardPaymentRestarted)
     }
 
 }

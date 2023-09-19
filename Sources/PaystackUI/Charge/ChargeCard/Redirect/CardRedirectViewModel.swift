@@ -6,6 +6,9 @@ class CardRedirectViewModel: ObservableObject {
     var repository: ChargeCardRepository
     var transactionId: Int
 
+    @Published
+    var displayWebview = false
+
     init(transactionId: Int,
          chargeCardContainer: ChargeCardContainer,
          repository: ChargeCardRepository = ChargeCardRepositoryImplementation()) {
@@ -14,14 +17,19 @@ class CardRedirectViewModel: ObservableObject {
         self.repository = repository
     }
 
-    func awaitAuthenticationResponse() async {
+    func initiateAndAwaitBankAuthentication() async {
         do {
+            displayWebview = true
             let authenticationResult = try await repository.listenFor3DS(for: transactionId)
             await chargeCardContainer.processTransactionResponse(authenticationResult)
         } catch {
             let error = ChargeError(error: error)
             chargeCardContainer.displayTransactionError(error)
         }
+    }
+
+    func cancelTransaction() {
+        chargeCardContainer.restartCardPayment()
     }
 
 }
