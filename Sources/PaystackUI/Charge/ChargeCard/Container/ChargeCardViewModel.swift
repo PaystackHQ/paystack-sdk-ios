@@ -73,7 +73,7 @@ class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
 
     @MainActor
     func displayTransactionError(_ error: ChargeError) {
-        Logger.error("Displaying error: %@", arguments: error.message)
+        Logger.error("Displaying error: %@", arguments: error.localizedDescription)
         chargeCardState = .error(error)
     }
 
