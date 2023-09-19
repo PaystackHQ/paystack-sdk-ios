@@ -27,23 +27,31 @@ struct CardRedirectView: View {
     var authenticationInitializationView: some View {
         VStack(spacing: .triplePadding) {
             Image.redirectIcon
-
-            Text("Please click the button below to authenticate with your bank")
-                .font(.body16M)
-                .foregroundColor(.stackBlue)
-                .multilineTextAlignment(.center)
-
-            Button("Authenticate", action: authenticateWithBank)
-                .buttonStyle(PrimaryButtonStyle())
-                .padding(.horizontal, .doublePadding)
-                .padding(.top, .singlePadding)
-
-
-            Button("Cancel", action: viewModel.cancelTransaction)
-                .foregroundColor(.navy02)
-                .font(.body14M)
+            titleText
+            primaryButton
+            cancelButton
         }
         .padding(.doublePadding)
+    }
+
+    var titleText: some View {
+        Text("Please click the button below to authenticate with your bank")
+            .font(.body16M)
+            .foregroundColor(.stackBlue)
+            .multilineTextAlignment(.center)
+    }
+
+    var primaryButton: some View {
+        Button("Authenticate", action: authenticateWithBank)
+            .buttonStyle(PrimaryButtonStyle())
+            .padding(.horizontal, .doublePadding)
+            .padding(.top, .singlePadding)
+    }
+
+    var cancelButton: some View {
+        Button("Cancel", action: viewModel.cancelTransaction)
+            .foregroundColor(.navy02)
+            .font(.body14M)
     }
 
     private func authenticateWithBank() {
