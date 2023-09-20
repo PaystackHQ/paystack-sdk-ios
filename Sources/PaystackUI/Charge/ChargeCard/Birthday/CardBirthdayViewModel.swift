@@ -39,9 +39,9 @@ class CardBirthdayViewModel: ObservableObject {
 
     private func constructBirthday() throws -> Date {
         guard let monthString = month?.formattedRepresentation,
-              let date = DateFormatter.toDate(usingFormat: "yy-MM-dd",
+              let date = DateFormatter.toDate(usingFormat: "yyyy-MM-dd",
                                               from: "\(year)-\(monthString)-\(day)") else {
-            throw ChargeError.generic
+            throw ChargeError(message: "Invalid Birthday entered")
         }
         return date
     }

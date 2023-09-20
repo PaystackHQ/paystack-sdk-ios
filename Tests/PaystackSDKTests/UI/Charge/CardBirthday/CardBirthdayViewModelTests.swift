@@ -29,21 +29,21 @@ final class CardBirthdayViewModelTests: XCTestCase {
     }
 
     func testFormIsInvalidWhenSomeFieldsAreEmpty() {
-        serviceUnderTest.year = "00"
+        serviceUnderTest.year = "2000"
         serviceUnderTest.day = "01"
         serviceUnderTest.month = nil
         XCTAssertFalse(serviceUnderTest.isValid)
     }
 
     func testFormIsValidIfAllFieldsAreNotEmpty() {
-        serviceUnderTest.year = "00"
+        serviceUnderTest.year = "2000"
         serviceUnderTest.day = "01"
         serviceUnderTest.month = .january
         XCTAssertTrue(serviceUnderTest.isValid)
     }
 
     func testSubmittingBirthdayConstructsBirthdayCorrectlyAndSendsRepoResultToCardContainer() async throws {
-        serviceUnderTest.year = "20"
+        serviceUnderTest.year = "2020"
         serviceUnderTest.month = .january
         serviceUnderTest.day = "01"
 
