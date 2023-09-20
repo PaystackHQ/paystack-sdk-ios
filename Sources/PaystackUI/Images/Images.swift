@@ -60,6 +60,13 @@ extension Image {
             .frame(width: 48)
     }
 
+    static var redirectIcon: some View {
+        Image("redirectIcon", bundle: .current)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 36)
+    }
+
     static var dropDownIndicator: some View {
         Image(systemName: "arrowtriangle.down.circle.fill")
             .foregroundColor(.gray01)
