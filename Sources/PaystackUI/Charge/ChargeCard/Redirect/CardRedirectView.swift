@@ -8,6 +8,9 @@ struct CardRedirectView: View {
     @StateObject
     var viewModel: CardRedirectViewModel
 
+    @State
+    var webviewLoading = false
+
     init(urlString: String,
          transactionId: Int,
          chargeCardContainer: ChargeCardContainer) {
@@ -18,9 +21,21 @@ struct CardRedirectView: View {
 
     var body: some View {
         if viewModel.displayWebview {
-            WebView(url: URL(string: urlString))
+            webview
         } else {
             authenticationInitializationView
+        }
+    }
+
+    var webview: some View {
+        ZStack {
+            WebView(url: URL(string: urlString),
+                    isLoading: $webviewLoading)
+
+            if webviewLoading {
+                LoadingIndicator(tintColor: .navy04)
+                    .scaleEffect(2)
+            }
         }
     }
 

@@ -12,7 +12,7 @@ public struct ChargeResponseData: Codable {
     public var ussdCode: String?
     public var qrCode: String?
     public var displayText: String?
-    public var metadata: [String: String]?
+    public var metadata: Metadata?
     public var gatewayResponse: String?
     public var message: String?
     public var channel: String?

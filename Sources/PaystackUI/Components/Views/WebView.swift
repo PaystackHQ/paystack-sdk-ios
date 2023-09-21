@@ -21,7 +21,7 @@ import WebKit
  You can also provide a custom `WKWebViewConfiguration` that
  can be used when initializing the `WKWebView` instance.
  */
-public struct WebView: WebViewRepresentable {
+struct WebView: WebViewRepresentable {
 
     // MARK: - Initializers
 
@@ -35,19 +35,27 @@ public struct WebView: WebViewRepresentable {
 
      - Parameters:
        - url: The url of the page to load into the web view, if any.
+       - isLoading: A Binding that updates with the current loading state of the web view
+       - normalizeScaling: Sets the vieport initial scale to prevent pages looking smaller than expected. Defaults to true.
        - webConfiguration: The WKWebViewConfiguration to apply to the web view, if any.
        - webView: The custom configuration block to apply to the web view, if any.
      */
-    public init(
+    init(
         url: URL? = nil,
+        isLoading: Binding<Bool> = .constant(false),
+        normalizeScaling: Bool = true,
         webConfiguration: WKWebViewConfiguration? = nil,
         viewConfiguration: @escaping (WKWebView) -> Void = { _ in }) {
-        self.url = url
-        self.webConfiguration = webConfiguration
-        self.viewConfiguration = viewConfiguration
-    }
+            self.url = url
+            self.normalizeScaling = normalizeScaling
+            self._isLoading = isLoading
+            self.webConfiguration = webConfiguration
+            self.viewConfiguration = viewConfiguration
+        }
 
     // MARK: - Properties
+    @Binding var isLoading: Bool
+    let normalizeScaling: Bool
 
     private let url: URL?
     private let webConfiguration: WKWebViewConfiguration?
@@ -55,20 +63,24 @@ public struct WebView: WebViewRepresentable {
 
     // MARK: - Functions
 
-    #if os(iOS)
-    public func makeUIView(context: Context) -> WKWebView {
-        makeView()
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
     }
 
-    public func updateUIView(_ uiView: WKWebView, context: Context) {}
+    #if os(iOS)
+    func makeUIView(context: Context) -> WKWebView {
+        makeView(context: context)
+    }
+
+    func updateUIView(_ uiView: WKWebView, context: Context) {}
     #endif
 
     #if os(macOS)
-    public func makeNSView(context: Context) -> WKWebView {
-        makeView()
+    func makeNSView(context: Context) -> WKWebView {
+        makeView(context: context)
     }
 
-    public func updateNSView(_ view: WKWebView, context: Context) {}
+    func updateNSView(_ view: WKWebView, context: Context) {}
     #endif
 }
 
@@ -79,8 +91,9 @@ private extension WebView {
         return WKWebView(frame: .zero, configuration: configuration)
     }
 
-    func makeView() -> WKWebView {
+    func makeView(context: Context) -> WKWebView {
         let view = makeWebView()
+        view.navigationDelegate = context.coordinator
         viewConfiguration(view)
         tryLoad(url, into: view)
         return view
@@ -89,6 +102,33 @@ private extension WebView {
     func tryLoad(_ url: URL?, into view: WKWebView) {
         guard let url = url else { return }
         view.load(URLRequest(url: url))
+    }
+}
+
+class Coordinator: NSObject, WKNavigationDelegate {
+    var parent: WebView
+
+    init(_ parent: WebView) {
+        self.parent = parent
+    }
+
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        parent.isLoading = true
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        parent.isLoading = false
+        normalizeScaling(on: webView)
+    }
+
+    private func normalizeScaling(on webView: WKWebView) {
+        guard parent.normalizeScaling else { return }
+        var scriptContent = "var meta = document.createElement('meta');"
+        scriptContent += "meta.name='viewport';"
+        scriptContent += "meta.content='initial-scale=1.0';"
+        scriptContent += "document.getElementsByTagName('head')[0].appendChild(meta);"
+
+        webView.evaluateJavaScript(scriptContent, completionHandler: nil)
     }
 }
 #endif
