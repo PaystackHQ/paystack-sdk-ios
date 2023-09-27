@@ -6,7 +6,7 @@ struct ErrorView: View {
     var message: String
     var buttonText: String?
     var buttonAction: (() -> Void)?
-    var dismissWithError: ChargeError?
+    var dismissWithError: ChargeErrorDetails?
 
     @EnvironmentObject
     var visibilityContainer: ViewVisibilityContainer
@@ -14,11 +14,11 @@ struct ErrorView: View {
     init(message: String,
          buttonText: String? = nil,
          buttonAction: (() -> Void)? = nil,
-         automaticallyDismissWithError error: ChargeError? = nil) {
+         automaticallyDismissWith errorDetails: ChargeErrorDetails? = nil) {
         self.message = message
         self.buttonText = buttonText
         self.buttonAction = buttonAction
-        self.dismissWithError = error
+        self.dismissWithError = errorDetails
     }
 
     var body: some View {
@@ -41,9 +41,10 @@ struct ErrorView: View {
     }
 
     func dismissIfNecessary() async {
-        guard let error = dismissWithError else { return }
+        guard let errorDetails = dismissWithError else { return }
         try? await Task.sleep(nanoseconds: 3_000_000_000)
-        visibilityContainer.completeAndDismiss(with: .error(error))
+        visibilityContainer.completeAndDismiss(with: .error(error: errorDetails.error,
+                                                            reference: errorDetails.transactionReference))
     }
 }
 

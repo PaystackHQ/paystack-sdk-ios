@@ -34,7 +34,8 @@ final class ChargeViewModelTests: PSTestCase {
                                                   paymentChannels: [.ussd],
                                                   domain: .test,
                                                   merchantName: "Test Merchant",
-                                                  publicEncryptionKey: "test_encryption_key")
+                                                  publicEncryptionKey: "test_encryption_key",
+                                                  reference: "test_reference")
         await serviceUnderTest.verifyAccessCodeAndProceedWithCard()
         XCTAssertEqual(serviceUnderTest.transactionState, .error(.init(message: expectedMessage)))
 
@@ -44,8 +45,10 @@ final class ChargeViewModelTests: PSTestCase {
         serviceUnderTest.transactionState = .loading()
         XCTAssertFalse(serviceUnderTest.centerView)
 
-        serviceUnderTest.transactionState = .success(amount: .init(
-            amount: 100, currency: "USD"), merchant: "Test")
+        serviceUnderTest.transactionState = .success(
+            amount: .init(amount: 100, currency: "USD"),
+            merchant: "Test",
+            details: .init(reference: "test"))
         XCTAssertTrue(serviceUnderTest.centerView)
     }
 
@@ -53,8 +56,9 @@ final class ChargeViewModelTests: PSTestCase {
         serviceUnderTest.transactionState = .loading()
         XCTAssertTrue(serviceUnderTest.displayCloseButtonConfirmation)
 
-        serviceUnderTest.transactionState = .success(amount: .init(
-            amount: 100, currency: "USD"), merchant: "Test")
+        serviceUnderTest.transactionState = .success(
+            amount: .init(amount: 100, currency: "USD"),
+            merchant: "Test", details: .init(reference: "test"))
         XCTAssertFalse(serviceUnderTest.displayCloseButtonConfirmation)
     }
 
@@ -63,7 +67,8 @@ final class ChargeViewModelTests: PSTestCase {
                                                     accessCode: "test_access",
                                                     paymentChannels: [], domain: .test,
                                                     merchantName: "Test Merchant",
-                                                    publicEncryptionKey: "test_encryption_key")
+                                                    publicEncryptionKey: "test_encryption_key",
+                                                    reference: "test_reference")
         XCTAssertTrue(serviceUnderTest.inTestMode)
     }
 
@@ -72,7 +77,8 @@ final class ChargeViewModelTests: PSTestCase {
                                                     accessCode: "test_access",
                                                     paymentChannels: [], domain: .live,
                                                     merchantName: "Test Merchant",
-                                                    publicEncryptionKey: "test_encryption_key")
+                                                    publicEncryptionKey: "test_encryption_key",
+                                                    reference: "test_reference")
         XCTAssertFalse(serviceUnderTest.inTestMode)
     }
 
@@ -88,8 +94,8 @@ extension ChargeState: Equatable {
         switch (lhs, rhs) {
         case (.loading, .loading):
             return true
-        case (.success(let firstAmount, let firstMerchant), .success(let secondAmount, let secondMerchant)):
-            return firstAmount == secondAmount && firstMerchant == secondMerchant
+        case (.success(let firstAmount, let firstMerchant, let firstDetails), .success(let secondAmount, let secondMerchant, let secondDetails)):
+            return firstAmount == secondAmount && firstMerchant == secondMerchant && firstDetails == secondDetails
         case (.payment(let first), .payment(let second)):
             return first == second
         case (.error(let first), .error(let second)):
@@ -99,4 +105,10 @@ extension ChargeState: Equatable {
         }
     }
 
+}
+
+extension ChargeCompletionDetails: Equatable {
+    public static func == (lhs: ChargeCompletionDetails, rhs: ChargeCompletionDetails) -> Bool {
+        lhs.reference == rhs.reference
+    }
 }

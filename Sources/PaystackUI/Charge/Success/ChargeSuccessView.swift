@@ -5,6 +5,7 @@ struct ChargeSuccessView: View {
 
     let amount: AmountCurrency
     let merchant: String
+    let completionDetails: ChargeCompletionDetails
 
     @EnvironmentObject
     var visibilityContainer: ViewVisibilityContainer
@@ -26,7 +27,7 @@ struct ChargeSuccessView: View {
 
     func dismissAutomatically() async {
         try? await Task.sleep(nanoseconds: 1_500_000_000)
-        visibilityContainer.completeAndDismiss(with: .completed)
+        visibilityContainer.completeAndDismiss(with: .completed(completionDetails))
     }
 }
 
@@ -34,6 +35,7 @@ struct ChargeSuccessView: View {
 struct ChargeSuccessView_Previews: PreviewProvider {
     static var previews: some View {
         ChargeSuccessView(amount: .init(amount: 10000, currency: "USD"),
-                          merchant: "Merchant")
+                          merchant: "Merchant",
+                          completionDetails: .init(reference: "testReference"))
     }
 }

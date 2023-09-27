@@ -31,7 +31,8 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          accessCode: "test_access",
                                                          paymentChannels: [], domain: .live,
                                                          merchantName: "Test Merchant",
-                                                         publicEncryptionKey: "test_encryption_key")
+                                                         publicEncryptionKey: "test_encryption_key",
+                                                         reference: "test_reference")
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails,
                                                chargeContainer: mockChargeContainer,
                                                repository: mockRepository)
@@ -46,7 +47,8 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          accessCode: "test_access",
                                                          paymentChannels: [], domain: .test,
                                                          merchantName: "Test Merchant",
-                                                         publicEncryptionKey: "test_encryption_key")
+                                                         publicEncryptionKey: "test_encryption_key",
+                                                         reference: "test_reference")
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails,
                                                chargeContainer: mockChargeContainer,
                                                repository: mockRepository)
@@ -61,7 +63,8 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          accessCode: "test_access",
                                                          paymentChannels: [], domain: .test,
                                                          merchantName: "Test Merchant",
-                                                         publicEncryptionKey: "test_encryption_key")
+                                                         publicEncryptionKey: "test_encryption_key",
+                                                         reference: "test_reference")
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails,
                                                chargeContainer: mockChargeContainer,
                                                repository: mockRepository)
@@ -74,7 +77,8 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          accessCode: "test_access",
                                                          paymentChannels: [], domain: .live,
                                                          merchantName: "Test Merchant",
-                                                         publicEncryptionKey: "test_encryption_key")
+                                                         publicEncryptionKey: "test_encryption_key",
+                                                         reference: "test_reference")
         serviceUnderTest = ChargeCardViewModel(transactionDetails: transactionDetails,
                                                chargeContainer: mockChargeContainer,
                                                repository: mockRepository)
@@ -87,7 +91,8 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          accessCode: "test_access",
                                                          paymentChannels: [], domain: .live,
                                                          merchantName: "Test Merchant",
-                                                         publicEncryptionKey: "test_encryption_key")
+                                                         publicEncryptionKey: "test_encryption_key",
+                                                         reference: "test_reference")
         serviceUnderTest.switchToTestModeCardSelection()
         XCTAssertEqual(serviceUnderTest.chargeCardState,
                        .testModeCardSelection(amount: transactionDetails.amountCurrency,
@@ -190,6 +195,7 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          paymentChannels: [], domain: .test,
                                                          merchantName: "Test Merchant",
                                                          publicEncryptionKey: "test_encryption_key",
+                                                         reference: "test_reference",
                                                          transactionId: expectedTransactionId)
 
         serviceUnderTest.transactionDetails = transactionDetails
@@ -208,6 +214,7 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          paymentChannels: [], domain: .test,
                                                          merchantName: "Test Merchant",
                                                          publicEncryptionKey: "test_encryption_key",
+                                                         reference: "test_reference",
                                                          transactionId: expectedTransactionId)
 
         serviceUnderTest.transactionDetails = transactionDetails
@@ -224,7 +231,8 @@ final class ChargeCardViewModelTests: PSTestCase {
                                                          accessCode: "test_access",
                                                          paymentChannels: [], domain: .test,
                                                          merchantName: "Test Merchant",
-                                                         publicEncryptionKey: "test_encryption_key")
+                                                         publicEncryptionKey: "test_encryption_key",
+                                                         reference: "test_reference")
 
         serviceUnderTest.transactionDetails = transactionDetails
         let redirectResponse = ChargeCardTransaction(status: .openUrl,
