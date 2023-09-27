@@ -33,8 +33,9 @@ struct ChargeView: View {
                 ErrorView(message: error.message)
             case .payment(let type):
                 paymentFlowView(for: type)
-            case .success(let amount, let merchant):
-                ChargeSuccessView(amount: amount, merchant: merchant)
+            case .success(let amount, let merchant, let details):
+                ChargeSuccessView(amount: amount, merchant: merchant,
+                                  completionDetails: details)
             }
 
             Spacer()
@@ -60,7 +61,11 @@ struct ChargeView: View {
     func chargeCancelled() {
         switch viewModel.transactionState {
         case .success:
-            visibilityContainer.completeAndDismiss(with: .completed)
+            guard let reference = viewModel.transactionDetails?.reference else {
+                Logger.error("Transaction details could not be found")
+                return
+            }
+            visibilityContainer.completeAndDismiss(with: .completed(.init(reference: reference)))
         default:
             visibilityContainer.cancelAndDismiss()
         }

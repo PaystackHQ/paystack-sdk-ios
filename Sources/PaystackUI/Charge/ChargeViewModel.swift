@@ -47,7 +47,9 @@ class ChargeViewModel: ObservableObject {
 extension ChargeViewModel: ChargeContainer {
 
     func processSuccessfulTransaction(details: VerifyAccessCode) {
-        transactionState = .success(amount: details.amountCurrency, merchant: details.merchantName)
+        transactionState = .success(amount: details.amountCurrency,
+                                    merchant: details.merchantName,
+                                    details: .init(reference: details.reference))
     }
 
 }

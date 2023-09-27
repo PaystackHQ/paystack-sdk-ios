@@ -29,7 +29,8 @@ final class ChargeRepositoryImplementationTests: PSTestCase {
                                               paymentChannels: [.card, .qr, .ussd],
                                               domain: .test,
                                               merchantName: "Test Merchant",
-                                              publicEncryptionKey: "test_encryption_key")
+                                              publicEncryptionKey: "test_encryption_key",
+                                              reference: "203520101")
 
         XCTAssertEqual(result, expectedResult)
     }

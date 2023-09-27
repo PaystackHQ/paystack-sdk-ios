@@ -58,7 +58,9 @@ struct ChargeCardView: View {
 
         case .fatalError(let error):
             ErrorView(message: error.message,
-                      automaticallyDismissWithError: error)
+                      automaticallyDismissWith: .init(
+                        error: error,
+                        transactionReference: viewModel.transactionDetails.reference))
 
         case .failed(let message):
             errorView(message: message ?? "Declined")

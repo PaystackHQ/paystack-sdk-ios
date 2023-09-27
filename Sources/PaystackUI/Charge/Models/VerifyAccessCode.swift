@@ -9,6 +9,7 @@ struct VerifyAccessCode: Equatable {
     var domain: Domain
     var merchantName: String
     var publicEncryptionKey: String
+    var reference: String
     var transactionId: Int?
 
     var amountCurrency: AmountCurrency {
@@ -26,6 +27,7 @@ extension VerifyAccessCode {
                          domain: response.data.domain,
                          merchantName: response.data.merchantName,
                          publicEncryptionKey: response.data.publicEncryptionKey,
+                         reference: response.data.reference,
                          transactionId: response.data.id)
     }
 
@@ -40,6 +42,7 @@ extension VerifyAccessCode {
               paymentChannels: [.card],
               domain: .test,
               merchantName: "Test Merchant",
-              publicEncryptionKey: "test_encryption_key")
+              publicEncryptionKey: "test_encryption_key",
+              reference: "test_reference")
     }
 }
