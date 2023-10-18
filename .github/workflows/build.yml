@@ -4,6 +4,8 @@ on:
   push:
     branches: [ "main" ]
 
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: macos-latest
@@ -14,7 +16,15 @@ jobs:
     - name: Build
       run: swift build -v
     - name: Run tests
-      run: swift test -v
+      run: |
+        swift test --enable-code-coverage -v
+        xcrun llvm-cov export -format="lcov" .build/debug/PaystackSDKPackageTests.xctest/Contents/MacOS/PaystackSDKPackageTests -instr-profile .build/debug/codecov/default.profdata > info.lcov
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        
 
   PodLinting:
     runs-on: macos-12
