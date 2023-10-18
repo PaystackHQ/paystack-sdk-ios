@@ -31,8 +31,8 @@ jobs:
       with:
         xcode-version: latest-stable
   
-  - name: Setup environment
-    run: |
+    - name: Setup environment
+      run: |
         bundle install
 
     - name: Build
