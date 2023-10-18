@@ -1,0 +1,183 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  
+  desc "Run Sonar Scan"
+  lane :sonar_scan do
+     
+    sonar(
+      project_key: "PaystackHQ_paystack-sdk-ios",
+      project_version: "1.0",
+      project_name: "paystack-sdk-ios",
+      sources_path: File.expand_path("../Sources/"),
+      sonar_organization: "paystackhq",
+      sonar_login: ENV["SONAR_TOKEN"],
+      sonar_url: "https://sonarcloud.io"
+    )  
+  end
+
+  desc "Team Issuing Internal Distribution"
+  lane :dev_team_distribution_build do
+    firebase_distribution(group: "team-issuing")
+  end
+
+  desc "Internal Distribution to Firebase"
+  lane :internal_distribute do
+    firebase_distribution(group: "qa-team")
+  end
+
+  desc "Beta Release to TestFlight"
+  lane :beta do
+    release_build
+
+    upload_to_testflight(
+      distribute_external: false,
+      notify_external_testers: false,
+    )
+
+    slack_notifications(displayMessage: 'Corporate Cards iOS beta app deployed to TestFlight. :fire: ',
+                        slackChannel_ID: '#feed-mobile-ci-builds')
+  end
+
+  desc "Production Release to AppStore"
+  lane :release do
+    release_build
+
+    upload_to_app_store
+
+    slack_notifications(displayMessage: 'Corporate Cards iOS app deployed to AppStore. :fire: ',
+                        slackChannel_ID: '#feed-mobile-ci-builds')
+  end
+  
+  error do |lane, exception|
+    slack_notifications(displayMessage: exception.message, 
+                        slackChannel_ID: "#feed-mobile-ci-builds")
+  end
+
+  private_lane :slack_notifications do |values|
+    displayMessage  = values[:displayMessage]
+    slackChannel_ID  = values[:slackChannel_ID]
+    puts displayMessage
+    puts slackChannel_ID
+
+    post_to_slack(
+      api_token: ENV['SLACK_BOT_TOKEN'],
+      message: displayMessage,
+      channel: slackChannel_ID, 
+      success: true,  
+      payload: { 
+        "Build Date" => Time.new.to_s,
+        "Built by" => "Github Actions",
+        'Changelog' => Actions.lane_context[SharedValues::FL_CHANGELOG],
+        'Git Branch' => Actions.lane_context[SharedValues::GIT_BRANCH_ENV_VARS]	
+      },
+      default_payloads: [
+        :git_branch,
+        :lane,
+        :git_author,
+        :test_result,
+        :last_git_commit_hash,
+        :last_git_commit_message], 
+        
+        attachment_properties: { 
+        thumb_url: "https://fastlane.tools/assets/img/fastlane_icon.png"
+      }
+    )
+
+  end
+
+
+  private_lane :firebase_distribution do |values|
+    group  = values[:group]
+    puts group
+    
+    clear_derived_data
+    
+    create_keychain(
+      name: "CI",
+      password: ENV["MATCH_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false
+    )
+    
+    match(
+      type: "development",
+      keychain_name: "CI",
+      keychain_password: ENV["MATCH_PASSWORD"],
+      readonly: is_ci,
+      verbose: true
+    )
+
+    build_app(
+      use_system_scm: true,
+      workspace: "Corporate Card.xcworkspace",
+      configuration: "Studio",
+      scheme: "Corporate Card",
+      export_method: "development"
+    )
+
+    firebase_app_distribution(
+      service_credentials_file: "firebase_credentials.json",
+      app: ENV['FIREBASE_APP_ID'],
+      groups: group,
+      release_notes_file: "FirebaseAppDistributionConfig/release_notes.txt"
+    )
+    
+    slack_notifications(displayMessage: 'Corporate Cards iOS app deployed to Firebase. :fire: ',
+                        slackChannel_ID: '#feed-mobile-ci-builds')
+
+  end
+
+  private_lane :release_build do
+    clear_derived_data
+
+    api_key = app_store_connect_api_key(
+      key_id: ENV["KEY_ID"],
+      issuer_id: ENV["ISSUER_ID"],
+      key_content: ENV["APPSTORE_CONNECT_PRIVATE_KEY"]
+    )
+
+    create_keychain(
+      name: "CI",
+      password: ENV["MATCH_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false
+    )
+    
+    match(
+      type: "appstore",
+      keychain_name: "CI",
+      keychain_password: ENV["MATCH_PASSWORD"],
+      readonly: is_ci,
+      api_key: api_key,
+      verbose: true
+    )
+
+    build_app(
+      use_system_scm: true,
+      workspace: "Corporate Card.xcworkspace",
+      configuration: "Release",
+      scheme: "Corporate Card",
+      export_method: "app-store"
+    )
+  end
+end
