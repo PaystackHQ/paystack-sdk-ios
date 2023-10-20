@@ -40,7 +40,7 @@ jobs:
     - name: Run tests
       run: |
         swift test --enable-code-coverage -v
-        xcrun llvm-cov export -format="lcov" .build/debug/PaystackSDKPackageTests.xctest/Contents/MacOS/PaystackSDKPackageTests -instr-profile .build/debug/codecov/default.profdata > info.lcov
+        xcrun llvm-cov show -instr-profile=.build/debug/codecov/default.profdata .build/debug/MyPackageTests.xctest/Contents/MacOS/MyPackageTests > coverage.report
         brew install sonar-scanner
         bundle exec fastlane sonar_scan
       env:
