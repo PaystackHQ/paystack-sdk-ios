@@ -29,6 +29,7 @@ class TestModeCardSelectionViewModel: ObservableObject {
         testCard != nil
     }
 
+    @MainActor
     func proceedWithTestCard() async {
         do {
             guard let testCard else { return }

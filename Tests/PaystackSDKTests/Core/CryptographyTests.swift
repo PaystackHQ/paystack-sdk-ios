@@ -21,7 +21,6 @@ final class CryptographyTests: XCTestCase {
             XCTFail("Encryption failed")
             return
         }
-
         guard let decryptedString = try? serviceUnderTest.decrypt(base64String: encryptedData,
                                                                   privateKey: privateKey) else {
             XCTFail("Decryption failed")
@@ -49,7 +48,7 @@ final class CryptographyTests: XCTestCase {
     }
 
     func testLongClearTextCase() {
-        let clearText = [String](repeating: "a", count: 117).joined(separator: "")
+        let clearText = [String](repeating: "a", count: 86).joined(separator: "")
 
         guard let encryptedData = try? serviceUnderTest.encrypt(text: clearText, publicKey: publicKey) else {
             XCTFail("Encryption failed")
@@ -118,7 +117,7 @@ final class CryptographyTests: XCTestCase {
 
     func testStandaloneDecryptionWithMatchingPrivateKey() {
         // swiftlint:disable:next line_length
-        let encryptedData = "UoeZtFlZgBu5j6OzH+5qKeDMAklJ6dyo/2fCYzY0MmifDqQHx81ZzO1GRjYXvKehgZRfU7dwcr8behWHFiHC/BS0X0h25rEtoaH4+2ddkfMGmhVHcIYSyQWzPhabD5rIGZdfPQnHCdNx6OR4lraGM6C0ngraMdSNQifiXe6+qfU="
+        let encryptedData = "JGQR/v/7z+Owaw969pxlO5PmEn1WFwHqvEPHvXvsBs4QLyakWW+AciAEqrBK1vBAFgLHuzWTrD9uwAR5OC3or14tTDVAy5vMDyXRGgVFiR1JXdK4fuPxG5+anr/i1VIL4bQb+F2g3alLgjLkl1J7wPINhj0lXFOS0hrssKZDaCU="
         guard let decryptedString = try? serviceUnderTest.decrypt(base64String: encryptedData,
                                                                   privateKey: privateKey) else {
             XCTFail("Decryption failed")
@@ -141,7 +140,7 @@ final class CryptographyTests: XCTestCase {
 
     func testAlreadyEncryptedJsonStringDecryptsCorrectlyToModel() throws {
         // swiftlint:disable:next line_length
-        let encryptedData = "gF8m8NyQKJSYJTxNaEoTMDrJSie0A1ixKVvkNPm+xQuOvcKc81LISkzgXd4UoFq7wW1ueNafAexADNqrubmW/PwonWjcbTMpqEtx/CVJMlg9QMA7LIXSELbLZsxodiPlH8aZ3xTDqaajEYf5A1o2S3aYCXMZqotBwRNE2/kUvEQ="
+        let encryptedData = "g+zqJYWMz0FcUQpOvvaWSa6/Tyb4WZP8G0MdoHhmR9BXUXhX/n3JkQ2dyH7AM97DxUOIVZGcnQHJIEAssVG5FdCWpFVQTuTd7ErDk0vMjJfnJHwol8VBxd+b8rbFKnNbVMOeleLPJ6Jgvv2jdoFLqOsb/0iTF17SLlTIYH1uSd0="
         let expectedObject = MockObject(number: 789, name: "Test Decrypt")
 
         let decryptedData: MockObject = try serviceUnderTest.decrypt(base64String: encryptedData,
@@ -151,7 +150,7 @@ final class CryptographyTests: XCTestCase {
 
     func testDecryptionFailsWhenDecryptedDataCannotBeDecodedToTheExpectedModel() {
         // swiftlint:disable:next line_length
-        let encryptedData = "UoeZtFlZgBu5j6OzH+5qKeDMAklJ6dyo/2fCYzY0MmifDqQHx81ZzO1GRjYXvKehgZRfU7dwcr8behWHFiHC/BS0X0h25rEtoaH4+2ddkfMGmhVHcIYSyQWzPhabD5rIGZdfPQnHCdNx6OR4lraGM6C0ngraMdSNQifiXe6+qfU="
+        let encryptedData = "D745spEYFbavF2a0JRuc/cgK5YQuNuBP5DsAjDx+2aY84jH6S7PoeiD4nAUy7mVkSp133Py+nVCBWrd9nKfzrjArZYjvXgwy7+Q1gdRXD132GD2YI1wLg9M4nauid1cbKfPeXMqboisuEdHWR6dvCqn55septvQOwJAOariJAsE="
 
         do {
             let _: MockObject = try serviceUnderTest.decrypt(base64String: encryptedData,
@@ -178,7 +177,7 @@ extension Cryptography {
         let key = try createKey(from: privateKey, isPublic: false)
 
         var error: Unmanaged<CFError>?
-        guard let decrypted = SecKeyCreateDecryptedData(key, .rsaEncryptionPKCS1,
+        guard let decrypted = SecKeyCreateDecryptedData(key, .rsaEncryptionOAEPSHA1,
                                                         data as CFData, &error),
                 let decryptedString = String(data: decrypted as Data, encoding: .utf8) else {
             throw CryptographyError.decryptionFailed
