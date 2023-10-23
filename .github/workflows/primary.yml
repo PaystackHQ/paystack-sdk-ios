@@ -42,7 +42,6 @@ jobs:
         swift test --enable-code-coverage -v
         xcrun llvm-cov show -instr-profile=.build/debug/codecov/default.profdata .build/debug/PaystackSDKPackageTests.xctest/Contents/MacOS/PaystackSDKPackageTests > coverage.report
         brew install sonar-scanner
-        sonar-scanner -Dsonar.swift.coverage.reportPaths=coverage.report
         bundle exec fastlane sonar_scan
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
