@@ -1,19 +1,13 @@
 import Foundation
 
 struct Cryptography {
-    private var paystackPublicKey = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBANIsL+RHqfkBiKGn/D1y1QnNrMkKzxWP" +
-    "2wkeSokw2OJrCI+d6YGJPrHHx+nmb/Qn885/R01Gw6d7M824qofmCvkCAwEAAQ=="
-
-    func encrypt(text: String) throws -> String {
-        try encrypt(text: text, publicKey: paystackPublicKey)
-    }
 
     func encrypt(text: String, publicKey: String) throws -> String {
         let key = try createKey(from: publicKey, isPublic: true)
 
         var encryptionError: Unmanaged<CFError>?
         guard let textData = text.data(using: .utf8),
-              let encryptedData = SecKeyCreateEncryptedData(key, .rsaEncryptionPKCS1,
+              let encryptedData = SecKeyCreateEncryptedData(key, .rsaEncryptionOAEPSHA1,
                                                             textData as CFData, &encryptionError) as Data? else {
             throw CryptographyError.encryptionFailed
         }
