@@ -16,7 +16,7 @@ class TransactionsTests: PSTestCase {
 
     func testVerifyAccessCode() async throws {
         mockServiceExecutor
-            .expectURL("https://api.paystack.co/transaction/verify_access_code/access_code_test")
+            .expectURL("https://api.paystack.co/transaction/verify_code/access_code_test")
             .expectMethod(.get)
             .expectHeader("Authorization", "Bearer \(apiKey)")
             .andReturn(json: "VerifyAccessCode")

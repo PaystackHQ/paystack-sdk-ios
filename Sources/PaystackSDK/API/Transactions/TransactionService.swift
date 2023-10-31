@@ -25,7 +25,7 @@ struct TransactionServiceImplementation: TransactionService {
     }
 
     func getVerifyAccessCode(_ code: String) -> Service<VerifyAccessCodeResponse> {
-        return get("/verify_access_code/\(code)")
+        return get("/verify_code/\(code)")
             .asService()
     }
 
