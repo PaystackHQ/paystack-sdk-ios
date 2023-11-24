@@ -1,3 +1,4 @@
+// swiftlint:disable file_length type_body_length
 import Foundation
 
 public extension Paystack {
@@ -95,3 +96,4 @@ public extension Paystack {
         return mobileMoneyService.postChargeMobileMoney(request)
     }
 }
+// swiftlint:enable file_length type_body_length
