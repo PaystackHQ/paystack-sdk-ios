@@ -9,11 +9,16 @@ public struct MobileMoneyChargeResponse: Codable {
 
 // MARK: - MobileMoneyChargeData
 public struct MobileMoneyChargeData: Codable {
-    let transaction, phone, provider, channelName: String
+    let transaction: String
+    let phone: String
+    let provider: String
+    let channelName: String
     let display: Display
 
     enum CodingKeys: String, CodingKey {
-        case transaction, phone, provider
+        case transaction
+        case phone
+        case provider
         case channelName
         case display
     }
@@ -21,6 +26,7 @@ public struct MobileMoneyChargeData: Codable {
 
 // MARK: - Display
 public struct Display: Codable {
-    let type, message: String
+    let type: String
+    let message: String
     let timer: Int
 }

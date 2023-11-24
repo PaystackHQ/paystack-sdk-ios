@@ -4,7 +4,7 @@ public extension Paystack {
     private var service: ChargeService {
         return ChargeServiceImplementation(config: config)
     }
-    
+
     private var mobileMoneyService: MobileMoneyService {
         return MobileMoneyServiceImplementation(config: config)
     }
@@ -76,7 +76,7 @@ public extension Paystack {
         let subscription: any Subscription = PusherSubscription(channelName: channelName, eventName: "response")
         return Service(subscription)
     }
-    
+
     /// Listens for a response after presenting a 3DS URL in a webview for authentication
     /// - Parameter transactionId:The ID of the current transaction that is being authenticated
     /// - Returns: A ``Service`` with the results of the authentication
@@ -85,7 +85,7 @@ public extension Paystack {
         let subscription: any Subscription = PusherSubscription(channelName: channelName, eventName: "response")
         return Service(subscription)
     }
-    
+
     /// Initialize Mobile Money charge
     /// - Parameters:
     ///   - mobileMoneyData: The data that needs to be passed in order to do a mobile money charge
@@ -94,5 +94,4 @@ public extension Paystack {
         let request = MobileMoneyChargeRequest(channelName: mobileMoneyData.channelName, amount: mobileMoneyData.amount, email: mobileMoneyData.email, phone: mobileMoneyData.phone, transaction: mobileMoneyData.transaction, provider: mobileMoneyData.provider)
         return mobileMoneyService.postChargeMobileMoney(request)
     }
-
 }

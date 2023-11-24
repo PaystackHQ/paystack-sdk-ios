@@ -36,7 +36,7 @@ let package = Package(
                 .copy("API/Charge/Resources/ChargeAuthenticationResponse.json"),
                 .copy("API/Other/Resources/AddressStatesResponse.json"),
                 .copy("API/Charge/Resources/ChargeMobileMoneyResponse.json")
-                
+
             ])
     ]
 )

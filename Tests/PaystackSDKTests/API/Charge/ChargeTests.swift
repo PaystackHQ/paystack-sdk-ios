@@ -26,7 +26,7 @@ final class ChargeTests: PSTestCase {
 
         _ = try serviceUnderTest.authenticateCharge(withOtp: "12345", accessCode: "abcde").sync()
     }
-    
+
     func testMobileMoneyCharge() throws {
         let mobileMoneyRequestBody = MobileMoneyChargeRequest(channelName: "MOBILE_MONEY_1504248187", amount: 1000, email: "peter@paystack.com", phone: "0723362418", transaction: "1504248187", provider: "MPESA")
 
@@ -36,12 +36,11 @@ final class ChargeTests: PSTestCase {
             .expectHeader("Authorization", "Bearer \(apiKey)")
             .expectBody(mobileMoneyRequestBody)
             .andReturn(json: "ChargeMobileMoneyResponse")
-        
+
         let mobileMoneyData = MobileMoneyData(channelName: "MOBILE_MONEY_1504248187", amount: 1000, email: "peter@paystack.com", phone: "0723362418", transaction: "1504248187", provider: "MPESA")
 
         _ = try serviceUnderTest.chargeMobileMoney(with: mobileMoneyData).sync()
     }
-
 
     func testAuthenticateChargeWithPhoneAuthentication() throws {
         let phoneRequestBody = SubmitPhoneRequest(phone: "0111234567", accessCode: "abcde")
@@ -105,7 +104,7 @@ final class ChargeTests: PSTestCase {
 
         _ = try serviceUnderTest.listenFor3DSResponse(for: transactionId).sync()
     }
-    
+
     func testListenForMobileMoney() throws {
         let transactionId = 1234
         let mockSubscription = PusherSubscription(channelName: "MOBILE_MONEY_\(transactionId)",

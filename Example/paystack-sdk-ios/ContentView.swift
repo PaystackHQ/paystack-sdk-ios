@@ -20,15 +20,15 @@ struct ContentView: View {
         }
         .padding()
     }
-    
+
     func paymentDone(_ result: TransactionResult) {
-        
+
         switch result {
         case .completed(let chargeDetails):
             print("Success: Transaction reference : \(chargeDetails.reference)")
-        case .cancelled :
+        case .cancelled:
             print("Transaction was cancelled.")
-        case .error(error: let error, reference: let reference) :
+        case .error(error: let error, reference: let reference):
             print("An error occured with \(reference!) : \(error.message)")
         }
     }
