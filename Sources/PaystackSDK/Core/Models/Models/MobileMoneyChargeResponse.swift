@@ -14,7 +14,7 @@ public struct MobileMoneyChargeData: Codable {
 
     enum CodingKeys: String, CodingKey {
         case transaction, phone, provider
-        case channelName = "channel_name"
+        case channelName
         case display
     }
 }
