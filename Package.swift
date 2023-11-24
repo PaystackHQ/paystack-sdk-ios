@@ -34,7 +34,9 @@ let package = Package(
             resources: [
                 .copy("API/Transactions/Resources/VerifyAccessCode.json"),
                 .copy("API/Charge/Resources/ChargeAuthenticationResponse.json"),
-                .copy("API/Other/Resources/AddressStatesResponse.json")
+                .copy("API/Other/Resources/AddressStatesResponse.json"),
+                .copy("API/Charge/Resources/ChargeMobileMoneyResponse.json")
+                
             ])
     ]
 )
