@@ -1,4 +1,4 @@
-// swiftlint:disable file_length type_body_length
+// swiftlint:disable file_length type_body_length line_length
 import XCTest
 @testable import PaystackCore
 
@@ -122,4 +122,4 @@ final class ChargeTests: PSTestCase {
     }
 
 }
-// swiftlint:enable file_length type_body_length
+// swiftlint:enable file_length type_body_length line_length
