@@ -24,7 +24,8 @@ jobs:
     - name: Increment Latest Version
       run: |
         mode=${{ github.event.inputs.release }}
-        sh Sources/PaystackSDK/Versioning/update_version.sh $mode ${{ github.event.inputs.body }}
+        cd Sources/PaystackSDK
+        sh Versioning/update_version.sh $mode ${{ github.event.inputs.body }}
  
     - name: Open Pull Request
       uses: peter-evans/create-pull-request@v4
