@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'PaystackUI'
-  s.version          = '0.1.0'
+  s.version          = '0.0.1'
   s.summary          = 'The UI Flows build upon the Paystack Public iOS SDK'
 
 # TODO: Add correct descriptions
