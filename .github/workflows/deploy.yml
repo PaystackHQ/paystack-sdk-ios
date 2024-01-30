@@ -1,37 +1,19 @@
-name: Build
+name: Deployment
 
 on:
-  push:
-    branches: [ "main" ]
-
   workflow_dispatch:
 
 jobs:
-  build:
+  deploy:
     runs-on: macos-latest
-    name: Build and Test Swift Package
+    name: Deploy to Cocoapods Trunk
 
     steps:
     - uses: actions/checkout@v3
     - name: Build
       run: swift build -v
-    - name: Run tests
-      run: |
-        swift test --enable-code-coverage -v
-        xcrun llvm-cov export -format="lcov" .build/debug/PaystackSDKPackageTests.xctest/Contents/MacOS/PaystackSDKPackageTests -instr-profile .build/debug/codecov/default.profdata > info.lcov
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    - uses: actions/checkout@v3
         
-
-  PodLinting:
-    runs-on: macos-12
-    name: Lint Podspec
-    
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    
     - name: setup-cocoapods
       uses: maxim-lobanov/setup-cocoapods@v1
       with:
@@ -40,22 +22,18 @@ jobs:
     - name: Run pod lint for Paystack Core
       run: pod lib lint PaystackCore.podspec --allow-warnings
 
-    # TODO: Add sonar here once the project is added
-
-  release:
-    if: ${{ github.event.pull_request.merged == true &&  github.head_ref == 'release/update-versions' }}
-    runs-on: macos-12
-    needs: [build, PodLinting]
-
-    steps:
-    - uses: actions/checkout@v3
-
     - name: Get version information
       run: |
         version=$(/usr/libexec/PlistBuddy -c "Print Version" ./Sources/PaystackSDK/Versioning/versions.plist)
         echo "version=${version}" >> $GITHUB_ENV
         body=$(/usr/libexec/PlistBuddy -c "Print Description" ./Sources/PaystackSDK/Versioning/versions.plist)
         echo "body=${body}" >> $GITHUB_ENV
+        cd  Sources/PaystackSDK/Core/Service/Subscription
+        PLIST= secrets.plist
+        /usr/libexec/PlistBuddy -c "Set PUSHER_API_KEY $PUSH_TOKEN" $PLIST
+        cd ../../../..
+       env:
+        PUSH_TOKEN: ${{ secrets.PUSH_TOKEN }}  
 
     - name: Create Release
       id: create_release
@@ -77,3 +55,4 @@ jobs:
         pod trunk push PaystackUI.podspec --allow-warnings
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+        
