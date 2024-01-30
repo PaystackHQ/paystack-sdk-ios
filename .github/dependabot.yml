@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: "npm" 
+  - package-ecosystem: "github-actions"
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+  - labels:
+      - "npm"
+      - "dependencies"
+     reviewers:
+     -  ""
