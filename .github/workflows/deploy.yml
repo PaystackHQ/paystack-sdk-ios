@@ -32,7 +32,7 @@ jobs:
         PLIST= secrets.plist
         /usr/libexec/PlistBuddy -c "Set PUSHER_API_KEY $PUSH_TOKEN" $PLIST
         cd ../../../..
-       env:
+      env:
         PUSH_TOKEN: ${{ secrets.PUSH_TOKEN }}  
 
     - name: Create Release
