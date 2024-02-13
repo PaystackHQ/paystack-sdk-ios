@@ -57,9 +57,13 @@ struct PusherSubscriptionListener: SubscriptionListener {
         channel.bind(eventName: eventName, eventCallback: {
             guard let stringData = $0.data else {
                 subscriptionResponse(.failure(.noData))
+                pusher.unsubscribe($0.channelName ?? "")
+                pusher.disconnect()
                 return
             }
             subscriptionResponse(.success(stringData))
+            pusher.unsubscribe($0.channelName ?? "")
+            pusher.disconnect()
         })
 
     }
