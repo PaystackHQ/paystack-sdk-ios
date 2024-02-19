@@ -26,7 +26,7 @@ final class ChargeRepositoryImplementationTests: PSTestCase {
         let expectedResult = VerifyAccessCode(amount: 10000,
                                               currency: "NGN",
                                               accessCode: "Access_Code_Test",
-                                              paymentChannels: [.card, .qr, .ussd],
+                                              paymentChannels: [.card, .qr, .ussd, .mobileMoney],
                                               domain: .test,
                                               merchantName: "Test Merchant",
                                               publicEncryptionKey: "test_encryption_key",

@@ -1,3 +1,4 @@
+// swiftlint:disable file_length type_body_length line_length
 import XCTest
 @testable import PaystackCore
 
@@ -25,6 +26,21 @@ final class ChargeTests: PSTestCase {
             .andReturn(json: "ChargeAuthenticationResponse")
 
         _ = try serviceUnderTest.authenticateCharge(withOtp: "12345", accessCode: "abcde").sync()
+    }
+
+    func testMobileMoneyCharge() throws {
+        let mobileMoneyRequestBody = MobileMoneyChargeRequest(channelName: "MOBILE_MONEY_1504248187", amount: 1000, email: "peter@paystack.com", phone: "0723362418", transaction: "1504248187", provider: "MPESA")
+
+        mockServiceExecutor
+            .expectURL("https://api.paystack.co/charge/mobile_money")
+            .expectMethod(.post)
+            .expectHeader("Authorization", "Bearer \(apiKey)")
+            .expectBody(mobileMoneyRequestBody)
+            .andReturn(json: "ChargeMobileMoneyResponse")
+
+        let mobileMoneyData = MobileMoneyData(channelName: "MOBILE_MONEY_1504248187", amount: 1000, email: "peter@paystack.com", phone: "0723362418", transaction: "1504248187", provider: "MPESA")
+
+        _ = try serviceUnderTest.chargeMobileMoney(with: mobileMoneyData).sync()
     }
 
     func testAuthenticateChargeWithPhoneAuthentication() throws {
@@ -90,4 +106,20 @@ final class ChargeTests: PSTestCase {
         _ = try serviceUnderTest.listenFor3DSResponse(for: transactionId).sync()
     }
 
+    func testListenForMobileMoney() throws {
+        let transactionId = 1234
+        let mockSubscription = PusherSubscription(channelName: "MOBILE_MONEY_\(transactionId)",
+                                                  eventName: "response")
+
+        // swiftlint:disable:next line_length
+        let responseString = "{\"redirecturl\":\"?trxref=2wdckavunc&reference=2wdckavunc\",\"trans\":\"1234\",\"trxref\":\"2wdckavunc\",\"reference\":\"2wdckavunc\",\"status\":\"success\",\"message\":\"Success\",\"response\":\"Approved\"}"
+
+        mockSubscriptionListener
+            .expectSubscription(mockSubscription)
+            .andReturnString(responseString)
+
+        _ = try serviceUnderTest.listenForMobileMoneyResponse(for: transactionId).sync()
+    }
+
 }
+// swiftlint:enable file_length type_body_length line_length
