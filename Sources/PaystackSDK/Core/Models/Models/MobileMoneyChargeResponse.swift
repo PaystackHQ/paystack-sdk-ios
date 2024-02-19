@@ -2,18 +2,18 @@ import Foundation
 
 // MARK: - MobileMoneyChargeResponse
 public struct MobileMoneyChargeResponse: Codable {
-    let status: Bool
-    let message: String
-    let data: MobileMoneyChargeData
+    public let status: Bool
+    public let message: String
+    public let data: MobileMoneyChargeData
 }
 
 // MARK: - MobileMoneyChargeData
 public struct MobileMoneyChargeData: Codable {
-    let transaction: String
-    let phone: String
-    let provider: String
-    let channelName: String
-    let display: Display
+    public let transaction: String
+    public let phone: String
+    public let provider: String
+    public let channelName: String
+    public let display: Display
 
     enum CodingKeys: String, CodingKey {
         case transaction
@@ -26,7 +26,7 @@ public struct MobileMoneyChargeData: Codable {
 
 // MARK: - Display
 public struct Display: Codable {
-    let type: String
-    let message: String
-    let timer: Int
+    public let type: String
+    public let message: String
+    public let timer: Int
 }

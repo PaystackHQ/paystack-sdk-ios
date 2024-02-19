@@ -29,7 +29,7 @@ final class ChargeTests: PSTestCase {
     }
 
     func testMobileMoneyCharge() throws {
-        let mobileMoneyRequestBody = MobileMoneyChargeRequest(channelName: "MOBILE_MONEY_1504248187", amount: 1000, email: "peter@paystack.com", phone: "0723362418", transaction: "1504248187", provider: "MPESA")
+        let mobileMoneyRequestBody = MobileMoneyChargeRequest(channelName: "MOBILE_MONEY_1504248187", phone: "0723362418", transaction: "1504248187", provider: "MPESA")
 
         mockServiceExecutor
             .expectURL("https://api.paystack.co/charge/mobile_money")
@@ -38,7 +38,7 @@ final class ChargeTests: PSTestCase {
             .expectBody(mobileMoneyRequestBody)
             .andReturn(json: "ChargeMobileMoneyResponse")
 
-        let mobileMoneyData = MobileMoneyData(channelName: "MOBILE_MONEY_1504248187", amount: 1000, email: "peter@paystack.com", phone: "0723362418", transaction: "1504248187", provider: "MPESA")
+        let mobileMoneyData = MobileMoneyData(phone: "0723362418", transaction: "1504248187", provider: "MPESA")
 
         _ = try serviceUnderTest.chargeMobileMoney(with: mobileMoneyData).sync()
     }

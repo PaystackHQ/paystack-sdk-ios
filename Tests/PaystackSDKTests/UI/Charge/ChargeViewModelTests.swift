@@ -35,7 +35,7 @@ final class ChargeViewModelTests: PSTestCase {
                                                   domain: .test,
                                                   merchantName: "Test Merchant",
                                                   publicEncryptionKey: "test_encryption_key",
-                                                  reference: "test_reference")
+                                                  reference: "test_reference", channelOptions: .example)
         await serviceUnderTest.verifyAccessCodeAndProceedWithCard()
         XCTAssertEqual(serviceUnderTest.transactionState, .error(.init(message: expectedMessage)))
 
@@ -68,7 +68,7 @@ final class ChargeViewModelTests: PSTestCase {
                                                     paymentChannels: [], domain: .test,
                                                     merchantName: "Test Merchant",
                                                     publicEncryptionKey: "test_encryption_key",
-                                                    reference: "test_reference")
+                                                    reference: "test_reference", channelOptions: .example)
         XCTAssertTrue(serviceUnderTest.inTestMode)
     }
 
@@ -78,7 +78,7 @@ final class ChargeViewModelTests: PSTestCase {
                                                     paymentChannels: [], domain: .live,
                                                     merchantName: "Test Merchant",
                                                     publicEncryptionKey: "test_encryption_key",
-                                                    reference: "test_reference")
+                                                    reference: "test_reference", channelOptions: .example)
         XCTAssertFalse(serviceUnderTest.inTestMode)
     }
 

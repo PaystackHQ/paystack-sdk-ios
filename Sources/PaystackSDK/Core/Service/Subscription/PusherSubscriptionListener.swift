@@ -35,7 +35,7 @@ struct PusherSubscriptionListener: SubscriptionListener {
         let channel = pusher.subscribe(channelName: channelName)
         bindConnectionEvents(to: channel)
         pusher.connect()
-
+        print(channelName)
         listenForData(on: channel, forEvent: eventName, subscriptionResponse: completion)
     }
 
@@ -53,13 +53,17 @@ struct PusherSubscriptionListener: SubscriptionListener {
         on channel: PusherChannel, forEvent eventName: String,
         subscriptionResponse: @escaping (Result<String, SubscriptionError>) -> Void
     ) {
-
+        print(channel.subscriptionCount ?? 0)
         channel.bind(eventName: eventName, eventCallback: {
             guard let stringData = $0.data else {
                 subscriptionResponse(.failure(.noData))
+                pusher.disconnect()
                 return
             }
+            print(channel.subscriptionCount ?? 0)
             subscriptionResponse(.success(stringData))
+            print(channel.name)
+            pusher.unsubscribe(channel.name)
         })
 
     }

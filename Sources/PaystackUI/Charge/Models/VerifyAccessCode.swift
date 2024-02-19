@@ -11,6 +11,7 @@ struct VerifyAccessCode: Equatable {
     var publicEncryptionKey: String
     var reference: String
     var transactionId: Int?
+    var channelOptions: PaystackUI.ChannelOptions?
 
     var amountCurrency: AmountCurrency {
         AmountCurrency(amount: amount, currency: currency)
@@ -28,7 +29,7 @@ extension VerifyAccessCode {
                          merchantName: response.data.merchantName,
                          publicEncryptionKey: response.data.publicEncryptionKey,
                          reference: response.data.reference,
-                         transactionId: response.data.id)
+                         transactionId: response.data.id, channelOptions: PaystackUI.ChannelOptions.from(response.data.channelOptions))
     }
 
 }
@@ -43,6 +44,6 @@ extension VerifyAccessCode {
               domain: .test,
               merchantName: "Test Merchant",
               publicEncryptionKey: "test_encryption_key",
-              reference: "test_reference")
+              reference: "test_reference", channelOptions: PaystackUI.ChannelOptions.example)
     }
 }

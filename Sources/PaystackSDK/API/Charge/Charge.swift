@@ -92,7 +92,7 @@ public extension Paystack {
     ///   - mobileMoneyData: The data that needs to be passed in order to do a mobile money charge
     /// - Returns: A ``Service`` with the ``MobileMoneyChargeResponse`` response
     func chargeMobileMoney(with mobileMoneyData: MobileMoneyData) -> Service<MobileMoneyChargeResponse> {
-        let request = MobileMoneyChargeRequest(channelName: mobileMoneyData.channelName, amount: mobileMoneyData.amount, email: mobileMoneyData.email, phone: mobileMoneyData.phone, transaction: mobileMoneyData.transaction, provider: mobileMoneyData.provider)
+        let request = MobileMoneyChargeRequest(channelName: "MOBILE_MONEY_\(mobileMoneyData.transaction)", phone: mobileMoneyData.phone, transaction: mobileMoneyData.transaction, provider: mobileMoneyData.provider)
         return mobileMoneyService.postChargeMobileMoney(request)
     }
 }

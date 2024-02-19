@@ -30,7 +30,7 @@ final class ChargeRepositoryImplementationTests: PSTestCase {
                                               domain: .test,
                                               merchantName: "Test Merchant",
                                               publicEncryptionKey: "test_encryption_key",
-                                              reference: "203520101")
+                                              reference: "203520101", channelOptions: PaystackUI.ChannelOptions(mobileMoney: nil))
 
         XCTAssertEqual(result, expectedResult)
     }

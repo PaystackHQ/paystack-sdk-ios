@@ -43,7 +43,7 @@ jobs:
     # TODO: Add sonar here once the project is added
 
   release:
-    if: github.event.pull_request.merged == true && github.head_ref == 'release/update-versions'
+    if: ${{ github.event.pull_request.merged == true &&  github.head_ref == 'release/update-versions' }}
     runs-on: macos-12
     needs: [build, PodLinting]
 

@@ -18,6 +18,6 @@ public struct ChannelOptions: Codable {
         case ussd
         case qrCode = "qr"
         case bankTransfer = "bank_transfer"
-        case mobileMoney = "mobile_money"
+        case mobileMoney
     }
 }

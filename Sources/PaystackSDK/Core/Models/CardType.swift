@@ -4,7 +4,7 @@ public enum CardType: String, Decodable {
     case visa
     case visaDebit = "visa DEBIT"
     case mastercardDebit = "mastercard DEBIT"
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let string = try container.decode(String.self)
@@ -15,7 +15,7 @@ public enum CardType: String, Decodable {
                                                                    debugDescription: "Could not find value for \(trimmedString) in CardType",
                                                                    underlyingError: nil))
         }
-        
+
         self = value
     }
 }

@@ -37,6 +37,26 @@ extension Image {
             .frame(height: 16)
     }
 
+    static var kenyaFlagLogo: some View {
+        Image("kenyaFlagLogo", bundle: .current)
+            .frame(height: 16)
+    }
+
+    static var messageBubbleLogo: some View {
+        Image("messageBubbleLogo", bundle: .current)
+            .frame(height: 16)
+    }
+
+    static var kenyaShLogo: some View {
+        Image("kenyaSHLogo", bundle: .current)
+            .frame(height: 16)
+    }
+
+    static var cardLogo: some View {
+        Image("cardLogo", bundle: .current)
+            .frame(height: 16)
+    }
+
     static var paystackSecured: some View {
         Image("paystackSecured", bundle: .current)
             .resizable()

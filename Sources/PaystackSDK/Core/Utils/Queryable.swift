@@ -5,9 +5,9 @@ public protocol Queryable {
 }
 
 public extension Array where Element: Queryable {
-    
+
     var keyPairs: [(String, String)] {
         return map { $0.keyPair }
     }
-    
+
 }
