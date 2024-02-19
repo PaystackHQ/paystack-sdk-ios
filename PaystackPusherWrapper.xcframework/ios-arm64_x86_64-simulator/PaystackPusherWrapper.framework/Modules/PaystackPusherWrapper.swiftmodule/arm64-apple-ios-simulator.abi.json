@@ -1,0 +1,82 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "TopLevel",
+    "printedName": "TopLevel",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "PaystackPusherWrapper"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "PaystackPusherConfig",
+        "printedName": "PaystackPusherConfig",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "apiKey",
+            "printedName": "apiKey",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:21PaystackPusherWrapper0aB6ConfigV6apiKeySSvpZ",
+            "mangledName": "$s21PaystackPusherWrapper0aB6ConfigV6apiKeySSvpZ",
+            "moduleName": "PaystackPusherWrapper",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:21PaystackPusherWrapper0aB6ConfigV6apiKeySSvgZ",
+                "mangledName": "$s21PaystackPusherWrapper0aB6ConfigV6apiKeySSvgZ",
+                "moduleName": "PaystackPusherWrapper",
+                "static": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:21PaystackPusherWrapper0aB6ConfigV",
+        "mangledName": "$s21PaystackPusherWrapper0aB6ConfigV",
+        "moduleName": "PaystackPusherWrapper",
+        "declAttributes": [
+          "AccessControl"
+        ]
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/Users\/peter-johnwelcome\/Developer\/PaystackPusherWrapper\/PaystackPusherWrapper\/PaystackPusherConfig.swift",
+      "kind": "StringLiteral",
+      "offset": 115,
+      "length": 22,
+      "value": "\"8e4b9b7ca3418bd5cdc8\""
+    }
+  ]
+}

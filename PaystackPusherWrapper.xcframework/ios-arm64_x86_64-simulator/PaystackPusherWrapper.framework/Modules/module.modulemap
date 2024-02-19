@@ -1,0 +1,11 @@
+framework module PaystackPusherWrapper {
+  umbrella header "PaystackPusherWrapper.h"
+  export *
+
+  module * { export * }
+}
+
+module PaystackPusherWrapper.Swift {
+  header "PaystackPusherWrapper-Swift.h"
+  requires objc
+}

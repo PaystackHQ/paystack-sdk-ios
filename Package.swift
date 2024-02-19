@@ -17,7 +17,8 @@ let package = Package(
     targets: [
         .target(
             name: "PaystackCore",
-            dependencies: [.product(name: "PusherSwift", package: "pusher-websocket-swift")],
+            dependencies: [.product(name: "PusherSwift", package: "pusher-websocket-swift"),
+                           .target(name: "PaystackPusherWrapper")],
             path: "Sources/PaystackSDK",
             resources: [
                 .process("Versioning/versions.plist"),
@@ -28,6 +29,10 @@ let package = Package(
             dependencies: ["PaystackCore"],
             path: "Sources/PaystackUI",
             resources: [.process("Design/FontAssets")]),
+        .binaryTarget(
+                    name: "PaystackPusherWrapper",
+                    path: "PaystackPusherWrapper.xcframework"
+                ),
         .testTarget(
             name: "PaystackSDKTests",
             dependencies: ["PaystackCore", "PaystackUI"],

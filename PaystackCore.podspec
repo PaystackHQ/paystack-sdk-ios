@@ -21,6 +21,7 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = "11.0"
   s.swift_versions = '5.7'
   s.source_files = 'Sources/PaystackSDK/**/*.{h,m,swift}'
+  s.vendored_frameworks = 'PaystackPusherWrapper.xcframework'
   s.resource_bundles = {
     'PaystackSDK_PaystackCore' => [ 
        'Sources/PaystackSDK/Versioning/versions.plist',
