@@ -13,7 +13,12 @@ struct MobileMoneyTransaction: Equatable {
 extension MobileMoneyTransaction {
 
     static func from(_ response: MobileMoneyChargeResponse) -> Self {
-        MobileMoneyTransaction(transaction: response.data.transaction, phone: response.data.transaction, provider: response.data.transaction, channelName: response.data.transaction, timer: response.data.display.timer, message: response.data.display.message)
+        MobileMoneyTransaction(transaction: response.data.transaction,
+                               phone: response.data.phone,
+                               provider: response.data.provider,
+                               channelName: response.data.channelName,
+                               timer: response.data.display.timer,
+                               message: response.data.display.message)
     }
 
 }

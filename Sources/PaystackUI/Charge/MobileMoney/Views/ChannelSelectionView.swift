@@ -105,7 +105,6 @@ struct ChannelView: View {
             Spacer()
         }
         .padding(.doublePadding)
-        .background(Color.red)
         .cornerRadius(.cornerRadius)
         .overlay(
             RoundedRectangle(cornerRadius: .cornerRadius)
