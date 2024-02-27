@@ -1,6 +1,6 @@
 import Foundation
 import PusherSwift
-
+import PaystackPusherWrapper
 struct PusherSubscriptionListener: SubscriptionListener {
 
     let pusher: Pusher
@@ -9,7 +9,7 @@ struct PusherSubscriptionListener: SubscriptionListener {
         let options = PusherClientOptions(
           host: .cluster("eu")
         )
-        self.pusher = Pusher(withAppKey: PusherSubscriptionListener.apiKey, options: options)
+        self.pusher = Pusher(withAppKey: PaystackPusherConfig.apiKey, options: options)
     }
 
     static private var apiKey: String {

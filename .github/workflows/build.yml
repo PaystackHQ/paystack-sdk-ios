@@ -8,11 +8,11 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-14
     name: Build and Test Swift Package
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Build
       run: swift build -v
     - name: Run tests
@@ -25,17 +25,17 @@ jobs:
         
 
   PodLinting:
-    runs-on: macos-12
+    runs-on: macos-14
     name: Lint Podspec
     
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     
     - name: setup-cocoapods
       uses: maxim-lobanov/setup-cocoapods@v1
       with:
-        version: 1.11.3
+        version: 1.14.2
     
     - name: Run pod lint for Paystack Core
       run: pod lib lint PaystackCore.podspec --allow-warnings
@@ -44,11 +44,11 @@ jobs:
 
   release:
     if: ${{ github.event.pull_request.merged == true &&  github.head_ref == 'release/update-versions' }}
-    runs-on: macos-12
+    runs-on: macos-14
     needs: [build, PodLinting]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Get version information
       run: |

@@ -5,19 +5,19 @@ on:
 
 jobs:
   deploy:
-    runs-on: macos-latest
+    runs-on: macos-14
     name: Deploy to Cocoapods Trunk
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Build
-      run: swift build -v
-    - uses: actions/checkout@v3
+      run: |
+        xcodebuild clean build test -scheme PaystackSDK-Package -sdk iphonesimulator17.2 -destination "OS=17.2,name=iPhone 15 Pro" -enableCodeCoverage YES CODE_SIGNING_REQUIRED=NO
         
     - name: setup-cocoapods
       uses: maxim-lobanov/setup-cocoapods@v1
       with:
-        version: 1.11.3
+        version: 1.14.2
     
     - name: Run pod lint for Paystack Core
       run: pod lib lint PaystackCore.podspec --allow-warnings
