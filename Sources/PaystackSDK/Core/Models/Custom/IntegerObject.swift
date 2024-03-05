@@ -3,7 +3,7 @@ import Foundation
 /// Service sometimes returns a string for an integer field
 public struct IntegerObject: Decodable {
     public var value: Int
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         do {

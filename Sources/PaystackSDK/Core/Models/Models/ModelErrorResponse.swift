@@ -7,8 +7,6 @@
 
 import Foundation
 
-
-
 public struct ModelErrorResponse: Codable {
 
     public var status: Bool
@@ -18,6 +16,5 @@ public struct ModelErrorResponse: Codable {
         self.status = status
         self.message = message
     }
-
 
 }
