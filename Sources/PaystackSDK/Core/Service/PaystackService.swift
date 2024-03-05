@@ -6,17 +6,17 @@ public protocol PaystackService: URLRequestBuilderHelper {
 }
 
 public extension PaystackService {
-    
+
     var endpoint: String {
         return "https://api.paystack.co/\(parentPath)"
     }
-    
+
     var bearerToken: String {
         return config.apiKey
     }
-    
+
     var paystackUserAgentVersion: String {
         return config.version
     }
-    
+
 }

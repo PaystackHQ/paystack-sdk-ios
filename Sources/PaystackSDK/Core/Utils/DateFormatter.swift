@@ -8,7 +8,7 @@ public extension DateFormatter {
         formatter.dateFormat = DateFormat.paystack.rawValue
         return formatter
     }
-    
+
     static func toString(usingFormat format: String, from date: Date) -> String {
         let formatter = DateFormatter()
         formatter.locale = .current
