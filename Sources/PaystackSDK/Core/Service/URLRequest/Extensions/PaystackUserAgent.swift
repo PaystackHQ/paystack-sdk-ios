@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 struct PaystackUserAgent: Encodable {
     var lang: String = "swift"
@@ -15,6 +16,10 @@ extension URLRequestBuilder {
         }
         
         return addHeader("X-Paystack-User-Agent", agentString)
+    }
+    
+    func addDeviceIdentifier() -> Self {
+        addHeader("x-device-identifier", "sdk_ios_" + (UIDevice.current.identifierForVendor?.uuidString ?? ""))
     }
     
 }

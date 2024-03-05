@@ -41,6 +41,7 @@ public extension URLRequestBuilderHelper {
         return URLRequestBuilder(endpoint: endpoint)
             .addBearerAuthorization(bearerToken)
             .addPaystackUserAgent(paystackUserAgentVersion)
+            .addDeviceIdentifier()
             .addLoggingHeaders()
     }
 
