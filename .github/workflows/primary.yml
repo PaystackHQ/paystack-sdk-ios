@@ -46,7 +46,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       
   PodLinting:
-    runs-on: macos-14
+    runs-on: macos-13
     name: Lint Podspec
     
     steps:
@@ -56,7 +56,7 @@ jobs:
     - name: setup-cocoapods
       uses: maxim-lobanov/setup-cocoapods@v1
       with:
-        version: 1.14.2
+        version: 1.15.2
     
     - name: Run pod lint for Paystack Core
       run: pod lib lint PaystackCore.podspec --allow-warnings
