@@ -38,7 +38,6 @@ jobs:
     - name: Build and Run tests
       run: |
         xcodebuild clean build test -scheme PaystackSDK-Package -sdk iphonesimulator17.4 -destination "OS=17.4,name=iPhone 15 Pro" -enableCodeCoverage YES CODE_SIGNING_REQUIRED=NO
-        xcrun llvm-cov show -instr-profile=.build/debug/codecov/default.profdata .build/debug/PaystackSDKPackageTests.xctest/Contents/MacOS/PaystackSDKPackageTests > coverage.report
         brew install sonar-scanner
         bundle exec fastlane sonar_scan
       env:
