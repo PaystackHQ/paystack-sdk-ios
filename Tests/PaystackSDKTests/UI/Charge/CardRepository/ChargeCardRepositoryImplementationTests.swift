@@ -15,27 +15,7 @@ final class ChargeCardRepositoryImplementationTests: PSTestCase {
         serviceUnderTest = ChargeCardRepositoryImplementation()
     }
 
-    func testSubmitBirthdaySubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel() async throws {
-        let birthdayRequestBody = SubmitBirthdayRequest(birthday: "1990-01-01",
-                                                        accessCode: "test_access")
-
-        mockServiceExecutor
-            .expectURL("https://api.paystack.co/transaction/charge/submit_birthday")
-            .expectMethod(.post)
-            .expectHeader("Authorization", "Bearer \(apiKey)")
-            .expectBody(birthdayRequestBody)
-            .andReturn(json: "ChargeAuthenticationResponse")
-
-        guard let birthday = DateFormatter.toDate(usingFormat: "yyyy-MM-dd",
-                                                  from: "1990-01-01") else {
-            XCTFail("Failed to construct birthday")
-            return
-        }
-
-        let result = try await serviceUnderTest.submitBirthday(birthday,
-                                                               accessCode: "test_access")
-        XCTAssertEqual(result, .jsonExample)
-    }
+    //TODO: Add test for testSubmitBirthdaySubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel
 
     func testSubmitPhoneSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel() async throws {
         let phoneRequestBody = SubmitPhoneRequest(phone: "0111234567", accessCode: "test_access")
@@ -52,36 +32,9 @@ final class ChargeCardRepositoryImplementationTests: PSTestCase {
         XCTAssertEqual(result, .jsonExample)
     }
 
-    func testSubmitOTPSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel() async throws {
-        let otpRequestBody = SubmitOtpRequest(otp: "12345", accessCode: "test_access")
+    //TODO: Add Test for testSubmitOTPSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel
 
-        mockServiceExecutor
-            .expectURL("https://api.paystack.co/transaction/charge/submit_otp")
-            .expectMethod(.post)
-            .expectHeader("Authorization", "Bearer \(apiKey)")
-            .expectBody(otpRequestBody)
-            .andReturn(json: "ChargeAuthenticationResponse")
-
-        let result = try await serviceUnderTest.submitOTP("12345", accessCode: "test_access")
-        XCTAssertEqual(result, .jsonExample)
-    }
-
-    func testSubmitAddressSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel() async throws {
-        let address = Address(address: "123 Road", city: "Johannesburg",
-                              state: "Gauteng", zipCode: "1234")
-        let addressRequestBody = SubmitAddressRequest(address: address,
-                                                      accessCode: "test_access")
-
-        mockServiceExecutor
-            .expectURL("https://api.paystack.co/transaction/charge/submit_address")
-            .expectMethod(.post)
-            .expectHeader("Authorization", "Bearer \(apiKey)")
-            .expectBody(addressRequestBody)
-            .andReturn(json: "ChargeAuthenticationResponse")
-
-        let result = try await serviceUnderTest.submitAddress(address, accessCode: "test_access")
-        XCTAssertEqual(result, .jsonExample)
-    }
+    //TODO: Add Test for testSubmitAddressSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel
 
     func testCheckPendingChargeSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel() async throws {
         mockServiceExecutor

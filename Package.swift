@@ -11,14 +11,17 @@ let package = Package(
             targets: ["PaystackCore"]),
         .library(
             name: "PaystackUI",
-            targets: ["PaystackUI"])
+            targets: ["PaystackUI"]),
+        .library(
+                   name: "PaystackPusherWrapper",
+                   targets: ["PaystackPusherWrapper"])
     ],
     dependencies: [.package(url: "https://github.com/pusher/pusher-websocket-swift.git", from: "10.1.0")],
     targets: [
         .target(
             name: "PaystackCore",
             dependencies: [.product(name: "PusherSwift", package: "pusher-websocket-swift"),
-                           .target(name: "PaystackPusherWrapper")],
+                           "PaystackPusherWrapper"],
             path: "Sources/PaystackSDK",
             resources: [
                 .process("Versioning/versions.plist"),
