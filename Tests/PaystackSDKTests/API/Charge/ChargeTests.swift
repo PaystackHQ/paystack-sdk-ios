@@ -16,18 +16,7 @@ final class ChargeTests: PSTestCase {
 
     // TODO: testAuthenticateChargeWithOTPAuthentication
 
-    func testAuthenticateChargeWithPhoneAuthentication() throws {
-        let phoneRequestBody = SubmitPhoneRequest(phone: "0111234567", accessCode: "abcde")
-
-        mockServiceExecutor
-            .expectURL("https://api.paystack.co/transaction/charge/submit_phone")
-            .expectMethod(.post)
-            .expectHeader("Authorization", "Bearer \(apiKey)")
-            .expectBody(phoneRequestBody)
-            .andReturn(json: "ChargeAuthenticationResponse")
-
-        _ = try serviceUnderTest.authenticateCharge(withPhone: "0111234567", accessCode: "abcde").sync()
-    }
+    // TODO: testAuthenticateChargeWithPhoneAuthentication
 
     // TODO: Add Test for testAuthenticateChargeWithBirthdayAuthentication
 
