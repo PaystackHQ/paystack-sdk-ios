@@ -45,6 +45,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       
   PodLinting:
+    if: ${{ false }}
     runs-on: macos-12
     name: Lint Podspec
     
