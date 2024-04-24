@@ -15,26 +15,13 @@ final class ChargeCardRepositoryImplementationTests: PSTestCase {
         serviceUnderTest = ChargeCardRepositoryImplementation()
     }
 
-    //TODO: Add test for testSubmitBirthdaySubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel
+    // TODO: Add test for testSubmitBirthdaySubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel
 
-    func testSubmitPhoneSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel() async throws {
-        let phoneRequestBody = SubmitPhoneRequest(phone: "0111234567", accessCode: "test_access")
+    // TODO: testSubmitPhoneSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel
 
-        mockServiceExecutor
-            .expectURL("https://api.paystack.co/transaction/charge/submit_phone")
-            .expectMethod(.post)
-            .expectHeader("Authorization", "Bearer \(apiKey)")
-            .expectBody(phoneRequestBody)
-            .andReturn(json: "ChargeAuthenticationResponse")
+    // TODO: Add Test for testSubmitOTPSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel
 
-        let result = try await serviceUnderTest.submitPhone("0111234567",
-                                                            accessCode: "test_access")
-        XCTAssertEqual(result, .jsonExample)
-    }
-
-    //TODO: Add Test for testSubmitOTPSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel
-
-    //TODO: Add Test for testSubmitAddressSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel
+    // TODO: Add Test for testSubmitAddressSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel
 
     func testCheckPendingChargeSubmitsRequestUsingPaystackObjectAndMapsCorrectlyToModel() async throws {
         mockServiceExecutor

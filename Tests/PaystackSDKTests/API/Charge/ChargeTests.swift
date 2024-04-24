@@ -14,8 +14,8 @@ final class ChargeTests: PSTestCase {
             .build()
     }
 
-    //TODO: testAuthenticateChargeWithOTPAuthentication
-    
+    // TODO: testAuthenticateChargeWithOTPAuthentication
+
     func testAuthenticateChargeWithPhoneAuthentication() throws {
         let phoneRequestBody = SubmitPhoneRequest(phone: "0111234567", accessCode: "abcde")
 
@@ -28,10 +28,10 @@ final class ChargeTests: PSTestCase {
 
         _ = try serviceUnderTest.authenticateCharge(withPhone: "0111234567", accessCode: "abcde").sync()
     }
-    
-    //TODO: Add Test for testAuthenticateChargeWithBirthdayAuthentication
-    
-    //TODO: Add test for testAuthenticateChargeWithAddressAuthentication
+
+    // TODO: Add Test for testAuthenticateChargeWithBirthdayAuthentication
+
+    // TODO: Add test for testAuthenticateChargeWithAddressAuthentication
 
     func testListenFor3DS() throws {
         let transactionId = 1234
