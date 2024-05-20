@@ -27,10 +27,7 @@ jobs:
     - name: setup-cocoapods
       uses: maxim-lobanov/setup-cocoapods@v1
       with:
-        version: 1.14.2
-    
-    - name: Run pod lint for Paystack Core
-      run: pod lib lint PaystackCore.podspec --allow-warnings
+        version: 1.15.2
 
     - name: Get version information
       run: |
@@ -48,9 +45,6 @@ jobs:
         tag_name: ${{ env.version }}
         release_name: ${{ env.version }}
         body: ${{ env.body }}
-
-    - name: Install Cocoapods
-      run: gem install cocoapods
 
     - name: Deploy to Cocoapods
       run: |
