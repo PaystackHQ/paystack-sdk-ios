@@ -13,12 +13,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build
-      run: swift build -v
-    - name: Run tests
+    - name: Select Xcode Version
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '15.3.0'
+  
+    - name: Setup environment
       run: |
-        swift test --enable-code-coverage -v
-        xcrun llvm-cov export -format="lcov" .build/debug/PaystackSDKPackageTests.xctest/Contents/MacOS/PaystackSDKPackageTests -instr-profile .build/debug/codecov/default.profdata > info.lcov
+        bundle install
+
+    - name: Build and Run tests
+      run: |
+        xcodebuild clean build test -scheme PaystackSDK-Package -sdk iphonesimulator17.4 -destination "OS=17.4,name=iPhone 15 Pro" -enableCodeCoverage YES CODE_SIGNING_REQUIRED=NO
+        brew install sonar-scanner
+        bundle exec fastlane sonar_scan
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -35,7 +43,7 @@ jobs:
     - name: setup-cocoapods
       uses: maxim-lobanov/setup-cocoapods@v1
       with:
-        version: 1.14.2
+        version: 1.15.2
     
     - name: Run pod lint for Paystack Core
       run: pod lib lint PaystackCore.podspec --allow-warnings

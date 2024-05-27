@@ -46,8 +46,20 @@ jobs:
         release_name: ${{ env.version }}
         body: ${{ env.body }}
 
+  Publish Cocoapods:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2.2'
+
     - name: Deploy to Cocoapods
       run: |
+        gem install cocoapods
         set -eo pipefail
         pod trunk push PaystackCore.podspec --allow-warnings
         pod trunk push PaystackUI.podspec --allow-warnings
