@@ -56,14 +56,7 @@ extension TestCard {
     var expiryYear: String {
         let nextYear = Calendar.current.component(.year, from: Date()) + 1
         let lastTwoDigits = String(nextYear).suffix(2)
-        switch self {
-        case .success:
-            return lastTwoDigits
-        case .bankAuthentication:
-            return lastTwoDigits
-        case .declined:
-            return lastTwoDigits
-        }
+        return lastTwoDigits
     }
 
     var cardType: CardType {
