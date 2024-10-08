@@ -42,15 +42,10 @@ extension TestCard {
         }
     }
 
-    var expiryMonth: String {
-        switch self {
-        case .success:
-            return "08"
-        case .bankAuthentication:
-            return "08"
-        case .declined:
-            return "08"
-        }
+    var expiryYear: String {
+        let nextYear = Calendar.current.component(.year, from: Date()) + 1
+        let lastTwoDigits = String(nextYear).suffix(2)
+        return "\(lastTwoDigits)"
     }
 
     var expiryYear: String {
