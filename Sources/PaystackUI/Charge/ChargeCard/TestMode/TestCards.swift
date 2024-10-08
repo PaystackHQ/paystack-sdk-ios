@@ -51,6 +51,7 @@ extension TestCard {
         case .declined:
             return "08"
         }
+    }
 
     var expiryYear: String {
         let nextYear = Calendar.current.component(.year, from: Date()) + 1
