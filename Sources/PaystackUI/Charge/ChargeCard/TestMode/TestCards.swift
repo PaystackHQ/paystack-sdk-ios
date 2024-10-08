@@ -42,7 +42,7 @@ extension TestCard {
         }
     }
 
-   var expiryMonth: String {
+    var expiryMonth: String {
         switch self {
         case .success:
             return "08"
