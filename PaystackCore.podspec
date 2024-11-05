@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'PaystackCore'
-  s.version          = '0.0.3'
+  s.version          = '0.0.4'
   s.summary          = 'The Paystack Public iOS SDK'
 
 # TODO: Add correct descriptions
