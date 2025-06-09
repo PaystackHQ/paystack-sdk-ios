@@ -4,154 +4,121 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>Headers/PaystackPusherWrapper-Swift.h</key>
-		<data>
-		+OIyc1ZxNFFkiJT+4WaWXE8+u4A=
-		</data>
-		<key>Headers/PaystackPusherWrapper.h</key>
-		<data>
-		/Dyos9V8+HuGXu3xbfHnQlLJhxw=
-		</data>
 		<key>Info.plist</key>
 		<data>
-		29TA8DLvAmtDyDQXelfljDNMxYc=
+		cuq6EMZPLll0GqDtk2d+IWMw7zU=
 		</data>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		Yqy4HvsRy8UBmADK83z6DKFDANU=
+		R2yEHL6vBBrm1DHYa/C+VmVjfKY=
 		</data>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		LGXSHliTd4eoTIDcPyILAmCnrwA=
+		R06uSWnemfBHt4DRyjbBs8kj1lA=
 		</data>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		tMwMp8r/C/8RMhCEsfWo50HV4KM=
+		b/Hm4T8x/KG/XMBHSDfvkik2JfU=
 		</data>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		LGXSHliTd4eoTIDcPyILAmCnrwA=
+		R06uSWnemfBHt4DRyjbBs8kj1lA=
 		</data>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		v77Rak2t7vm2R+InwiDI9iF2QkU=
+		xfgKWVtqM4UW3BQ7uwoKckmA1RI=
 		</data>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		Yqy4HvsRy8UBmADK83z6DKFDANU=
+		R2yEHL6vBBrm1DHYa/C+VmVjfKY=
 		</data>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		AUWWJ5xaQ4lEhSRMcT4zEUk2H08=
+		kymZis8rCQ2yIk0+paHM/AFyU/s=
 		</data>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		oFsLpfL4Z0cwQkEUNXkydnq+DjI=
+		qf+Z/5DmiEWeQylbfzsCFfBoT4Y=
 		</data>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		AUWWJ5xaQ4lEhSRMcT4zEUk2H08=
+		kymZis8rCQ2yIk0+paHM/AFyU/s=
 		</data>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		M9iqlNMBhQobwqruyHngdLNv11Y=
-		</data>
-		<key>Modules/module.modulemap</key>
-		<data>
-		0HnHNstSzZN620+GfAaU/dD6B4Q=
+		thL1IzPGXQsO7CByabqyOhllNxk=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>Headers/PaystackPusherWrapper-Swift.h</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			DfYNY+AooKSgix0xc620ddq2Smxu9hAEuh3CeenOn24=
-			</data>
-		</dict>
-		<key>Headers/PaystackPusherWrapper.h</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			cpdhY9c8UY5BGikNeZgeLfPjaf2XL7R6YNbgOIG66XE=
-			</data>
-		</dict>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			lXmPN3ad3UeL+vbBZry4QMDCejW+Il5F18patCj8cNQ=
+			9pNvwYSNTqhNpxzl1my8R6novKndiMbS/0tU33ciGyg=
 			</data>
 		</dict>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			KuRW8qeJ/pvoWApCBnR17+2G2G7130gx6yIGx1Kh/hA=
+			yntZGRZvy5wz2coDoGKOWw3y/Ca0oioZZ+u8bUPxu0U=
 			</data>
 		</dict>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			nQyGkqjxrRdSv5/UvnqLTIwEqcOa3pqYZQGk+Af/VEg=
+			pYGSW59uTWEHwO3opaz0fHOg/HNod8f+Y04KqSCkVvo=
 			</data>
 		</dict>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			KuRW8qeJ/pvoWApCBnR17+2G2G7130gx6yIGx1Kh/hA=
+			yntZGRZvy5wz2coDoGKOWw3y/Ca0oioZZ+u8bUPxu0U=
 			</data>
 		</dict>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			beMnwgSEQhcKBzfRdZQIZKb0ZILDHL/trN6xzCr7Gq0=
+			rP/Y5GvAphUvObEodjui0aF+zkVgnzs4iTRVTl8znw0=
 			</data>
 		</dict>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			lXmPN3ad3UeL+vbBZry4QMDCejW+Il5F18patCj8cNQ=
+			9pNvwYSNTqhNpxzl1my8R6novKndiMbS/0tU33ciGyg=
 			</data>
 		</dict>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			xuWiu2gfxh5dHcsctAQRUpMoXsOqX7AGDsnH3JLcmPc=
+			Z49HXxbI8GkuMYwCFkx3ISAPnF3rCA99O9wqI+E5sf0=
 			</data>
 		</dict>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ixQgmI0t/FTKh4AweZn0vmkOu1JwpmwX2lAPtXlTmdM=
+			KGep5DdGp9TcZ4oOP2Saubr0m0sUAmduDKCW9QX3ARU=
 			</data>
 		</dict>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			xuWiu2gfxh5dHcsctAQRUpMoXsOqX7AGDsnH3JLcmPc=
+			Z49HXxbI8GkuMYwCFkx3ISAPnF3rCA99O9wqI+E5sf0=
 			</data>
 		</dict>
 		<key>Modules/PaystackPusherWrapper.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			8AxSzoOu/kG2Mz8GyVwvd7nmva/lQiYe9D57h8YzRFg=
-			</data>
-		</dict>
-		<key>Modules/module.modulemap</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			h4X+Xeqsslj8qH7Soqk2EaHExSMC29AKHVv8Y5xizOw=
+			79HfS8age1QN7h4IyugNIuqh6IS5EGbioIMY/KwYjp0=
 			</data>
 		</dict>
 	</dict>

@@ -1,8 +1,8 @@
 {
   "ABIRoot": {
     "kind": "Root",
-    "name": "TopLevel",
-    "printedName": "TopLevel",
+    "name": "PaystackPusherWrapper",
+    "printedName": "PaystackPusherWrapper",
     "children": [
       {
         "kind": "Import",
@@ -29,13 +29,17 @@
               }
             ],
             "declKind": "Var",
-            "usr": "s:21PaystackPusherWrapper0aB6ConfigV6apiKeySSvpZ",
-            "mangledName": "$s21PaystackPusherWrapper0aB6ConfigV6apiKeySSvpZ",
+            "usr": "s:21PaystackPusherWrapper0aB6ConfigO6apiKeySSvpZ",
+            "mangledName": "$s21PaystackPusherWrapper0aB6ConfigO6apiKeySSvpZ",
             "moduleName": "PaystackPusherWrapper",
             "static": true,
             "declAttributes": [
+              "HasInitialValue",
+              "HasStorage",
               "AccessControl"
             ],
+            "isLet": true,
+            "hasStorage": true,
             "accessors": [
               {
                 "kind": "Accessor",
@@ -50,21 +54,38 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:21PaystackPusherWrapper0aB6ConfigV6apiKeySSvgZ",
-                "mangledName": "$s21PaystackPusherWrapper0aB6ConfigV6apiKeySSvgZ",
+                "usr": "s:21PaystackPusherWrapper0aB6ConfigO6apiKeySSvgZ",
+                "mangledName": "$s21PaystackPusherWrapper0aB6ConfigO6apiKeySSvgZ",
                 "moduleName": "PaystackPusherWrapper",
                 "static": true,
+                "implicit": true,
                 "accessorKind": "get"
               }
             ]
           }
         ],
-        "declKind": "Struct",
-        "usr": "s:21PaystackPusherWrapper0aB6ConfigV",
-        "mangledName": "$s21PaystackPusherWrapper0aB6ConfigV",
+        "declKind": "Enum",
+        "usr": "s:21PaystackPusherWrapper0aB6ConfigO",
+        "mangledName": "$s21PaystackPusherWrapper0aB6ConfigO",
         "moduleName": "PaystackPusherWrapper",
         "declAttributes": [
           "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
         ]
       }
     ],
@@ -72,9 +93,9 @@
   },
   "ConstValues": [
     {
-      "filePath": "\/Users\/peter-johnwelcome\/Developer\/PaystackPusherWrapper\/PaystackPusherWrapper\/PaystackPusherConfig.swift",
+      "filePath": "\/Users\/zaheer@paystack.com\/Desktop\/PaystackPusherWrapper\/PaystackPusherWrapper\/PaystackPusherConfig.swift",
       "kind": "StringLiteral",
-      "offset": 115,
+      "offset": 85,
       "length": 22,
       "value": "\"8e4b9b7ca3418bd5cdc8\""
     }
