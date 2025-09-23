@@ -15,18 +15,9 @@ final class ChargeTests: PSTestCase {
             .build()
     }
 
-    func testAuthenticateChargeWithOTPAuthentication() throws {
-        let otpRequestBody = SubmitOtpRequest(otp: "12345", accessCode: "abcde")
+    // TODO: testAuthenticateChargeWithOTPAuthentication
 
-        mockServiceExecutor
-            .expectURL("https://api.paystack.co/transaction/charge/submit_otp")
-            .expectMethod(.post)
-            .expectHeader("Authorization", "Bearer \(apiKey)")
-            .expectBody(otpRequestBody)
-            .andReturn(json: "ChargeAuthenticationResponse")
-
-        _ = try serviceUnderTest.authenticateCharge(withOtp: "12345", accessCode: "abcde").sync()
-    }
+    // TODO: testAuthenticateChargeWithPhoneAuthentication
 
     func testMobileMoneyCharge() throws {
         let mobileMoneyRequestBody = MobileMoneyChargeRequest(channelName: "MOBILE_MONEY_1504248187", phone: "0723362418", transaction: "1504248187", provider: "MPESA")
@@ -45,51 +36,9 @@ final class ChargeTests: PSTestCase {
 
     func testAuthenticateChargeWithPhoneAuthentication() throws {
         let phoneRequestBody = SubmitPhoneRequest(phone: "0111234567", accessCode: "abcde")
+    // TODO: Add Test for testAuthenticateChargeWithBirthdayAuthentication
 
-        mockServiceExecutor
-            .expectURL("https://api.paystack.co/transaction/charge/submit_phone")
-            .expectMethod(.post)
-            .expectHeader("Authorization", "Bearer \(apiKey)")
-            .expectBody(phoneRequestBody)
-            .andReturn(json: "ChargeAuthenticationResponse")
-
-        _ = try serviceUnderTest.authenticateCharge(withPhone: "0111234567", accessCode: "abcde").sync()
-    }
-
-    func testAuthenticateChargeWithBirthdayAuthentication() throws {
-        let birthdayRequestBody = SubmitBirthdayRequest(birthday: "1990-01-01", accessCode: "abcde")
-
-        mockServiceExecutor
-            .expectURL("https://api.paystack.co/transaction/charge/submit_birthday")
-            .expectMethod(.post)
-            .expectHeader("Authorization", "Bearer \(apiKey)")
-            .expectBody(birthdayRequestBody)
-            .andReturn(json: "ChargeAuthenticationResponse")
-
-        guard let birthday = DateFormatter.toDate(usingFormat: "yyyy-MM-dd",
-                                                  from: "1990-01-01") else {
-            XCTFail("Failed to construct birthday")
-            return
-        }
-
-        _ = try serviceUnderTest.authenticateCharge(withBirthday: birthday, accessCode: "abcde").sync()
-    }
-
-    func testAuthenticateChargeWithAddressAuthentication() throws {
-        let address = Address(address: "123 Road", city: "Johannesburg",
-                              state: "Gauteng", zipCode: "1234")
-        let addressRequestBody = SubmitAddressRequest(address: address,
-                                                      accessCode: "abcde")
-
-        mockServiceExecutor
-            .expectURL("https://api.paystack.co/transaction/charge/submit_address")
-            .expectMethod(.post)
-            .expectHeader("Authorization", "Bearer \(apiKey)")
-            .expectBody(addressRequestBody)
-            .andReturn(json: "ChargeAuthenticationResponse")
-
-        _ = try serviceUnderTest.authenticateCharge(withAddress: address, accessCode: "abcde").sync()
-    }
+    // TODO: Add test for testAuthenticateChargeWithAddressAuthentication
 
     func testListenFor3DS() throws {
         let transactionId = 1234

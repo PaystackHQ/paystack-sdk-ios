@@ -11,21 +11,22 @@ import IOKit
 // MARK: - Logging
 extension URLRequestBuilder {
     private static let operatingSystem: String = {
-        #if os(iOS)
-            #if targetEnvironment(macCatalyst)
-            return "macOS - Catalyst"
-            #else
-            return "iOS"
-            #endif
-        #else
+#if os(iOS)
+#if targetEnvironment(macCatalyst)
+        return "macOS - Catalyst"
+#else
+        return "iOS"
+#endif
+#else
         return "macOS"
-        #endif
+#endif
     }()
 
     func addLoggingHeaders() -> Self {
         return addPlatformHeader()
             .addSDKVersionHeader()
             .addPlatformVersionHeader()
+            .addDeviceIdentifier()
             .addDeviceModelHeader()
     }
 
@@ -40,7 +41,7 @@ extension URLRequestBuilder {
               let data = try? Data(contentsOf: versionUrl),
               let plist = try? PropertyListSerialization.propertyList(
                 from: data, format: nil) as? [String: String],
-                let versionNumber = plist["Version"] else {
+              let versionNumber = plist["Version"] else {
             return self
         }
 
@@ -53,6 +54,10 @@ extension URLRequestBuilder {
         return addHeader("x-platform-version", "\(Self.operatingSystem) \(osVersionString)")
     }
 
+    func addDeviceIdentifier() -> Self {
+        addHeader("x-device-identifier", "sdk_ios_" + getDeviceID())
+    }
+
     private func addDeviceModelHeader() -> Self {
         guard let modelName = getDeviceModel() else {
             return self
@@ -61,14 +66,22 @@ extension URLRequestBuilder {
     }
 
     private func getDeviceModel() -> String? {
-        #if canImport(UIKit)
+#if canImport(UIKit)
         return UIDevice.modelName
-        #elseif canImport(IOKit)
+#elseif canImport(IOKit)
         return getModelIdentifier()
-        #endif
+#endif
     }
 
-    #if canImport(IOKit)
+    private func getDeviceID() -> String {
+#if canImport(UIKit)
+        return UIDevice.deviceID
+#elseif canImport(IOKit)
+        return getModelIdentifier() ?? ""
+#endif
+    }
+
+#if canImport(IOKit)
     func getModelIdentifier() -> String? {
         let service = IOServiceGetMatchingService(kIOMasterPortDefault,
                                                   IOServiceMatching("IOPlatformExpertDevice"))
@@ -81,7 +94,7 @@ extension URLRequestBuilder {
         IOObjectRelease(service)
         return modelIdentifier
     }
-    #endif
+#endif
 }
 
 #if canImport(UIKit)
@@ -95,6 +108,10 @@ private extension UIDevice {
             return identifier + String(UnicodeScalar(UInt8(value)))
         }
         return identifier
+    }()
+
+    static let deviceID: String = {
+        UIDevice.current.identifierForVendor?.uuidString ?? ""
     }()
 }
 #endif

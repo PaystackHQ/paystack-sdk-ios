@@ -8,7 +8,6 @@ We currently have two variations of Example apps.
 
 To get started with either of these:
 - Open the associated project file.
-- Add the Pusher public key to the `secrets.plist` file located in `/Sources/PaystackSDK/Core/Service/Subscription`
 - Inside `ContentView.swift` (SwiftUI Example App) or `ViewController.swift` (UIKit Example app), modify the Paystack object that is being built to include the public key of the integration being used.
 
 ```swift
@@ -32,18 +31,7 @@ To install the SDK using [Swift Package Manager](https://github.com/apple/swift-
 1. In Xcode, select “File” → “Add Packages...”
 2. Enter https://github.com/PaystackHQ/paystack-sdk-ios.git
 
-### CocoaPods
-Add the pods to your Podfile as required:
-```ruby
-pod 'PaystackCore'
-pod `PaystackUI`
-```
-
-And then run:
-```ruby
-pod install
-```
-After installing the Cocoapod into your project import it using
+After installing with Swift package Manager into your project import it using
 ```swift
 import PaystackCore
 import PaystackUI
@@ -63,7 +51,14 @@ paystackObject?.chargeUIButton(accessCode: "transaction access code",
 }
 
 func paymentDone(_ result: TransactionResult) {
-  // Handle transaction result
+    switch (result){
+    case .completed(let details):
+        print("Transaction completed with reference: \(details.reference)")
+    case .cancelled:
+        print("Transaction was cancelled")
+    case .error(error: let error, reference: let reference):
+        print("An error occured: \(error.message) with reference: \(String(describing: reference))")
+    }
 }
 ```
 
@@ -78,7 +73,14 @@ For UIKit, you would create your own button to trigger the flow and provide a re
 }
 
 func paymentDone(_ result: TransactionResult) {
-  // Handle transaction result
+    switch (result){
+    case .completed(let details):
+        print("Transaction completed with reference: \(details.reference)")
+    case .cancelled:
+        print("Transaction was cancelled")
+    case .error(error: let error, reference: let reference):
+        print("An error occured: \(error.message) with reference: \(String(describing: reference))")
+    }
 }
 ```
 

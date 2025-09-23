@@ -1,6 +1,6 @@
 import Foundation
 import PusherSwift
-
+import PaystackPusherWrapper
 struct PusherSubscriptionListener: SubscriptionListener {
 
     let pusher: Pusher
@@ -9,7 +9,7 @@ struct PusherSubscriptionListener: SubscriptionListener {
         let options = PusherClientOptions(
           host: .cluster("eu")
         )
-        self.pusher = Pusher(withAppKey: PusherSubscriptionListener.apiKey, options: options)
+        self.pusher = Pusher(withAppKey: PaystackPusherConfig.apiKey, options: options)
     }
 
     static private var apiKey: String {
@@ -57,13 +57,14 @@ struct PusherSubscriptionListener: SubscriptionListener {
         channel.bind(eventName: eventName, eventCallback: {
             guard let stringData = $0.data else {
                 subscriptionResponse(.failure(.noData))
+                pusher.unsubscribe($0.channelName ?? "")
                 pusher.disconnect()
                 return
             }
             print(channel.subscriptionCount ?? 0)
             subscriptionResponse(.success(stringData))
-            print(channel.name)
-            pusher.unsubscribe(channel.name)
+            pusher.unsubscribe($0.channelName ?? "")
+            pusher.disconnect()
         })
 
     }
