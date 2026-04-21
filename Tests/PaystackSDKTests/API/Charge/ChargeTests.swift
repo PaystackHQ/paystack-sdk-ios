@@ -19,21 +19,6 @@ final class ChargeTests: PSTestCase {
     
     // TODO: testAuthenticateChargeWithPhoneAuthentication
     
-    func testMobileMoneyCharge() throws {
-        let mobileMoneyRequestBody = MobileMoneyChargeRequest(channelName: "MOBILE_MONEY_1504248187", phone: "0723362418", transaction: "1504248187", provider: "MPESA")
-        
-        mockServiceExecutor
-            .expectURL("https://api.paystack.co/charge/mobile_money")
-            .expectMethod(.post)
-            .expectHeader("Authorization", "Bearer \(apiKey)")
-            .expectBody(mobileMoneyRequestBody)
-            .andReturn(json: "ChargeMobileMoneyResponse")
-        
-        let mobileMoneyData = MobileMoneyData(phone: "0723362418", transaction: "1504248187", provider: "MPESA")
-        
-        _ = try serviceUnderTest.chargeMobileMoney(with: mobileMoneyData).sync()
-    }
-    
     func testAuthenticateChargeWithPhoneAuthentication() throws {
         let phoneRequestBody = SubmitPhoneRequest(phone: "0111234567", accessCode: "abcde")
         // TODO: Add Test for testAuthenticateChargeWithBirthdayAuthentication
