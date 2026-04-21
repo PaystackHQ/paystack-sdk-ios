@@ -21,16 +21,16 @@ struct MPesaChargeView: View {
             LoadingView(message: message)
         case .error(let chargeError):
             ErrorView(message: chargeError.message,
-                      automaticallyDismissWith: .init(
-                        error: chargeError,
-                        transactionReference: viewModel.transactionDetails.reference))
+                      buttonText: "Try again",
+                      buttonAction: viewModel.restartMPesaPayment)
         case .fatalError(let error):
             ErrorView(message: error.message,
                       automaticallyDismissWith: .init(
                         error: error,
                         transactionReference: viewModel.transactionDetails.reference))
         case .processTransaction(let transaction):
-            MPesaProcessingView(chargeCardContainer: viewModel.chargeCardContainer, transactionDetails: viewModel.transactionDetails, mobileMoneyTransaction: transaction)
+            MPesaProcessingView(container: viewModel,
+                                mobileMoneyTransaction: transaction)
         case .countdown:
             VStack(spacing: .triplePadding) {
 

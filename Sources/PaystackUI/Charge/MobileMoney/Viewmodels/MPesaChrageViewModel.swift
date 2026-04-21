@@ -1,7 +1,14 @@
 import Foundation
 import PaystackCore
 
-class MPesaChrageViewModel: ObservableObject {
+protocol MPesaContainer {
+    var transactionDetails: VerifyAccessCode { get }
+    func processTransactionResponse(_ response: ChargeCardTransaction) async
+    func displayTransactionError(_ error: ChargeError)
+    func restartMPesaPayment()
+}
+
+class MPesaChrageViewModel: ObservableObject, @MainActor MPesaContainer {
 
     var chargeCardContainer: ChargeContainer
     var repository: ChargeMobileMoneyRepository
@@ -27,14 +34,45 @@ class MPesaChrageViewModel: ObservableObject {
     @MainActor
     func submitPhoneNumber() async {
         do {
-            let authenticationResult = try await repository.chargeMobileMoney(phone: phoneNumber, transactionId: "\(transactionDetails.transactionId ?? 0)", provider: transactionDetails.channelOptions?.mobileMoney?.first?.key ?? "")
+            let authenticationResult = try await repository.chargeMobileMoney(
+                phone: phoneNumber,
+                transactionId: "\(transactionDetails.transactionId ?? 0)",
+                provider: transactionDetails.channelOptions?.mobileMoney?.first?.key ?? "")
             transactionState = .processTransaction(transaction: authenticationResult)
         } catch {
-            let chargeError = ChargeError(error: error)
-            transactionState = .error(chargeError)
-            Logger.error("Submitting your phone number failed with error: %@",
-                         arguments: error.localizedDescription)
+            displayTransactionError(ChargeError(error: error))
         }
+    }
+
+    func restartMPesaPayment() {
+        transactionState = .countdown
+    }
+
+    @MainActor
+    func processTransactionResponse(_ response: ChargeCardTransaction) async {
+        switch response.status {
+        case .success:
+            chargeCardContainer.processSuccessfulTransaction(details: transactionDetails)
+        case .failed:
+            let message = response.message ?? response.displayText ?? "Declined"
+            transactionState = .error(ChargeError(message: message))
+        case .timeout:
+            let message = response.displayText ?? "Payment timed out"
+            transactionState = .fatalError(error: .init(message: message))
+        case .pending:
+            break
+        default:
+            Logger.error("Unexpected M-Pesa transaction status: %@",
+                         arguments: response.status.rawValue)
+            transactionState = .fatalError(
+                error: .generic(withCause: "Unexpected transaction status: \(response.status.rawValue)"))
+        }
+    }
+
+    @MainActor
+    func displayTransactionError(_ error: ChargeError) {
+        Logger.error("Displaying error: %@", arguments: error.localizedDescription)
+        transactionState = .error(error)
     }
 
     func cancelTransaction() {

@@ -1,21 +1,24 @@
 import Foundation
+import PaystackCore
+
 class MPesaProcessingViewModel: ObservableObject {
 
-    var chargeCardContainer: ChargeContainer
+    var container: MPesaContainer
     var repository: ChargeMobileMoneyRepository
-    var transactionDetails: VerifyAccessCode
     let mobileMoneyTransaction: MobileMoneyTransaction
     @Published
     var counter = 0
 
-    init(transactionDetails: VerifyAccessCode,
-         chargeCardContainer: ChargeContainer,
+    init(container: MPesaContainer,
          mobileMoneyTransaction: MobileMoneyTransaction,
          repository: ChargeMobileMoneyRepository = ChargeMobileMoneyRepositoryImplementation()) {
-        self.transactionDetails = transactionDetails
-        self.chargeCardContainer = chargeCardContainer
+        self.container = container
         self.repository = repository
         self.mobileMoneyTransaction = mobileMoneyTransaction
+    }
+
+    var transactionDetails: VerifyAccessCode {
+        container.transactionDetails
     }
 
     func checkTransactionStatus() {
@@ -27,37 +30,31 @@ class MPesaProcessingViewModel: ObservableObject {
     @MainActor
     func initializeMPesaAuthorization() async {
         do {
-            let authenticationResult = try await repository.listenForMPesa(for: Int( mobileMoneyTransaction.transaction) ?? 0)
-
-            if authenticationResult.status == .success {
-                chargeCardContainer.processSuccessfulTransaction(details: transactionDetails)
-            } else {
-                print(authenticationResult.status.rawValue)
-            }
+            let authenticationResult = try await repository.listenForMPesa(
+                for: Int(mobileMoneyTransaction.transaction) ?? 0)
+            await container.processTransactionResponse(authenticationResult)
         } catch {
-            let error = ChargeError(error: error)
-            //chargeCardContainer.displayTransactionError(error)
+            Logger.error("Listening for M-Pesa transaction failed with error: %@",
+                         arguments: error.localizedDescription)
+            container.displayTransactionError(ChargeError(error: error))
         }
     }
 
     @MainActor
     private func checkPendingCharge() async {
         do {
-            // chargeCardState = .loading(message: "Checking transaction status")
-            // try await Task.sleep(nanoseconds: checkPendingChargeDelay)
             let authenticationResult = try await repository.checkPendingCharge(
                 with: transactionDetails.accessCode)
-            if authenticationResult.status == .success {
-                chargeCardContainer.processSuccessfulTransaction(details: transactionDetails)
-            }
+            await container.processTransactionResponse(authenticationResult)
         } catch {
-            let error = ChargeError(error: error)
-            // displayTransactionError(error)
+            Logger.error("Checking pending M-Pesa charge failed with error: %@",
+                         arguments: error.localizedDescription)
+            container.displayTransactionError(ChargeError(error: error))
         }
     }
 
     func cancelTransaction() {
-        // chargeCardContainer.restartCardPayment()
+        container.restartMPesaPayment()
     }
 
 }

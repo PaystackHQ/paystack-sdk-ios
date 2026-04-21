@@ -6,12 +6,11 @@ struct MPesaProcessingView: View {
     @StateObject
     var viewModel: MPesaProcessingViewModel
 
-    init(chargeCardContainer: ChargeContainer,
-         transactionDetails: VerifyAccessCode,
+    init(container: MPesaContainer,
          mobileMoneyTransaction: MobileMoneyTransaction) {
-        self._viewModel = StateObject(wrappedValue: MPesaProcessingViewModel(transactionDetails: transactionDetails,
-                                                                             chargeCardContainer: chargeCardContainer,
-                                                                             mobileMoneyTransaction: mobileMoneyTransaction))
+        self._viewModel = StateObject(wrappedValue: MPesaProcessingViewModel(
+            container: container,
+            mobileMoneyTransaction: mobileMoneyTransaction))
     }
 
     var body: some View {
