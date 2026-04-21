@@ -1,7 +1,7 @@
 import Foundation
 import PaystackCore
 
-class ChargeCardViewModel: ObservableObject, ChargeCardContainer {
+class ChargeCardViewModel: ObservableObject, @MainActor ChargeCardContainer {
 
     @Published
     var chargeCardState: ChargeCardState

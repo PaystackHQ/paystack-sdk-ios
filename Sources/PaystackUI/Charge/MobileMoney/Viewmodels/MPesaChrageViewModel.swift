@@ -76,7 +76,7 @@ class MPesaChrageViewModel: ObservableObject, @MainActor MPesaContainer {
     }
 
     func cancelTransaction() {
-       // TODO: cancel transaction code
+       restartMPesaPayment()
     }
 }
 
