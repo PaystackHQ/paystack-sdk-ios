@@ -5,16 +5,16 @@ on:
 
 jobs:
   deploy:
-    runs-on: macos-latest
+    runs-on: macos-15
     name: Deploy to Cocoapods Trunk
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
     - name: Select Xcode Version
-      uses: maxim-lobanov/setup-xcode@v1
+      uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1.7.0
       with:
-        xcode-version: '15.3.0'
+        xcode-version: '26.3'
 
     - name: Setup environment
       run: |
@@ -22,10 +22,10 @@ jobs:
 
     - name: Build and Run tests
       run: |
-        xcodebuild clean build test -scheme PaystackSDK-Package -sdk iphonesimulator17.4 -destination "OS=17.4,name=iPhone 15 Pro" -enableCodeCoverage YES CODE_SIGNING_REQUIRED=NO        
+        xcodebuild clean build test -scheme PaystackSDK-Package -sdk iphonesimulator26.2 -destination "OS=26.2,name=iPhone 17 Pro" -enableCodeCoverage YES CODE_SIGNING_REQUIRED=NO
 
     - name: setup-cocoapods
-      uses: maxim-lobanov/setup-cocoapods@v1
+      uses: maxim-lobanov/setup-cocoapods@8e97e1e98e6ccf42564fdf5622c8feec74199377 # v1.4.0
       with:
         version: 1.15.2
 
@@ -45,12 +45,12 @@ jobs:
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ env.version }}
-        release_name: ${{ env.version }}
+        name: ${{ env.version }}
         body: ${{ env.body }}
 
   Publish_Cocoapods:
@@ -58,9 +58,9 @@ jobs:
     needs: deploy
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-    - uses: ruby/setup-ruby@v1
+    - uses: ruby/setup-ruby@7372622e62b60b3cb750dcd2b9e32c247ffec26a # v1.302.0
       with:
           ruby-version: '3.2.2'
 
@@ -72,4 +72,3 @@ jobs:
         pod trunk push PaystackUI.podspec --allow-warnings
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        
