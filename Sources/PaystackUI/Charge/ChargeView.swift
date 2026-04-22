@@ -36,6 +36,10 @@ struct ChargeView: View {
             case .success(let amount, let merchant, let details):
                 ChargeSuccessView(amount: amount, merchant: merchant,
                                   completionDetails: details)
+            case .channelSelection(let transactionInformation, let supportedChannels):
+                ChannelSelectionView(state: $viewModel.transactionState,
+                                     supportedChannels: supportedChannels,
+                                     information: transactionInformation)
             }
 
             Spacer()
@@ -55,6 +59,8 @@ struct ChargeView: View {
         case .card(let transactionInformation):
             ChargeCardView(transactionDetails: transactionInformation,
                            chargeContainer: viewModel)
+        case .mobileMoney(transactionInformation: let transactionInformation):
+            MPesaChargeView(chargeCardContainer: viewModel, transactionDetails: transactionInformation)
         }
     }
 

@@ -14,6 +14,14 @@ post_install do |installer|
           project.targets.each do |target|
               target.build_configurations.each do |config|
                   config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+
+                  # Expose TweetNacl's `CTweetNacl` C submodule to every pod target.
+                  # Without this, Xcode 16+/Swift 6 explicit-module builds fail to
+                  # resolve `CTweetNacl` when PusherSwift (transitively) imports TweetNacl.
+                  existing = config.build_settings['SWIFT_INCLUDE_PATHS'] || '$(inherited)'
+                  unless existing.include?('TweetNacl/Sources')
+                      config.build_settings['SWIFT_INCLUDE_PATHS'] = "#{existing} \"${PODS_ROOT}/TweetNacl/Sources\""
+                  end
                end
           end
    end

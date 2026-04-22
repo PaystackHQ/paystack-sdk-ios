@@ -13,10 +13,19 @@ final class ChargeViewModelTests: PSTestCase {
     }
 
     func testVerifyAccessCodeSetsViewStateAsCardDetailsWhenSuccessful() async {
-        mockRepo.expectedVerifyAccessCode = .example
+        let cardOnlyAccessCode = VerifyAccessCode(amount: 10000,
+                                                  currency: "USD",
+                                                  accessCode: "test_access",
+                                                  paymentChannels: [.card],
+                                                  domain: .test,
+                                                  merchantName: "Test Merchant",
+                                                  publicEncryptionKey: "test_encryption_key",
+                                                  reference: "test_reference",
+                                                  channelOptions: nil)
+        mockRepo.expectedVerifyAccessCode = cardOnlyAccessCode
         await serviceUnderTest.verifyAccessCodeAndProceedWithCard()
         XCTAssertEqual(serviceUnderTest.transactionState,
-                       .payment(type: .card(transactionInformation: .example)))
+                       .payment(type: .card(transactionInformation: cardOnlyAccessCode)))
     }
 
     func testVerifyAccessCodeSetsViewStateAsErrorWhenUnsuccessful() async {
@@ -35,7 +44,7 @@ final class ChargeViewModelTests: PSTestCase {
                                                   domain: .test,
                                                   merchantName: "Test Merchant",
                                                   publicEncryptionKey: "test_encryption_key",
-                                                  reference: "test_reference")
+                                                  reference: "test_reference", channelOptions: .example)
         await serviceUnderTest.verifyAccessCodeAndProceedWithCard()
         XCTAssertEqual(serviceUnderTest.transactionState, .error(.init(message: expectedMessage)))
 
@@ -68,7 +77,7 @@ final class ChargeViewModelTests: PSTestCase {
                                                     paymentChannels: [], domain: .test,
                                                     merchantName: "Test Merchant",
                                                     publicEncryptionKey: "test_encryption_key",
-                                                    reference: "test_reference")
+                                                    reference: "test_reference", channelOptions: .example)
         XCTAssertTrue(serviceUnderTest.inTestMode)
     }
 
@@ -78,7 +87,7 @@ final class ChargeViewModelTests: PSTestCase {
                                                     paymentChannels: [], domain: .live,
                                                     merchantName: "Test Merchant",
                                                     publicEncryptionKey: "test_encryption_key",
-                                                    reference: "test_reference")
+                                                    reference: "test_reference", channelOptions: .example)
         XCTAssertFalse(serviceUnderTest.inTestMode)
     }
 

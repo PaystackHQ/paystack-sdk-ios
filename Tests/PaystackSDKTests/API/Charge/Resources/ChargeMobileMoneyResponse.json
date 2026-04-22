@@ -1,0 +1,15 @@
+{
+    "status": true,
+    "message": "Charge attempted",
+    "data": {
+        "transaction": "1504248187",
+        "phone": "0703362111",
+        "provider": "MPESA",
+        "channel_name": "MOBILE_MONEY_1504248187",
+        "display": {
+            "type": "pop",
+            "message": "Please complete authorization process on your mobile phone",
+            "timer": 60
+        }
+    }
+}

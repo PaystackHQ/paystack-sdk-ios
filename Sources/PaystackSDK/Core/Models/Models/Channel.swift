@@ -11,6 +11,7 @@ public enum Channel: String, Codable {
     case card = "card"
     case bank = "bank"
     case ussd = "ussd"
+    case mobileMoney = "mobile_money"
     case qr = "qr"
     case bankTransfer = "bank_transfer"
     case unsupportedChannel

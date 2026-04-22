@@ -8,7 +8,7 @@ public protocol PaystackService: URLRequestBuilderHelper {
 public extension PaystackService {
 
     var endpoint: String {
-        return "https://api.paystack.co/\(parentPath)"
+         return "https://api.paystack.co/\(parentPath)"
     }
 
     var bearerToken: String {
