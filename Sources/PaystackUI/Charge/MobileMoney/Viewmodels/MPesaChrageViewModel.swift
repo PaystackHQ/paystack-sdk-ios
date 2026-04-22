@@ -35,7 +35,7 @@ class MPesaChrageViewModel: ObservableObject, @MainActor MPesaContainer {
     func submitPhoneNumber() async {
         do {
             let authenticationResult = try await repository.chargeMobileMoney(
-                phone: phoneNumber,
+                phone: phoneNumber.formattedKenyanPhoneNumber,
                 transactionId: "\(transactionDetails.transactionId ?? 0)",
                 provider: transactionDetails.channelOptions?.mobileMoney?.first?.key ?? "")
             transactionState = .processTransaction(transaction: authenticationResult)

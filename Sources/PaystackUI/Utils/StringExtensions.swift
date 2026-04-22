@@ -11,4 +11,18 @@ extension String {
                                     timeZone: timeZone,
                                     from: self)
     }
+
+    var formattedKenyanPhoneNumber: String {
+        let trimmed = self.removingAllWhitespaces
+        if trimmed.hasPrefix("+254") {
+            return trimmed
+        }
+        if trimmed.hasPrefix("254") {
+            return "+" + trimmed
+        }
+        if trimmed.hasPrefix("0") {
+            return "+254" + trimmed.dropFirst()
+        }
+        return trimmed
+    }
 }

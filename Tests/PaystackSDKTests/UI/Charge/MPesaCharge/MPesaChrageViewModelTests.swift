@@ -57,9 +57,27 @@ final class MPesaChrageViewModelTests: XCTestCase {
         serviceUnderTest.phoneNumber = "0703362111"
         await serviceUnderTest.submitPhoneNumber()
 
-        XCTAssertEqual(mockRepository.chargeMobileMoneySubmitted.phone, "0703362111")
+        XCTAssertEqual(mockRepository.chargeMobileMoneySubmitted.phone, "+254703362111")
         XCTAssertEqual(mockRepository.chargeMobileMoneySubmitted.transactionId, "\(expectedTransactionId)")
         XCTAssertEqual(mockRepository.chargeMobileMoneySubmitted.provider, "MPESA")
+    }
+
+    func testSubmitPhoneNumberForwardsFormattedPhoneWhenStartsWith254() async {
+        mockRepository.expectedMobileMoneyTransaction = .mPesaExample
+
+        serviceUnderTest.phoneNumber = "254703362111"
+        await serviceUnderTest.submitPhoneNumber()
+
+        XCTAssertEqual(mockRepository.chargeMobileMoneySubmitted.phone, "+254703362111")
+    }
+
+    func testSubmitPhoneNumberForwardsPhoneUnchangedWhenAlreadyStartsWithPlus254() async {
+        mockRepository.expectedMobileMoneyTransaction = .mPesaExample
+
+        serviceUnderTest.phoneNumber = "+254703362111"
+        await serviceUnderTest.submitPhoneNumber()
+
+        XCTAssertEqual(mockRepository.chargeMobileMoneySubmitted.phone, "+254703362111")
     }
 
     func testSubmitPhoneNumberWithMissingTransactionIdDefaultsToZero() async {
