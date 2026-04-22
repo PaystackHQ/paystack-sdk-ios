@@ -35,10 +35,7 @@ jobs:
         echo "version=${version}" >> $GITHUB_ENV
         body=$(/usr/libexec/PlistBuddy -c "Print Description" ./Sources/PaystackSDK/Versioning/versions.plist)
         echo "body=${body}" >> $GITHUB_ENV
-        cd  Sources/PaystackSDK/Core/Service/Subscription
-        PLIST=secrets.plist
-        /usr/libexec/PlistBuddy -c "Set PUSHER_API_KEY $PUSH_TOKEN" $PLIST
-        cd ../../../../..
+        
       env:
         PUSH_TOKEN: ${{ secrets.PUSH_TOKEN }}
 
