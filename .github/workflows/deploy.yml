@@ -35,10 +35,6 @@ jobs:
         echo "version=${version}" >> $GITHUB_ENV
         body=$(/usr/libexec/PlistBuddy -c "Print Description" ./Sources/PaystackSDK/Versioning/versions.plist)
         echo "body=${body}" >> $GITHUB_ENV
-        
-      env:
-        PUSH_TOKEN: ${{ secrets.PUSH_TOKEN }}
-
 
     - name: Create Release
       id: create_release
