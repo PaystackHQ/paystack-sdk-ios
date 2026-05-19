@@ -10,9 +10,12 @@ struct MPesaChargeView: View {
 
     init(
          chargeCardContainer: ChargeContainer,
-         transactionDetails: VerifyAccessCode) {
+         transactionDetails: VerifyAccessCode,
+         provider: MobileMoneyChannel) {
         self._viewModel = StateObject(wrappedValue: MPesaChrageViewModel(
-            chargeCardContainer: chargeCardContainer, transactionDetails: transactionDetails))
+            chargeCardContainer: chargeCardContainer,
+            transactionDetails: transactionDetails,
+            provider: provider))
     }
 
     var body: some View {

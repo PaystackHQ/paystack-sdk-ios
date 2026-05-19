@@ -14,6 +14,7 @@ final class MPesaChrageViewModelTests: XCTestCase {
         mockRepository = MockChargeMobileMoneyRepository()
         serviceUnderTest = MPesaChrageViewModel(chargeCardContainer: mockChargeContainer,
                                                 transactionDetails: .example,
+                                                provider: .example,
                                                 repository: mockRepository)
     }
 
@@ -51,6 +52,7 @@ final class MPesaChrageViewModelTests: XCTestCase {
                                                   channelOptions: .example)
         serviceUnderTest = MPesaChrageViewModel(chargeCardContainer: mockChargeContainer,
                                                 transactionDetails: transactionDetails,
+                                                provider: .example,
                                                 repository: mockRepository)
         mockRepository.expectedMobileMoneyTransaction = .mPesaExample
 
@@ -89,26 +91,21 @@ final class MPesaChrageViewModelTests: XCTestCase {
         XCTAssertEqual(mockRepository.chargeMobileMoneySubmitted.transactionId, "0")
     }
 
-    func testSubmitPhoneNumberWithMissingChannelOptionsDefaultsToEmptyProvider() async {
-        let transactionDetails = VerifyAccessCode(amount: 10000,
-                                                  currency: "USD",
-                                                  accessCode: "test_access",
-                                                  paymentChannels: [.mobileMoney],
-                                                  domain: .live,
-                                                  merchantName: "Test Merchant",
-                                                  publicEncryptionKey: "test_encryption_key",
-                                                  reference: "test_reference",
-                                                  transactionId: 1,
-                                                  channelOptions: nil)
+    func testSubmitPhoneNumberForwardsTheInjectedProviderKeyEvenWhenNotMPesa() async {
+        let mtnProvider = MobileMoneyChannel(key: "MTN",
+                                             value: "MTN",
+                                             isNew: false,
+                                             phoneNumberRegex: "")
         serviceUnderTest = MPesaChrageViewModel(chargeCardContainer: mockChargeContainer,
-                                                transactionDetails: transactionDetails,
+                                                transactionDetails: .example,
+                                                provider: mtnProvider,
                                                 repository: mockRepository)
         mockRepository.expectedMobileMoneyTransaction = .mPesaExample
 
         serviceUnderTest.phoneNumber = "0703362111"
         await serviceUnderTest.submitPhoneNumber()
 
-        XCTAssertEqual(mockRepository.chargeMobileMoneySubmitted.provider, "")
+        XCTAssertEqual(mockRepository.chargeMobileMoneySubmitted.provider, "MTN")
     }
 
     func testSubmitPhoneNumberOnSuccessSetsStateToProcessTransaction() async {
