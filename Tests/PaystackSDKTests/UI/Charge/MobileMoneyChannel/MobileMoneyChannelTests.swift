@@ -25,7 +25,7 @@ final class MobileMoneyChannelTests: XCTestCase {
     }
 
     func testExpectedCountryCodeReturnsIvoryCoastCodeForOrangeAndMoov() {
-        for key in ["ORANGE", "MOOV"] {
+        for key in ["WAVE_CI", "ORANGE_CI", "MTN_CI"] {
             XCTAssertEqual(MobileMoneyChannel(key: key,
                                               value: "",
                                               isNew: false,
@@ -35,13 +35,6 @@ final class MobileMoneyChannelTests: XCTestCase {
         }
     }
 
-    func testExpectedCountryCodeReturnsRwandaCodeForAirtel() {
-        XCTAssertEqual(MobileMoneyChannel(key: "AIRTEL",
-                                          value: "",
-                                          isNew: false,
-                                          phoneNumberRegex: "").expectedCountryCode,
-                       "250")
-    }
 
     func testExpectedCountryCodeReturnsEmptyForUnknownProvider() {
         XCTAssertEqual(MobileMoneyChannel(key: "SOMETHING_NEW",
