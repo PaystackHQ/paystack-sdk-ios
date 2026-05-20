@@ -1,10 +1,10 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
-struct MPesaChargeView: View {
+struct MobileMoneyChargeView: View {
 
     @StateObject
-    var viewModel: MPesaChrageViewModel
+    var viewModel: MobileMoneyChargeViewModel
     private let phoneNumberMaximumLength = 15
     @State private var showPhoneNumberError = false
 
@@ -12,7 +12,7 @@ struct MPesaChargeView: View {
          chargeCardContainer: ChargeContainer,
          transactionDetails: VerifyAccessCode,
          provider: MobileMoneyChannel) {
-        self._viewModel = StateObject(wrappedValue: MPesaChrageViewModel(
+        self._viewModel = StateObject(wrappedValue: MobileMoneyChargeViewModel(
             chargeCardContainer: chargeCardContainer,
             transactionDetails: transactionDetails,
             provider: provider))
@@ -25,15 +25,15 @@ struct MPesaChargeView: View {
         case .error(let chargeError):
             ErrorView(message: chargeError.message,
                       buttonText: "Try again",
-                      buttonAction: viewModel.restartMPesaPayment)
+                      buttonAction: viewModel.restartMobileMoneyPayment)
         case .fatalError(let error):
             ErrorView(message: error.message,
                       automaticallyDismissWith: .init(
                         error: error,
                         transactionReference: viewModel.transactionDetails.reference))
         case .processTransaction(let transaction):
-            MPesaProcessingView(container: viewModel,
-                                mobileMoneyTransaction: transaction)
+            MobileMoneyProcessingView(container: viewModel,
+                                      mobileMoneyTransaction: transaction)
         case .countdown:
             VStack(spacing: .triplePadding) {
 
@@ -55,6 +55,7 @@ struct MPesaChargeView: View {
 
     @ViewBuilder
     var phoneNumber: some FormInputItemView {
+        
         TextFieldFormInputView(title: "Phone Number",
                                placeholder: "070 000 0000",
                                text: $viewModel.phoneNumber,
@@ -62,7 +63,7 @@ struct MPesaChargeView: View {
                                maxLength: phoneNumberMaximumLength,
                                inErrorState: $showPhoneNumberError,
                                defaultFocused: true,
-                               accessoryView: Image.kenyaFlagLogo)
+                               accessoryView: viewModel.provider.phoneInputAccessory)
         .minLength(10, errorMessage: "Invalid Phone Number")
     }
 }

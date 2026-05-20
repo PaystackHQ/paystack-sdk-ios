@@ -3,7 +3,7 @@ import PaystackCore
 
 protocol ChargeMobileMoneyRepository {
     func chargeMobileMoney(phone: String, transactionId: String, provider: String) async throws -> MobileMoneyTransaction
-    func listenForMPesa(for transactionId: Int) async throws -> ChargeCardTransaction
+    func listenForMobileMoneyResponse(for transactionId: Int) async throws -> ChargeCardTransaction
     func checkPendingCharge(with accessCode: String) async throws -> ChargeCardTransaction
 }
 
@@ -21,7 +21,7 @@ struct ChargeMobileMoneyRepositoryImplementation: ChargeMobileMoneyRepository {
         return MobileMoneyTransaction.from(response)
     }
 
-    func listenForMPesa(for transactionId: Int) async throws -> ChargeCardTransaction {
+    func listenForMobileMoneyResponse(for transactionId: Int) async throws -> ChargeCardTransaction {
         let response = try await paystack.listenForMobileMoneyResponse(for: transactionId).async()
         return ChargeCardTransaction.from(response)
     }

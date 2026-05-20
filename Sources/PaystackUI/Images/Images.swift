@@ -41,6 +41,11 @@ extension Image {
         Image("kenyaFlagLogo", bundle: .current)
             .frame(height: 16)
     }
+    
+    static var ghanaFlagLogo: some View {
+        Image("ghanaFlagLogo", bundle: .current)
+            .frame(height: 16)
+    }
 
     static var messageBubbleLogo: some View {
         Image("messageBubbleLogo", bundle: .current)

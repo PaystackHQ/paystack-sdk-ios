@@ -12,16 +12,20 @@ extension String {
                                     from: self)
     }
 
-    var formattedKenyanPhoneNumber: String {
+    func formatted(for provider: MobileMoneyChannel) -> String {
         let trimmed = self.removingAllWhitespaces
-        if trimmed.hasPrefix("+254") {
+        let countryCode = provider.expectedCountryCode
+
+        guard !countryCode.isEmpty else { return trimmed }
+
+        if trimmed.hasPrefix("+\(countryCode)") {
             return trimmed
         }
-        if trimmed.hasPrefix("254") {
+        if trimmed.hasPrefix(countryCode) {
             return "+" + trimmed
         }
         if trimmed.hasPrefix("0") {
-            return "+254" + trimmed.dropFirst()
+            return "+\(countryCode)" + trimmed.dropFirst()
         }
         return trimmed
     }
