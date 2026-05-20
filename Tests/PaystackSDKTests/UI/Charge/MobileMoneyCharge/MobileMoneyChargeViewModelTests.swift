@@ -2,9 +2,9 @@ import XCTest
 import PaystackCore
 @testable import PaystackUI
 
-final class MPesaChrageViewModelTests: XCTestCase {
+final class MobileMoneyChargeViewModelTests: XCTestCase {
 
-    var serviceUnderTest: MPesaChrageViewModel!
+    var serviceUnderTest: MobileMoneyChargeViewModel!
     var mockChargeContainer: MockChargeContainer!
     var mockRepository: MockChargeMobileMoneyRepository!
 
@@ -12,22 +12,52 @@ final class MPesaChrageViewModelTests: XCTestCase {
         try super.setUpWithError()
         mockChargeContainer = MockChargeContainer()
         mockRepository = MockChargeMobileMoneyRepository()
-        serviceUnderTest = MPesaChrageViewModel(chargeCardContainer: mockChargeContainer,
-                                                transactionDetails: .example,
-                                                provider: .example,
-                                                repository: mockRepository)
+        serviceUnderTest = MobileMoneyChargeViewModel(chargeCardContainer: mockChargeContainer,
+                                                      transactionDetails: .example,
+                                                      provider: .example,
+                                                      repository: mockRepository)
     }
 
     // MARK: - Phone number validation
 
-    func testIsValidReturnsFalseWhenPhoneNumberIsLessThanTenDigits() {
-        serviceUnderTest.phoneNumber = "012345678"
+    func testIsValidReturnsTrueWhenPhoneMatchesProviderRegex() {
+        // .example is MPESA: the regex requires +254 followed by 7xx or 11x.
+        // 0703... formats to +254703... which satisfies the 7([0-2]\d|...) branch.
+        serviceUnderTest.phoneNumber = "0703362111"
+        XCTAssertTrue(serviceUnderTest.isValid)
+    }
+
+    func testIsValidReturnsFalseWhenFormattedPhoneFailsProviderRegex() {
+        // Same provider (MPESA) but the formatted input (+254123456789) doesn't
+        // match the regex (first digit after +254 must be 7 or 1-then-1).
+        serviceUnderTest.phoneNumber = "0123456789"
         XCTAssertFalse(serviceUnderTest.isValid)
     }
 
-    func testIsValidReturnsTrueWhenPhoneNumberIsAtLeastTenDigits() {
-        serviceUnderTest.phoneNumber = "0123456789"
+    func testIsValidFallsBackToMinLengthWhenProviderHasNoRegex() {
+        let providerWithoutRegex = MobileMoneyChannel(key: "UNKNOWN",
+                                                      value: "Unknown",
+                                                      isNew: false,
+                                                      phoneNumberRegex: "")
+        serviceUnderTest = MobileMoneyChargeViewModel(chargeCardContainer: mockChargeContainer,
+                                                      transactionDetails: .example,
+                                                      provider: providerWithoutRegex,
+                                                      repository: mockRepository)
+        serviceUnderTest.phoneNumber = "0123456789" // 10 digits — passes minLength
         XCTAssertTrue(serviceUnderTest.isValid)
+    }
+
+    func testIsValidFallsBackToMinLengthAndFailsForShortInput() {
+        let providerWithoutRegex = MobileMoneyChannel(key: "UNKNOWN",
+                                                      value: "Unknown",
+                                                      isNew: false,
+                                                      phoneNumberRegex: "")
+        serviceUnderTest = MobileMoneyChargeViewModel(chargeCardContainer: mockChargeContainer,
+                                                      transactionDetails: .example,
+                                                      provider: providerWithoutRegex,
+                                                      repository: mockRepository)
+        serviceUnderTest.phoneNumber = "012345678" // 9 digits — fails minLength
+        XCTAssertFalse(serviceUnderTest.isValid)
     }
 
     // MARK: - Initial state
@@ -50,10 +80,10 @@ final class MPesaChrageViewModelTests: XCTestCase {
                                                   reference: "test_reference",
                                                   transactionId: expectedTransactionId,
                                                   channelOptions: .example)
-        serviceUnderTest = MPesaChrageViewModel(chargeCardContainer: mockChargeContainer,
-                                                transactionDetails: transactionDetails,
-                                                provider: .example,
-                                                repository: mockRepository)
+        serviceUnderTest = MobileMoneyChargeViewModel(chargeCardContainer: mockChargeContainer,
+                                                      transactionDetails: transactionDetails,
+                                                      provider: .example,
+                                                      repository: mockRepository)
         mockRepository.expectedMobileMoneyTransaction = .mPesaExample
 
         serviceUnderTest.phoneNumber = "0703362111"
@@ -96,10 +126,10 @@ final class MPesaChrageViewModelTests: XCTestCase {
                                              value: "MTN",
                                              isNew: false,
                                              phoneNumberRegex: "")
-        serviceUnderTest = MPesaChrageViewModel(chargeCardContainer: mockChargeContainer,
-                                                transactionDetails: .example,
-                                                provider: mtnProvider,
-                                                repository: mockRepository)
+        serviceUnderTest = MobileMoneyChargeViewModel(chargeCardContainer: mockChargeContainer,
+                                                      transactionDetails: .example,
+                                                      provider: mtnProvider,
+                                                      repository: mockRepository)
         mockRepository.expectedMobileMoneyTransaction = .mPesaExample
 
         serviceUnderTest.phoneNumber = "0703362111"
@@ -196,9 +226,9 @@ final class MPesaChrageViewModelTests: XCTestCase {
         XCTAssertEqual(serviceUnderTest.transactionState, .error(error))
     }
 
-    func testRestartMPesaPaymentResetsStateToCountdown() {
+    func testRestartMobileMoneyPaymentResetsStateToCountdown() {
         serviceUnderTest.transactionState = .error(.generic)
-        serviceUnderTest.restartMPesaPayment()
+        serviceUnderTest.restartMobileMoneyPayment()
         XCTAssertEqual(serviceUnderTest.transactionState, .countdown)
     }
 

@@ -41,7 +41,9 @@ enum SupportedChannel: Equatable, Identifiable {
     /// future provider lights up via the allowlist.
     private static func image(forMobileMoneyKey key: String) -> Image {
         switch key.uppercased() {
-        case "MPESA":
+        case "MPESA", "ATL_KE":
+            return Image("kenyaSHLogo", bundle: .current)
+        case "MTN", "ATL", "VOD":
             return Image("kenyaSHLogo", bundle: .current)
         default:
             return Image(systemName: "creditcard")

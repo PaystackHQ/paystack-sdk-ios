@@ -30,7 +30,7 @@ final class ChargeMobileMoneyRepositoryImplementationTests: PSTestCase {
         XCTAssertEqual(result, .jsonExample)
     }
 
-    func testListenForMPesaSubscribesToMobileMoneyChannelAndMapsSuccessToSuccess() async throws {
+    func testListenForMobileMoneyResponseSubscribesToMobileMoneyChannelAndMapsSuccessToSuccess() async throws {
         let transactionId = 1234
         let mockSubscription = PusherSubscription(channelName: "MOBILE_MONEY_\(transactionId)",
                                                   eventName: "response")
@@ -41,11 +41,11 @@ final class ChargeMobileMoneyRepositoryImplementationTests: PSTestCase {
             .expectSubscription(mockSubscription)
             .andReturnString(responseString)
 
-        let result = try await serviceUnderTest.listenForMPesa(for: transactionId)
+        let result = try await serviceUnderTest.listenForMobileMoneyResponse(for: transactionId)
         XCTAssertEqual(result, .init(status: .success))
     }
 
-    func testListenForMPesaMapsFailedSubscriptionResponseToFailedStatus() async throws {
+    func testListenForMobileMoneyResponseMapsFailedSubscriptionResponseToFailedStatus() async throws {
         let transactionId = 4321
         let mockSubscription = PusherSubscription(channelName: "MOBILE_MONEY_\(transactionId)",
                                                   eventName: "response")
@@ -56,7 +56,7 @@ final class ChargeMobileMoneyRepositoryImplementationTests: PSTestCase {
             .expectSubscription(mockSubscription)
             .andReturnString(responseString)
 
-        let result = try await serviceUnderTest.listenForMPesa(for: transactionId)
+        let result = try await serviceUnderTest.listenForMobileMoneyResponse(for: transactionId)
         XCTAssertEqual(result, .init(status: .failed))
     }
 

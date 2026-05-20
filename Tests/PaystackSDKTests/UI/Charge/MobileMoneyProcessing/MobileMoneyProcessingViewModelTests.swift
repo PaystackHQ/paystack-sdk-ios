@@ -2,62 +2,62 @@ import XCTest
 import PaystackCore
 @testable import PaystackUI
 
-final class MPesaProcessingViewModelTests: XCTestCase {
+final class MobileMoneyProcessingViewModelTests: XCTestCase {
 
-    var serviceUnderTest: MPesaProcessingViewModel!
-    var mockContainer: MockMPesaContainer!
+    var serviceUnderTest: MobileMoneyProcessingViewModel!
+    var mockContainer: MockMobileMoneyContainer!
     var mockRepository: MockChargeMobileMoneyRepository!
     var mobileMoneyTransaction: MobileMoneyTransaction!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        mockContainer = MockMPesaContainer()
+        mockContainer = MockMobileMoneyContainer()
         mockRepository = MockChargeMobileMoneyRepository()
         mobileMoneyTransaction = .mPesaExample
-        serviceUnderTest = MPesaProcessingViewModel(container: mockContainer,
-                                                    mobileMoneyTransaction: mobileMoneyTransaction,
-                                                    repository: mockRepository)
+        serviceUnderTest = MobileMoneyProcessingViewModel(container: mockContainer,
+                                                          mobileMoneyTransaction: mobileMoneyTransaction,
+                                                          repository: mockRepository)
     }
 
-    // MARK: - initializeMPesaAuthorization
+    // MARK: - initializeMobileMoneyAuthorization
 
-    func testInitializeMPesaAuthorizationForwardsTransactionIdToRepository() async {
+    func testInitializeMobileMoneyAuthorizationForwardsTransactionIdToRepository() async {
         mockRepository.expectedChargeCardTransaction = .example
-        await serviceUnderTest.initializeMPesaAuthorization()
-        XCTAssertEqual(mockRepository.listenForMPesaTransactionId, 1504248187)
+        await serviceUnderTest.initializeMobileMoneyAuthorization()
+        XCTAssertEqual(mockRepository.listenForMobileMoneyResponseTransactionId, 1504248187)
     }
 
-    func testInitializeMPesaAuthorizationWithNonNumericTransactionDefaultsToZero() async {
+    func testInitializeMobileMoneyAuthorizationWithNonNumericTransactionDefaultsToZero() async {
         mobileMoneyTransaction = MobileMoneyTransaction(transaction: "not-a-number",
                                                         phone: "0703362111",
                                                         provider: "MPESA",
                                                         channelName: "MOBILE_MONEY_x",
                                                         timer: 60,
                                                         message: "")
-        serviceUnderTest = MPesaProcessingViewModel(container: mockContainer,
-                                                    mobileMoneyTransaction: mobileMoneyTransaction,
-                                                    repository: mockRepository)
+        serviceUnderTest = MobileMoneyProcessingViewModel(container: mockContainer,
+                                                          mobileMoneyTransaction: mobileMoneyTransaction,
+                                                          repository: mockRepository)
         mockRepository.expectedChargeCardTransaction = .example
 
-        await serviceUnderTest.initializeMPesaAuthorization()
+        await serviceUnderTest.initializeMobileMoneyAuthorization()
 
-        XCTAssertEqual(mockRepository.listenForMPesaTransactionId, 0)
+        XCTAssertEqual(mockRepository.listenForMobileMoneyResponseTransactionId, 0)
     }
 
-    func testInitializeMPesaAuthorizationOnSuccessForwardsResponseToContainer() async {
+    func testInitializeMobileMoneyAuthorizationOnSuccessForwardsResponseToContainer() async {
         let expectedResponse = ChargeCardTransaction(status: .success)
         mockRepository.expectedChargeCardTransaction = expectedResponse
 
-        await serviceUnderTest.initializeMPesaAuthorization()
+        await serviceUnderTest.initializeMobileMoneyAuthorization()
 
         XCTAssertEqual(mockContainer.transactionResponse, expectedResponse)
     }
 
-    func testInitializeMPesaAuthorizationOnErrorForwardsErrorToContainer() async {
+    func testInitializeMobileMoneyAuthorizationOnErrorForwardsErrorToContainer() async {
         let expectedErrorMessage = "Subscription failed"
         mockRepository.expectedErrorResponse = PaystackError.response(code: 500, message: expectedErrorMessage)
 
-        await serviceUnderTest.initializeMPesaAuthorization()
+        await serviceUnderTest.initializeMobileMoneyAuthorization()
 
         XCTAssertEqual(mockContainer.transactionError, ChargeError(message: expectedErrorMessage))
     }
@@ -96,13 +96,41 @@ final class MPesaProcessingViewModelTests: XCTestCase {
 
     func testCancelTransactionAsksContainerToRestart() {
         serviceUnderTest.cancelTransaction()
-        XCTAssertTrue(mockContainer.mPesaPaymentRestarted)
+        XCTAssertTrue(mockContainer.mobileMoneyPaymentRestarted)
     }
 
     // MARK: - transactionDetails
 
     func testTransactionDetailsComesFromContainer() {
         XCTAssertEqual(serviceUnderTest.transactionDetails, mockContainer.transactionDetails)
+    }
+
+    // MARK: - authorizationPromptText
+
+    func testAuthorizationPromptTextUsesApiMessageWhenPresent() {
+        // mPesaExample carries `message: "Authorize on your device"` — the
+        // API copy should win over the SDK fallback even when the provider
+        // is set.
+        XCTAssertEqual(serviceUnderTest.authorizationPromptText,
+                       "Authorize on your device")
+    }
+
+    func testAuthorizationPromptTextFallsBackToProviderCopyWhenApiMessageEmpty() {
+        let transactionWithoutMessage = MobileMoneyTransaction(transaction: "1234",
+                                                               phone: "0703362111",
+                                                               provider: "MPESA",
+                                                               channelName: "MOBILE_MONEY_1234",
+                                                               timer: 60,
+                                                               message: "")
+        mockContainer.provider = MobileMoneyChannel(key: "MTN",
+                                                    value: "MTN",
+                                                    isNew: false,
+                                                    phoneNumberRegex: "")
+        serviceUnderTest = MobileMoneyProcessingViewModel(container: mockContainer,
+                                                          mobileMoneyTransaction: transactionWithoutMessage,
+                                                          repository: mockRepository)
+        XCTAssertEqual(serviceUnderTest.authorizationPromptText,
+                       "Please authorize the payment with MTN on your phone")
     }
 }
 

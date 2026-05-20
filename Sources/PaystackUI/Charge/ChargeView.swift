@@ -60,9 +60,9 @@ struct ChargeView: View {
             ChargeCardView(transactionDetails: transactionInformation,
                            chargeContainer: viewModel)
         case .mobileMoney(let transactionInformation, let provider):
-            MPesaChargeView(chargeCardContainer: viewModel,
-                            transactionDetails: transactionInformation,
-                            provider: provider)
+            MobileMoneyFlowFactory.view(for: provider,
+                                        chargeContainer: viewModel,
+                                        transactionDetails: transactionInformation)
         }
     }
 

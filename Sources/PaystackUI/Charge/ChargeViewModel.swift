@@ -98,7 +98,7 @@ extension ChargeViewModel {
     /// Add a new key here when you've added its logo to `SupportedChannel.image`
     /// and its country code / phone formatter to the relevant helpers.
     static var supportedMobileMoneyProviders: Set<String>? = [
-        "MPESA"
+        "MPESA", "ATL_KE", "MTN", "ATL", "VOD"
     ]
 }
 

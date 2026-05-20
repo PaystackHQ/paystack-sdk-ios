@@ -1,14 +1,15 @@
 import Foundation
 import PaystackCore
 
-protocol MPesaContainer {
+protocol MobileMoneyContainer {
     var transactionDetails: VerifyAccessCode { get }
+    var provider: MobileMoneyChannel { get }
     func processTransactionResponse(_ response: ChargeCardTransaction) async
     func displayTransactionError(_ error: ChargeError)
-    func restartMPesaPayment()
+    func restartMobileMoneyPayment()
 }
 
-class MPesaChrageViewModel: ObservableObject, @MainActor MPesaContainer {
+class MobileMoneyChargeViewModel: ObservableObject, @MainActor MobileMoneyContainer {
 
     var chargeCardContainer: ChargeContainer
     var repository: ChargeMobileMoneyRepository
@@ -31,14 +32,20 @@ class MPesaChrageViewModel: ObservableObject, @MainActor MPesaContainer {
     }
 
     var isValid: Bool {
-        phoneNumber.count >= 10
+        if !provider.phoneNumberRegex.isEmpty,
+           let regex = try? NSRegularExpression(pattern: provider.phoneNumberRegex) {
+            let formatted = phoneNumber.formatted(for: provider)
+            let range = NSRange(location: 0, length: formatted.utf16.count)
+            return regex.firstMatch(in: formatted, range: range) != nil
+        }
+        return phoneNumber.count >= 10
     }
 
     @MainActor
     func submitPhoneNumber() async {
         do {
             let authenticationResult = try await repository.chargeMobileMoney(
-                phone: phoneNumber.formattedKenyanPhoneNumber,
+                phone: phoneNumber.formatted(for: provider),
                 transactionId: "\(transactionDetails.transactionId ?? 0)",
                 provider: provider.key)
             transactionState = .processTransaction(transaction: authenticationResult)
@@ -47,7 +54,7 @@ class MPesaChrageViewModel: ObservableObject, @MainActor MPesaContainer {
         }
     }
 
-    func restartMPesaPayment() {
+    func restartMobileMoneyPayment() {
         transactionState = .countdown
     }
 
@@ -65,7 +72,7 @@ class MPesaChrageViewModel: ObservableObject, @MainActor MPesaContainer {
         case .pending:
             break
         default:
-            Logger.error("Unexpected M-Pesa transaction status: %@",
+            Logger.error("Unexpected mobile money transaction status: %@",
                          arguments: response.status.rawValue)
             transactionState = .fatalError(
                 error: .generic(withCause: "Unexpected transaction status: \(response.status.rawValue)"))
@@ -79,7 +86,7 @@ class MPesaChrageViewModel: ObservableObject, @MainActor MPesaContainer {
     }
 
     func cancelTransaction() {
-       restartMPesaPayment()
+       restartMobileMoneyPayment()
     }
 }
 
