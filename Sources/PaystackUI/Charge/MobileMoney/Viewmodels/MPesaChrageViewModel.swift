@@ -13,6 +13,7 @@ class MPesaChrageViewModel: ObservableObject, @MainActor MPesaContainer {
     var chargeCardContainer: ChargeContainer
     var repository: ChargeMobileMoneyRepository
     var transactionDetails: VerifyAccessCode
+    let provider: MobileMoneyChannel
     @Published
     var phoneNumber: String = ""
 
@@ -21,10 +22,12 @@ class MPesaChrageViewModel: ObservableObject, @MainActor MPesaContainer {
 
     init(chargeCardContainer: ChargeContainer,
          transactionDetails: VerifyAccessCode,
+         provider: MobileMoneyChannel,
          repository: ChargeMobileMoneyRepository = ChargeMobileMoneyRepositoryImplementation()) {
         self.chargeCardContainer = chargeCardContainer
         self.repository = repository
         self.transactionDetails = transactionDetails
+        self.provider = provider
     }
 
     var isValid: Bool {
@@ -37,7 +40,7 @@ class MPesaChrageViewModel: ObservableObject, @MainActor MPesaContainer {
             let authenticationResult = try await repository.chargeMobileMoney(
                 phone: phoneNumber.formattedKenyanPhoneNumber,
                 transactionId: "\(transactionDetails.transactionId ?? 0)",
-                provider: transactionDetails.channelOptions?.mobileMoney?.first?.key ?? "")
+                provider: provider.key)
             transactionState = .processTransaction(transaction: authenticationResult)
         } catch {
             displayTransactionError(ChargeError(error: error))
