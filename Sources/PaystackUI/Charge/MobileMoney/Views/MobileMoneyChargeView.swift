@@ -37,7 +37,7 @@ struct MobileMoneyChargeView: View {
         case .countdown:
             VStack(spacing: .triplePadding) {
 
-                Text("Please enter your mobile money number to begin this payment")
+                Text("Please enter the mobile money number to begin this payment")
                     .font(.body16M)
                     .foregroundColor(.stackBlue)
                     .multilineTextAlignment(.center)
