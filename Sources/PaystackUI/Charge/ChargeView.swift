@@ -48,7 +48,7 @@ struct ChargeView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 140)
         }
-        .task(viewModel.verifyAccessCodeAndProceedWithCard)
+        .task(viewModel.verifyAccessCodeAndProceed)
         .modalCancelButton(showConfirmation: viewModel.displayCloseButtonConfirmation,
                            onCancelled: chargeCancelled)
     }
@@ -59,8 +59,10 @@ struct ChargeView: View {
         case .card(let transactionInformation):
             ChargeCardView(transactionDetails: transactionInformation,
                            chargeContainer: viewModel)
-        case .mobileMoney(transactionInformation: let transactionInformation):
-            MPesaChargeView(chargeCardContainer: viewModel, transactionDetails: transactionInformation)
+        case .mobileMoney(let transactionInformation, let provider):
+            MobileMoneyFlowFactory.view(for: provider,
+                                        chargeContainer: viewModel,
+                                        transactionDetails: transactionInformation)
         }
     }
 

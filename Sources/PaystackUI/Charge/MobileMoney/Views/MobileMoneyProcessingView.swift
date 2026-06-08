@@ -1,14 +1,14 @@
 import SwiftUI
 
 @available(iOS 14.0, *)
-struct MPesaProcessingView: View {
+struct MobileMoneyProcessingView: View {
 
     @StateObject
-    var viewModel: MPesaProcessingViewModel
+    var viewModel: MobileMoneyProcessingViewModel
 
-    init(container: MPesaContainer,
+    init(container: MobileMoneyContainer,
          mobileMoneyTransaction: MobileMoneyTransaction) {
-        self._viewModel = StateObject(wrappedValue: MPesaProcessingViewModel(
+        self._viewModel = StateObject(wrappedValue: MobileMoneyProcessingViewModel(
             container: container,
             mobileMoneyTransaction: mobileMoneyTransaction))
     }
@@ -23,7 +23,7 @@ struct MPesaProcessingView: View {
                 .foregroundColor(.stackBlue)
                 .multilineTextAlignment(.center)
 
-            Text("Please enter your pin on your phone to complete this payment")
+            Text(viewModel.authorizationPromptText)
                 .font(.body16M)
                 .foregroundColor(.stackBlue)
                 .multilineTextAlignment(.center)
@@ -33,7 +33,7 @@ struct MPesaProcessingView: View {
                           action: viewModel.checkTransactionStatus)
         }
         .padding(.doublePadding)
-        .task(viewModel.initializeMPesaAuthorization)
+        .task(viewModel.initializeMobileMoneyAuthorization)
     }
 }
 

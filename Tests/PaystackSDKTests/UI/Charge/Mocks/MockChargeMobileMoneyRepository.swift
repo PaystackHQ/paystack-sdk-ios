@@ -9,7 +9,7 @@ class MockChargeMobileMoneyRepository: ChargeMobileMoneyRepository {
 
     var chargeMobileMoneySubmitted: (phone: String, transactionId: String,
                                      provider: String) = ("", "", "")
-    var listenForMPesaTransactionId: Int?
+    var listenForMobileMoneyResponseTransactionId: Int?
     var pendingChargeAccessCode: String?
 
     func chargeMobileMoney(phone: String, transactionId: String,
@@ -21,8 +21,8 @@ class MockChargeMobileMoneyRepository: ChargeMobileMoneyRepository {
         return response
     }
 
-    func listenForMPesa(for transactionId: Int) async throws -> ChargeCardTransaction {
-        listenForMPesaTransactionId = transactionId
+    func listenForMobileMoneyResponse(for transactionId: Int) async throws -> ChargeCardTransaction {
+        listenForMobileMoneyResponseTransactionId = transactionId
         guard let response = expectedChargeCardTransaction else {
             throw expectedErrorResponse ?? MockError.stubNotProvided
         }

@@ -19,37 +19,22 @@ class ChargeViewModel: ObservableObject {
     }
 
     @MainActor
-    func verifyAccessCodeAndProceedWithCard() async {
-        var supportedChannels: [SupportedChannels] = []
+    func verifyAccessCodeAndProceed() async {
         do {
             transactionState = .loading()
-            let accessCodeResponse = try await repository.verifyAccessCode(accessCode)
-            guard accessCodeResponse.paymentChannels.contains(where: { $0 == .card || $0 == .mobileMoney }) else {
-                let message = "Card/MPesa payments are not supported. " +
+            let response = try await repository.verifyAccessCode(accessCode)
+            let supported = resolveSupportedChannels(from: response)
+
+            guard !supported.isEmpty else {
+                let message = "No supported payment methods. " +
                 "Please reach out to your merchant for further information"
-                let cause = "There are currently no payment channels on " +
-                "your integration that are supported by the SDK"
+                let cause = "No payment channels on this integration " +
+                "are supported by the SDK"
                 throw ChargeError(displayMessage: message, causeMessage: cause)
             }
 
-            let mobileMoneyChannel = accessCodeResponse.channelOptions?.mobileMoney?.contains(where: { $0.key == SupportedChannels.MPESA.rawValue }) ?? false
-
-            accessCodeResponse.paymentChannels.forEach {
-                if $0 == .card {
-                    supportedChannels.append(.CARD)
-                }
-                if $0 == .mobileMoney && accessCodeResponse.channelOptions?.mobileMoney?.contains(where: { $0.key == SupportedChannels.MPESA.rawValue }) ?? false {
-                    supportedChannels.append(.MPESA)
-                }
-            }
-
-            if mobileMoneyChannel {
-                transactionState = .channelSelection(
-                    transactionInformation: accessCodeResponse, supportedChannels: supportedChannels)
-            } else {
-                self.transactionDetails = accessCodeResponse
-                transactionState = .payment(type: .card(transactionInformation: accessCodeResponse))
-            }
+            transactionDetails = response
+            transactionState = nextState(for: supported, response: response)
         } catch {
             let error = ChargeError(error: error)
             Logger.error("Verify access code failed with error: %@",
@@ -59,24 +44,62 @@ class ChargeViewModel: ObservableObject {
         }
     }
 
-}
+    private func resolveSupportedChannels(from response: VerifyAccessCode) -> [SupportedChannel] {
+        var result: [SupportedChannel] = []
 
-enum SupportedChannels: String, CaseIterable {
-    case CARD = "CARD"
-    case MPESA = "MPESA"
-    case unsupportedChannel
-
-    var image: Image {
-        switch self {
-        case .CARD:
-            return Image("cardLogo", bundle: .current)
-        case .MPESA:
-            return Image("kenyaSHLogo", bundle: .current)
-        case .unsupportedChannel:
-            return   Image(systemName: "exclamationmark.triangle.fill")
+        if response.paymentChannels.contains(.card) {
+            result.append(.card)
         }
+
+        if response.paymentChannels.contains(.mobileMoney),
+           let providers = response.channelOptions?.mobileMoney, !providers.isEmpty {
+            let allowed = filtered(providers)
+            result.append(contentsOf: allowed.map { .mobileMoney($0) })
+        }
+
+        return result
     }
 
+    private func filtered(_ providers: [MobileMoneyChannel]) -> [MobileMoneyChannel] {
+        guard let allowlist = Self.supportedMobileMoneyProviders else {
+            return providers
+        }
+        return providers.filter { allowlist.contains($0.key.uppercased()) }
+    }
+
+    private func nextState(for channels: [SupportedChannel],
+                           response: VerifyAccessCode) -> ChargeState {
+        if channels.count == 1, case .card = channels[0] {
+            return .payment(type: .card(transactionInformation: response))
+        }
+
+        if !channels.contains(.card),
+           channels.count == 1,
+           case .mobileMoney(let provider) = channels[0] {
+            return .payment(type: .mobileMoney(transactionInformation: response,
+                                               provider: provider))
+        }
+
+        return .channelSelection(transactionInformation: response,
+                                 supportedChannels: channels)
+    }
+
+}
+
+// MARK: - Mobile money provider allowlist
+extension ChargeViewModel {
+
+    /// Mobile money provider keys (`MobileMoneyChannel.key`, uppercased) that
+    /// the SDK is allowed to route to. The API may return providers we don't
+    /// yet have logos, copy, or phone formatters for — listing them here is
+    /// what opts them into the UI.
+    ///
+    /// Set to `nil` to accept every provider the API returns (no filtering).
+    /// Add a new key here when you've added its logo to `SupportedChannel.image`
+    /// and its country code / phone formatter to the relevant helpers.
+    static var supportedMobileMoneyProviders: Set<String>? = [
+        "MPESA", "ATL_KE", "MTN", "ATL", "VOD"
+    ]
 }
 
 // MARK: - Charge Container

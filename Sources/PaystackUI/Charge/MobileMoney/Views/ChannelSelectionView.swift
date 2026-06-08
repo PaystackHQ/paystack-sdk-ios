@@ -14,15 +14,14 @@ struct ChannelSelectionView: View {
     var visibilityContainer: ViewVisibilityContainer
     @StateObject
     var viewModel: ChannelSelectionViewModel
+    let supportedChannels: [SupportedChannel]
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
-    var items: [PaymentChannel] = []
+
     init(state: Binding<ChargeState>,
-         supportedChannels: [SupportedChannels],
+         supportedChannels: [SupportedChannel],
          information: VerifyAccessCode) {
         self._viewModel = StateObject(wrappedValue: ChannelSelectionViewModel(state: state, information: information))
-        items = supportedChannels.map {
-            PaymentChannel(channel: $0)
-        }
+        self.supportedChannels = supportedChannels
     }
 
     var body: some View {
@@ -35,13 +34,13 @@ struct ChannelSelectionView: View {
                     .multilineTextAlignment(.center)
                 GeometryReader { geo in
                     LazyVGrid(columns: columns) {
-                        ForEach(items) { value in
-                            ChannelView(channelTitle: value.title, image: value.image)
+                        ForEach(supportedChannels) { channel in
+                            ChannelView(channelTitle: channel.displayTitle, image: channel.image)
                                 .padding(.singlePadding)
                                 .onTapGesture {
-                                    viewModel.chooseChannel(channel: value.channel)
+                                    viewModel.choose(channel)
                                 }
-                                .frame(width: (geo.size.width / CGFloat(items.count)).rounded())
+                                .frame(width: (geo.size.width / CGFloat(supportedChannels.count)).rounded())
                         }
                     }
                 }
@@ -59,31 +58,14 @@ class ChannelSelectionViewModel: ObservableObject {
         self.information = information
     }
 
-    func chooseChannel(channel: SupportedChannels) {
-        let message = "Card/MPesa payments are not supported. " +
-        "Please reach out to your merchant for further information"
-        let cause = "There are currently no payment channels on " +
-        "your integration that are supported by the SDK"
+    func choose(_ channel: SupportedChannel) {
         switch channel {
-        case .CARD:
+        case .card:
             state = .payment(type: .card(transactionInformation: self.information))
-        case .MPESA:
-            state = .payment(type: .mobileMoney(transactionInformation: self.information))
-        case .unsupportedChannel:
-            state = .error(ChargeError(displayMessage: message, causeMessage: cause))
+        case .mobileMoney(let provider):
+            state = .payment(type: .mobileMoney(transactionInformation: self.information,
+                                                provider: provider))
         }
-
-    }
-}
-
-struct PaymentChannel: Identifiable {
-    var id: String = UUID().uuidString
-    let channel: SupportedChannels
-    var title: String {
-        channel.rawValue
-    }
-    var image: Image {
-        channel.image
     }
 }
 

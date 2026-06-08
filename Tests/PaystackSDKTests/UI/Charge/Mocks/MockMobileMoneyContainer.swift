@@ -1,11 +1,12 @@
 import Foundation
 @testable import PaystackUI
 
-class MockMPesaContainer: MPesaContainer {
+class MockMobileMoneyContainer: MobileMoneyContainer {
 
     var transactionDetails: VerifyAccessCode = .example
+    var provider: MobileMoneyChannel = .example
 
-    var mPesaPaymentRestarted = false
+    var mobileMoneyPaymentRestarted = false
     var transactionResponse: ChargeCardTransaction?
     var transactionError: ChargeError?
 
@@ -22,7 +23,7 @@ class MockMPesaContainer: MPesaContainer {
         onDisplayTransactionError?()
     }
 
-    func restartMPesaPayment() {
-        mPesaPaymentRestarted = true
+    func restartMobileMoneyPayment() {
+        mobileMoneyPaymentRestarted = true
     }
 }

@@ -1,15 +1,15 @@
 import Foundation
 import PaystackCore
 
-class MPesaProcessingViewModel: ObservableObject {
+class MobileMoneyProcessingViewModel: ObservableObject {
 
-    var container: MPesaContainer
+    var container: MobileMoneyContainer
     var repository: ChargeMobileMoneyRepository
     let mobileMoneyTransaction: MobileMoneyTransaction
     @Published
     var counter = 0
 
-    init(container: MPesaContainer,
+    init(container: MobileMoneyContainer,
          mobileMoneyTransaction: MobileMoneyTransaction,
          repository: ChargeMobileMoneyRepository = ChargeMobileMoneyRepositoryImplementation()) {
         self.container = container
@@ -21,6 +21,13 @@ class MPesaProcessingViewModel: ObservableObject {
         container.transactionDetails
     }
 
+    var authorizationPromptText: String {
+        if !mobileMoneyTransaction.message.isEmpty {
+            return mobileMoneyTransaction.message
+        }
+        return "Please authorize the payment with \(container.provider.value) on your phone"
+    }
+
     func checkTransactionStatus() {
         Task {
             await checkPendingCharge()
@@ -28,13 +35,13 @@ class MPesaProcessingViewModel: ObservableObject {
     }
 
     @MainActor
-    func initializeMPesaAuthorization() async {
+    func initializeMobileMoneyAuthorization() async {
         do {
-            let authenticationResult = try await repository.listenForMPesa(
+            let authenticationResult = try await repository.listenForMobileMoneyResponse(
                 for: Int(mobileMoneyTransaction.transaction) ?? 0)
             await container.processTransactionResponse(authenticationResult)
         } catch {
-            Logger.error("Listening for M-Pesa transaction failed with error: %@",
+            Logger.error("Listening for mobile money transaction failed with error: %@",
                          arguments: error.localizedDescription)
             container.displayTransactionError(ChargeError(error: error))
         }
@@ -47,14 +54,14 @@ class MPesaProcessingViewModel: ObservableObject {
                 with: transactionDetails.accessCode)
             await container.processTransactionResponse(authenticationResult)
         } catch {
-            Logger.error("Checking pending M-Pesa charge failed with error: %@",
+            Logger.error("Checking pending mobile money charge failed with error: %@",
                          arguments: error.localizedDescription)
             container.displayTransactionError(ChargeError(error: error))
         }
     }
 
     func cancelTransaction() {
-        container.restartMPesaPayment()
+        container.restartMobileMoneyPayment()
     }
 
 }
