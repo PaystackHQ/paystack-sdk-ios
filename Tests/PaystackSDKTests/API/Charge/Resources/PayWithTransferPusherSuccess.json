@@ -1,0 +1,13 @@
+{
+    "status": "success",
+    "message": "Payment Successful",
+    "data": {
+        "message_type": "SUCCESS",
+        "transaction_id": "3818017015",
+        "reference": "T3818017015I615243Sujjxh",
+        "trxref": "T3818017015I615243Sujjxh",
+        "trans": "3818017015",
+        "response": "Approved",
+        "redirecturl": ""
+    }
+}

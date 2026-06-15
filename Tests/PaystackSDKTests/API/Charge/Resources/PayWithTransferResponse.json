@@ -1,0 +1,18 @@
+{
+    "status": true,
+    "message": "Please make a transfer to the account specified",
+    "data": {
+        "account_name": "PAYSTACK CHECKOUT",
+        "account_number": "9985488398",
+        "transaction_reference": "T6215047322I100043S0g703",
+        "bank": {
+            "slug": "titan-paystack",
+            "name": "Paystack-Titan",
+            "id": 629
+        },
+        "account_expires_at": "2026-06-02T15:18:37.053Z",
+        "assignment_expires_at": "2026-06-02T22:48:37.053Z",
+        "transaction_id": "6215047322",
+        "pusher_channel": "PWT6215047322"
+    }
+}

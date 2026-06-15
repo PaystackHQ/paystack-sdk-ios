@@ -4,7 +4,8 @@ public extension DateFormatter {
 
     static var paystackFormatter: DateFormatter {
         let formatter = DateFormatter()
-        formatter.locale = .current
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(identifier: "UTC")
         formatter.dateFormat = DateFormat.paystack.rawValue
         return formatter
     }

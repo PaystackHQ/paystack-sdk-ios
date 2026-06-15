@@ -22,6 +22,11 @@
       "qr": [
         "visa"
       ],
+      "bank_transfer": [
+        "wema-bank",
+        "titan-paystack",
+        "paystack-mfb"
+      ],
       "mobile_money": [
                      {
                          "key": "MPESA",
@@ -44,6 +49,11 @@
         "919_GH",
         "mcash"
       ]
+    },
+    "merchant_channel_settings": {
+      "bank_transfer": {
+        "fulfil_late_notification": true
+      }
     }
   }
 }

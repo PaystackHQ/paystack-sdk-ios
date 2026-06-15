@@ -1,0 +1,9 @@
+{
+    "status": "transfer-credit-request-pending",
+    "message": "credit request pending",
+    "data": {
+        "message_type": "TRANSFER_CREDIT_REQUEST_PENDING",
+        "reference_id": "3818017015",
+        "transaction_id": "3818017015"
+    }
+}

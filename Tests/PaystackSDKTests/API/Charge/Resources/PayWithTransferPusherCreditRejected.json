@@ -1,0 +1,9 @@
+{
+    "status": "transfer-credit-request-rejected",
+    "message": "Transfer was rejected",
+    "data": {
+        "message_type": "TRANSFER_CREDIT_REQUEST_REJECTED",
+        "reference_id": "3818017015",
+        "transaction_id": "3818017015"
+    }
+}

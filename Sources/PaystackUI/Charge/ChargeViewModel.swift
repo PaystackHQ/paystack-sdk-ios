@@ -39,7 +39,6 @@ class ChargeViewModel: ObservableObject {
             let error = ChargeError(error: error)
             Logger.error("Verify access code failed with error: %@",
                          arguments: error.cause?.localizedDescription ?? "Unknown")
-            // TODO: Display a fatal error here in the future instead
             transactionState = .error(error)
         }
     }
@@ -55,6 +54,16 @@ class ChargeViewModel: ObservableObject {
            let providers = response.channelOptions?.mobileMoney, !providers.isEmpty {
             let allowed = filtered(providers)
             result.append(contentsOf: allowed.map { .mobileMoney($0) })
+        }
+
+        if response.paymentChannels.contains(.bankTransfer),
+           let transactionId = response.transactionId {
+            let config = BankTransferConfig(
+                fulfilLateNotification: response
+                    .merchantChannelSettings?.bankTransfer?.fulfilLateNotification ?? false,
+                transactionId: transactionId,
+                availableProviders: response.channelOptions?.bankTransfer ?? [])
+            result.append(.bankTransfer(config))
         }
 
         return result
@@ -80,29 +89,26 @@ class ChargeViewModel: ObservableObject {
                                                provider: provider))
         }
 
+        if !channels.contains(.card),
+           channels.count == 1,
+           case .bankTransfer(let config) = channels[0] {
+            return .payment(type: .bankTransfer(transactionInformation: response,
+                                                config: config))
+        }
+
         return .channelSelection(transactionInformation: response,
                                  supportedChannels: channels)
     }
 
 }
 
-// MARK: - Mobile money provider allowlist
 extension ChargeViewModel {
 
-    /// Mobile money provider keys (`MobileMoneyChannel.key`, uppercased) that
-    /// the SDK is allowed to route to. The API may return providers we don't
-    /// yet have logos, copy, or phone formatters for — listing them here is
-    /// what opts them into the UI.
-    ///
-    /// Set to `nil` to accept every provider the API returns (no filtering).
-    /// Add a new key here when you've added its logo to `SupportedChannel.image`
-    /// and its country code / phone formatter to the relevant helpers.
     static var supportedMobileMoneyProviders: Set<String>? = [
-        "MPESA", "ATL_KE", "MTN", "ATL", "VOD"
+        "MPESA", "ATL_KE", "MTN", "ATL", "VOD", "WAVE_CI", "ORANGE_CI", "MTN_CI"
     ]
 }
 
-// MARK: - Charge Container
 extension ChargeViewModel: ChargeContainer {
 
     func processSuccessfulTransaction(details: VerifyAccessCode) {
@@ -111,9 +117,19 @@ extension ChargeViewModel: ChargeContainer {
                                     details: .init(reference: details.reference))
     }
 
+    func restartFromChannelSelection() {
+        guard let details = transactionDetails else {
+            Logger.error("restartFromChannelSelection called without cached transaction details")
+            transactionState = .error(.generic)
+            return
+        }
+        let supported = resolveSupportedChannels(from: details)
+        transactionState = .channelSelection(transactionInformation: details,
+                                             supportedChannels: supported)
+    }
+
 }
 
-// MARK: UI State Management
 extension ChargeViewModel {
 
     var centerView: Bool {
