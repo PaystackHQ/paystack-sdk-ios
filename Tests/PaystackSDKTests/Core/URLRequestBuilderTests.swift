@@ -127,4 +127,61 @@ class URLRequestBuilderTests: XCTestCase {
         XCTAssertNotNil(result.value(forHTTPHeaderField: "x-platform-version"))
         XCTAssertNotNil(result.value(forHTTPHeaderField: "x-device"))
     }
+
+    // MARK: - setFormBody — application/x-www-form-urlencoded
+
+    func testSetFormBodyBuildsURLRequestWithFormUrlencodedContentType() throws {
+        let result = try builder
+            .setMethod(.post)
+            .setFormBody(["wallet_id": "test@example.com"])
+            .build()
+
+        XCTAssertEqual(result.value(forHTTPHeaderField: "Content-Type"),
+                       "application/x-www-form-urlencoded")
+    }
+
+    func testSetFormBodyEncodesSimpleField() throws {
+        let result = try builder
+            .setMethod(.post)
+            .setFormBody(["wallet_id": "alice"])
+            .build()
+
+        let body = try XCTUnwrap(result.httpBody)
+        XCTAssertEqual(String(data: body, encoding: .utf8), "wallet_id=alice")
+    }
+
+    func testSetFormBodyPercentEncodesEmailValue() throws {
+        let result = try builder
+            .setMethod(.post)
+            .setFormBody(["wallet_id": "customer@example.com"])
+            .build()
+
+        let body = try XCTUnwrap(result.httpBody)
+        XCTAssertEqual(String(data: body, encoding: .utf8),
+                       "wallet_id=customer%40example.com")
+    }
+
+    func testSetFormBodyPercentEncodesAmpersandsAndSpacesInValue() throws {
+        let result = try builder
+            .setMethod(.post)
+            .setFormBody(["note": "hello & welcome"])
+            .build()
+
+        let body = try XCTUnwrap(result.httpBody)
+        XCTAssertEqual(String(data: body, encoding: .utf8),
+                       "note=hello%20%26%20welcome")
+    }
+
+    func testSetFormBodyJoinsMultipleFieldsWithAmpersand() throws {
+        let result = try builder
+            .setMethod(.post)
+            .setFormBody(["a": "1", "b": "2"])
+            .build()
+
+        let body = try XCTUnwrap(result.httpBody)
+
+        let text = String(data: body, encoding: .utf8)
+        XCTAssertTrue(text == "a=1&b=2" || text == "b=2&a=1",
+                      "Unexpected encoded body: \(text ?? "nil")")
+    }
 }

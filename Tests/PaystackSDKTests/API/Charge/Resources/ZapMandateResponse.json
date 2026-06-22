@@ -1,0 +1,7 @@
+{
+    "status": "pending",
+    "message": "Transaction Initiated",
+    "pusher_channel": "DBMAN_6222375579",
+    "payment_url": "https://joinzap.com/app/merchant-payment/f3k3t3c88ovR6P7CDkKu",
+    "qr_image": "https://paystack-production-zap-eu-west-1.s3.eu-west-1.amazonaws.com/merchant-payments/qr/f3k3t3c88ovR6P7CDkKu/qr_f3k3t3c88ovR6P7CDkKu.png"
+}

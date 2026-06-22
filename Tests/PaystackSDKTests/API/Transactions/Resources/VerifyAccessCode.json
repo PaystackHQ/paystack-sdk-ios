@@ -54,6 +54,10 @@
       "bank_transfer": {
         "fulfil_late_notification": true
       }
-    }
+    },
+    "supported_banks": [
+      { "id": 870, "code": "00zap", "name": "Zap by Paystack", "slug": "zap" },
+      { "id": 871, "code": "044", "name": "Access Bank", "slug": "access-bank" }
+    ]
   }
 }

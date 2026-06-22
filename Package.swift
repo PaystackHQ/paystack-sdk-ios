@@ -49,7 +49,8 @@ let package = Package(
                 .copy("API/Charge/Resources/PayWithTransferPusherCreditReceived.json"),
                 .copy("API/Charge/Resources/PayWithTransferPusherCreditPending.json"),
                 .copy("API/Charge/Resources/PayWithTransferPusherCreditRejected.json"),
-                .copy("API/Charge/Resources/PayWithTransferPusherIncorrectAmount.json")
+                .copy("API/Charge/Resources/PayWithTransferPusherIncorrectAmount.json"),
+                .copy("API/Charge/Resources/ZapMandateResponse.json")
 
             ])
     ]

@@ -15,11 +15,14 @@ public struct VerifyAccessCodeData: Decodable {
     public var merchantChannelSettings: MerchantChannelSettings?
     public var publicEncryptionKey: String
 
+    public var supportedBanks: [SupportedBank]?
+
     public init(id: Int?, email: String, amount: Decimal, reference: String, accessCode: String,
                 merchantLogo: String? = nil, merchantName: String, domain: Domain,
                 currency: String, channels: [Channel], channelOptions: ChannelOptions,
                 merchantChannelSettings: MerchantChannelSettings? = nil,
-                publicEncryptionKey: String) {
+                publicEncryptionKey: String,
+                supportedBanks: [SupportedBank]? = nil) {
         self.id = id
         self.email = email
         self.amount = amount
@@ -33,5 +36,6 @@ public struct VerifyAccessCodeData: Decodable {
         self.channelOptions = channelOptions
         self.merchantChannelSettings = merchantChannelSettings
         self.publicEncryptionKey = publicEncryptionKey
+        self.supportedBanks = supportedBanks
     }
 }
