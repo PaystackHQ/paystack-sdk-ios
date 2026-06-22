@@ -12,11 +12,13 @@ public struct VerifyAccessCodeData: Decodable {
     public var currency: String
     public var channels: [Channel]
     public var channelOptions: ChannelOptions
+    public var merchantChannelSettings: MerchantChannelSettings?
     public var publicEncryptionKey: String
 
     public init(id: Int?, email: String, amount: Decimal, reference: String, accessCode: String,
                 merchantLogo: String? = nil, merchantName: String, domain: Domain,
                 currency: String, channels: [Channel], channelOptions: ChannelOptions,
+                merchantChannelSettings: MerchantChannelSettings? = nil,
                 publicEncryptionKey: String) {
         self.id = id
         self.email = email
@@ -29,6 +31,7 @@ public struct VerifyAccessCodeData: Decodable {
         self.currency = currency
         self.channels = channels
         self.channelOptions = channelOptions
+        self.merchantChannelSettings = merchantChannelSettings
         self.publicEncryptionKey = publicEncryptionKey
     }
 }

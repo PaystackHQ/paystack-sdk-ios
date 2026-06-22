@@ -12,6 +12,7 @@ struct VerifyAccessCode: Equatable {
     var reference: String
     var transactionId: Int?
     var channelOptions: PaystackUI.ChannelOptions?
+    var merchantChannelSettings: MerchantChannelSettings?
 
     var amountCurrency: AmountCurrency {
         AmountCurrency(amount: amount, currency: currency)
@@ -29,12 +30,13 @@ extension VerifyAccessCode {
                          merchantName: response.data.merchantName,
                          publicEncryptionKey: response.data.publicEncryptionKey,
                          reference: response.data.reference,
-                         transactionId: response.data.id, channelOptions: PaystackUI.ChannelOptions.from(response.data.channelOptions))
+                         transactionId: response.data.id,
+                         channelOptions: PaystackUI.ChannelOptions.from(response.data.channelOptions),
+                         merchantChannelSettings: response.data.merchantChannelSettings)
     }
 
 }
 
-// MARK: - Previews
 extension VerifyAccessCode {
     static var example: Self {
         .init(amount: 10000,

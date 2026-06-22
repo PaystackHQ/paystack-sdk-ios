@@ -29,7 +29,6 @@ struct ChargeView: View {
             case .loading(let message):
                 LoadingView(message: message)
             case .error(let error):
-                // TODO: Update once we have new designs for this error screen
                 ErrorView(message: error.message)
             case .payment(let type):
                 paymentFlowView(for: type)
@@ -63,6 +62,10 @@ struct ChargeView: View {
             MobileMoneyFlowFactory.view(for: provider,
                                         chargeContainer: viewModel,
                                         transactionDetails: transactionInformation)
+        case .bankTransfer(let transactionInformation, let config):
+            BankTransferView(chargeContainer: viewModel,
+                             transactionDetails: transactionInformation,
+                             config: config)
         }
     }
 

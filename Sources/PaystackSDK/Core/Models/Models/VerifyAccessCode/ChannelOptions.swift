@@ -17,7 +17,7 @@ public struct ChannelOptions: Codable {
     enum CodingKeys: String, CodingKey {
         case ussd
         case qrCode = "qr"
-        case bankTransfer = "bank_transfer"
+        case bankTransfer
         case mobileMoney
     }
 }

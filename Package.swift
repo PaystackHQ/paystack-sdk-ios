@@ -43,7 +43,13 @@ let package = Package(
                 .copy("API/Transactions/Resources/VerifyAccessCode.json"),
                 .copy("API/Charge/Resources/ChargeAuthenticationResponse.json"),
                 .copy("API/Other/Resources/AddressStatesResponse.json"),
-                .copy("API/Charge/Resources/ChargeMobileMoneyResponse.json")
+                .copy("API/Charge/Resources/ChargeMobileMoneyResponse.json"),
+                .copy("API/Charge/Resources/PayWithTransferResponse.json"),
+                .copy("API/Charge/Resources/PayWithTransferPusherSuccess.json"),
+                .copy("API/Charge/Resources/PayWithTransferPusherCreditReceived.json"),
+                .copy("API/Charge/Resources/PayWithTransferPusherCreditPending.json"),
+                .copy("API/Charge/Resources/PayWithTransferPusherCreditRejected.json"),
+                .copy("API/Charge/Resources/PayWithTransferPusherIncorrectAmount.json")
 
             ])
     ]

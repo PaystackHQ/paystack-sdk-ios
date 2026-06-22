@@ -1,0 +1,9 @@
+{
+    "status": "transfer-credit-request-received",
+    "message": "credit request received",
+    "data": {
+        "message_type": "TRANSFER_CREDIT_REQUEST_RECEIVED",
+        "reference_id": "3818017015",
+        "transaction_id": "3818017015"
+    }
+}

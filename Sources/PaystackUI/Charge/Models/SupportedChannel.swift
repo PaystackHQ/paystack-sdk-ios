@@ -1,12 +1,10 @@
 import SwiftUI
 import PaystackCore
 
-/// A resolved payment channel that the SDK is willing to route to for the
-/// current transaction. One entry per card option, plus one entry per
-/// supported mobile money provider returned by `verifyAccessCode`.
 enum SupportedChannel: Equatable, Identifiable {
     case card
     case mobileMoney(MobileMoneyChannel)
+    case bankTransfer(BankTransferConfig)
 
     var id: String {
         switch self {
@@ -14,6 +12,8 @@ enum SupportedChannel: Equatable, Identifiable {
             return "card"
         case .mobileMoney(let channel):
             return "mobile_money.\(channel.key)"
+        case .bankTransfer:
+            return "bank_transfer"
         }
     }
 
@@ -23,6 +23,8 @@ enum SupportedChannel: Equatable, Identifiable {
             return "Card"
         case .mobileMoney(let channel):
             return channel.value
+        case .bankTransfer:
+            return "Transfer"
         }
     }
 
@@ -32,13 +34,11 @@ enum SupportedChannel: Equatable, Identifiable {
             return Image("cardLogo", bundle: .current)
         case .mobileMoney(let channel):
             return Self.image(forMobileMoneyKey: channel.key)
+        case .bankTransfer:
+            return Image(systemName: "building.columns")
         }
     }
 
-    /// Maps known Paystack mobile money provider keys to a bundled logo.
-    /// Falls back to a generic SF Symbol when the SDK has no logo for the
-    /// provider yet — keeps the channel-selection screen renderable when a
-    /// future provider lights up via the allowlist.
     private static func image(forMobileMoneyKey key: String) -> Image {
         switch key.uppercased() {
         case "MPESA", "ATL_KE":

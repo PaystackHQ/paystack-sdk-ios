@@ -1,10 +1,3 @@
-//
-//  ChannelSelectionView.swift
-//  PaystackUI
-//
-//  Created by Peter-John Welcome on 2023/12/01.
-//
-
 import SwiftUI
 import PaystackCore
 @available(iOS 14.0, *)
@@ -65,6 +58,9 @@ class ChannelSelectionViewModel: ObservableObject {
         case .mobileMoney(let provider):
             state = .payment(type: .mobileMoney(transactionInformation: self.information,
                                                 provider: provider))
+        case .bankTransfer(let config):
+            state = .payment(type: .bankTransfer(transactionInformation: self.information,
+                                                 config: config))
         }
     }
 }

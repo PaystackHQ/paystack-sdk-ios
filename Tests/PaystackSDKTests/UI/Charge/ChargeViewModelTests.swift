@@ -7,9 +7,6 @@ final class ChargeViewModelTests: PSTestCase {
     var serviceUnderTest: ChargeViewModel!
     var mockRepo: MockChargeRepository!
 
-    /// Snapshot the production allowlist on entry so individual tests can
-    /// mutate `supportedMobileMoneyProviders` freely and we restore the
-    /// original value in `tearDown`. Avoids order-dependent test leakage.
     private static let productionAllowlist = ChargeViewModel.supportedMobileMoneyProviders
 
     override func setUpWithError() throws {
@@ -62,8 +59,6 @@ final class ChargeViewModelTests: PSTestCase {
 
     }
 
-    // MARK: - Resolver and auto-route
-
     func testAutoRoutesToMobileMoneyWhenCardUnsupportedAndExactlyOneAllowlistedProvider() async {
         ChargeViewModel.supportedMobileMoneyProviders = ["MPESA"]
         let response = VerifyAccessCode.with(channels: [.mobileMoney],
@@ -78,7 +73,7 @@ final class ChargeViewModelTests: PSTestCase {
     }
 
     func testShowsChannelSelectionWhenMultipleMobileMoneyProvidersAndNoCard() async {
-        ChargeViewModel.supportedMobileMoneyProviders = nil   // accept everything
+        ChargeViewModel.supportedMobileMoneyProviders = nil
         let response = VerifyAccessCode.with(channels: [.mobileMoney],
                                              mobileMoney: [.mtnFixture, .vodafoneFixture])
         mockRepo.expectedVerifyAccessCode = response
@@ -147,8 +142,6 @@ final class ChargeViewModelTests: PSTestCase {
     }
 
     func testTransactionDetailsIsSetAfterResolvingMobileMoneyAutoRoute() async {
-        // Regression guard: pre-PR-2 the MM branch never set `transactionDetails`,
-        // so downstream UI checks (inTestMode, chargeCancelled) saw nil.
         ChargeViewModel.supportedMobileMoneyProviders = ["MPESA"]
         let response = VerifyAccessCode.with(channels: [.mobileMoney],
                                              mobileMoney: [.mpesaFixture])
@@ -157,6 +150,147 @@ final class ChargeViewModelTests: PSTestCase {
         await serviceUnderTest.verifyAccessCodeAndProceed()
 
         XCTAssertEqual(serviceUnderTest.transactionDetails, response)
+    }
+
+    func testAutoRoutesToBankTransferWhenItIsTheOnlyChannel() async {
+        let response = VerifyAccessCode.with(
+            channels: [.bankTransfer],
+            bankTransferProviders: ["wema-bank", "titan-paystack"],
+            fulfilLateNotification: true,
+            transactionId: 1234)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        let expectedConfig = BankTransferConfig(
+            fulfilLateNotification: true,
+            transactionId: 1234,
+            availableProviders: ["wema-bank", "titan-paystack"])
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .payment(type: .bankTransfer(transactionInformation: response,
+                                                    config: expectedConfig)))
+    }
+
+    func testShowsChannelSelectionWhenBankTransferAndCardBothSupported() async {
+        let response = VerifyAccessCode.with(
+            channels: [.card, .bankTransfer],
+            bankTransferProviders: ["wema-bank"],
+            fulfilLateNotification: false,
+            transactionId: 1234)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        let expectedConfig = BankTransferConfig(
+            fulfilLateNotification: false,
+            transactionId: 1234,
+            availableProviders: ["wema-bank"])
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .channelSelection(transactionInformation: response,
+                                         supportedChannels: [.card,
+                                                             .bankTransfer(expectedConfig)]))
+    }
+
+    func testShowsChannelSelectionWhenBankTransferAndMobileMoneyAndCardSupported() async {
+        ChargeViewModel.supportedMobileMoneyProviders = ["MPESA"]
+        let response = VerifyAccessCode.with(
+            channels: [.card, .mobileMoney, .bankTransfer],
+            mobileMoney: [.mpesaFixture],
+            bankTransferProviders: ["wema-bank"],
+            fulfilLateNotification: false,
+            transactionId: 1234)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        let expectedConfig = BankTransferConfig(
+            fulfilLateNotification: false,
+            transactionId: 1234,
+            availableProviders: ["wema-bank"])
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .channelSelection(transactionInformation: response,
+                                         supportedChannels: [.card,
+                                                             .mobileMoney(.mpesaFixture),
+                                                             .bankTransfer(expectedConfig)]))
+    }
+
+    func testBankTransferConfigDefaultsFulfilLateNotificationToFalseWhenAbsent() async {
+        let response = VerifyAccessCode.with(
+            channels: [.bankTransfer],
+            bankTransferProviders: ["titan-paystack"],
+            fulfilLateNotification: nil,
+            transactionId: 1234)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        let expectedConfig = BankTransferConfig(
+            fulfilLateNotification: false,
+            transactionId: 1234,
+            availableProviders: ["titan-paystack"])
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .payment(type: .bankTransfer(transactionInformation: response,
+                                                    config: expectedConfig)))
+    }
+
+    func testBankTransferDoesNotAppearWhenChannelArrayOmitsIt() async {
+        let response = VerifyAccessCode.with(
+            channels: [.card],
+            bankTransferProviders: ["wema-bank"],
+            fulfilLateNotification: true,
+            transactionId: 1234)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .payment(type: .card(transactionInformation: response)))
+    }
+
+    func testBankTransferDoesNotAppearWhenTransactionIdMissing() async {
+        let response = VerifyAccessCode.with(
+            channels: [.bankTransfer],
+            bankTransferProviders: ["wema-bank"],
+            fulfilLateNotification: true,
+            transactionId: nil)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        let expectedMessage = "No supported payment methods. " +
+        "Please reach out to your merchant for further information"
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .error(.init(message: expectedMessage)))
+    }
+
+    func testRestartFromChannelSelectionRebuildsChannelSelectionFromCachedDetails() async {
+        let response = VerifyAccessCode.with(
+            channels: [.card, .bankTransfer],
+            bankTransferProviders: ["wema-bank"],
+            fulfilLateNotification: false,
+            transactionId: 1234)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+        serviceUnderTest.transactionState = .payment(
+            type: .card(transactionInformation: response))
+
+        serviceUnderTest.restartFromChannelSelection()
+
+        let expectedConfig = BankTransferConfig(
+            fulfilLateNotification: false,
+            transactionId: 1234,
+            availableProviders: ["wema-bank"])
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .channelSelection(transactionInformation: response,
+                                         supportedChannels: [.card,
+                                                             .bankTransfer(expectedConfig)]))
+    }
+
+    func testRestartFromChannelSelectionWithoutCachedDetailsSetsErrorState() {
+        serviceUnderTest.transactionDetails = nil
+        serviceUnderTest.restartFromChannelSelection()
+        XCTAssertEqual(serviceUnderTest.transactionState, .error(.generic))
     }
 
     func testViewShouldBeCenteredForSpecifiedStates() {
@@ -233,8 +367,6 @@ extension ChargeCompletionDetails: Equatable {
     }
 }
 
-// MARK: - Test fixtures
-
 private extension MobileMoneyChannel {
     static let mpesaFixture = MobileMoneyChannel(key: "MPESA",
                                                  value: "M-PESA",
@@ -251,18 +383,30 @@ private extension MobileMoneyChannel {
 }
 
 private extension VerifyAccessCode {
-    /// Compact helper for building `VerifyAccessCode` fixtures for resolver tests.
-    /// Most fields are irrelevant to channel resolution and get sensible defaults.
     static func with(channels: [PaystackCore.Channel],
-                     mobileMoney: [MobileMoneyChannel]? = nil) -> Self {
-        VerifyAccessCode(amount: 10000,
-                         currency: "USD",
-                         accessCode: "test_access",
-                         paymentChannels: channels,
-                         domain: .test,
-                         merchantName: "Test Merchant",
-                         publicEncryptionKey: "test_encryption_key",
-                         reference: "test_reference",
-                         channelOptions: mobileMoney.map { PaystackUI.ChannelOptions(mobileMoney: $0) })
+                     mobileMoney: [MobileMoneyChannel]? = nil,
+                     bankTransferProviders: [String]? = nil,
+                     fulfilLateNotification: Bool? = nil,
+                     transactionId: Int? = 1234) -> Self {
+        let channelOptions: PaystackUI.ChannelOptions? = {
+            if mobileMoney == nil && bankTransferProviders == nil { return nil }
+            return PaystackUI.ChannelOptions(mobileMoney: mobileMoney,
+                                             bankTransfer: bankTransferProviders)
+        }()
+        let settings: MerchantChannelSettings? = fulfilLateNotification.map {
+            MerchantChannelSettings(
+                bankTransfer: BankTransferMerchantSettings(fulfilLateNotification: $0))
+        }
+        return VerifyAccessCode(amount: 10000,
+                                currency: "USD",
+                                accessCode: "test_access",
+                                paymentChannels: channels,
+                                domain: .test,
+                                merchantName: "Test Merchant",
+                                publicEncryptionKey: "test_encryption_key",
+                                reference: "test_reference",
+                                transactionId: transactionId,
+                                channelOptions: channelOptions,
+                                merchantChannelSettings: settings)
     }
 }
