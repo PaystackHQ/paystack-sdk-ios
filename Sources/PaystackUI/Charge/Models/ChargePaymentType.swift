@@ -6,4 +6,6 @@ enum ChargePaymentType: Equatable {
                      provider: MobileMoneyChannel)
     case bankTransfer(transactionInformation: VerifyAccessCode,
                       config: BankTransferConfig)
+    case zap(transactionInformation: VerifyAccessCode,
+             config: ZapConfig)
 }

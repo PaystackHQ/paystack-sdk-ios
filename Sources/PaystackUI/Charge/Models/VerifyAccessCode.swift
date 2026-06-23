@@ -2,6 +2,8 @@ import Foundation
 import PaystackCore
 
 struct VerifyAccessCode: Equatable {
+
+    var email: String = ""
     var amount: Decimal
     var currency: String
     var accessCode: String
@@ -14,6 +16,8 @@ struct VerifyAccessCode: Equatable {
     var channelOptions: PaystackUI.ChannelOptions?
     var merchantChannelSettings: MerchantChannelSettings?
 
+    var supportedBanks: [SupportedBank]?
+
     var amountCurrency: AmountCurrency {
         AmountCurrency(amount: amount, currency: currency)
     }
@@ -22,7 +26,8 @@ struct VerifyAccessCode: Equatable {
 extension VerifyAccessCode {
 
     static func from(_ response: VerifyAccessCodeResponse) -> Self {
-        VerifyAccessCode(amount: response.data.amount,
+        VerifyAccessCode(email: response.data.email,
+                         amount: response.data.amount,
                          currency: response.data.currency,
                          accessCode: response.data.accessCode,
                          paymentChannels: response.data.channels.filter { $0 != .unsupportedChannel },
@@ -32,20 +37,23 @@ extension VerifyAccessCode {
                          reference: response.data.reference,
                          transactionId: response.data.id,
                          channelOptions: PaystackUI.ChannelOptions.from(response.data.channelOptions),
-                         merchantChannelSettings: response.data.merchantChannelSettings)
+                         merchantChannelSettings: response.data.merchantChannelSettings,
+                         supportedBanks: response.data.supportedBanks)
     }
 
 }
 
 extension VerifyAccessCode {
     static var example: Self {
-        .init(amount: 10000,
+        .init(email: "test@email.com",
+              amount: 10000,
               currency: "USD",
               accessCode: "test_access",
               paymentChannels: [.card],
               domain: .test,
               merchantName: "Test Merchant",
               publicEncryptionKey: "test_encryption_key",
-              reference: "test_reference", channelOptions: PaystackUI.ChannelOptions.example)
+              reference: "test_reference",
+              channelOptions: PaystackUI.ChannelOptions.example)
     }
 }

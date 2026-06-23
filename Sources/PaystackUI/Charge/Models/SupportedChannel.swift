@@ -5,6 +5,7 @@ enum SupportedChannel: Equatable, Identifiable {
     case card
     case mobileMoney(MobileMoneyChannel)
     case bankTransfer(BankTransferConfig)
+    case zap(ZapConfig)
 
     var id: String {
         switch self {
@@ -14,6 +15,8 @@ enum SupportedChannel: Equatable, Identifiable {
             return "mobile_money.\(channel.key)"
         case .bankTransfer:
             return "bank_transfer"
+        case .zap:
+            return "zap"
         }
     }
 
@@ -25,6 +28,8 @@ enum SupportedChannel: Equatable, Identifiable {
             return channel.value
         case .bankTransfer:
             return "Transfer"
+        case .zap:
+            return "Zap"
         }
     }
 
@@ -36,6 +41,8 @@ enum SupportedChannel: Equatable, Identifiable {
             return Self.image(forMobileMoneyKey: channel.key)
         case .bankTransfer:
             return Image(systemName: "building.columns")
+        case .zap:
+            return Image("zapSingleLogo", bundle: .current)
         }
     }
 

@@ -32,7 +32,8 @@ final class ChargeRepositoryImplementationTests: PSTestCase {
             bankTransfer: ["wema-bank", "titan-paystack", "paystack-mfb"])
         let expectedMerchantSettings = MerchantChannelSettings(
             bankTransfer: BankTransferMerchantSettings(fulfilLateNotification: true))
-        let expectedResult = VerifyAccessCode(amount: 10000,
+        let expectedResult = VerifyAccessCode(email: "test@email.com",
+                                              amount: 10000,
                                               currency: "NGN",
                                               accessCode: "Access_Code_Test",
                                               paymentChannels: [.card, .qr, .ussd, .mobileMoney],
@@ -41,7 +42,13 @@ final class ChargeRepositoryImplementationTests: PSTestCase {
                                               publicEncryptionKey: "test_encryption_key",
                                               reference: "203520101",
                                               channelOptions: expectedChannelOptions,
-                                              merchantChannelSettings: expectedMerchantSettings)
+                                              merchantChannelSettings: expectedMerchantSettings,
+                                              supportedBanks: [
+                                                SupportedBank(id: 870, code: "00zap",
+                                                              name: "Zap by Paystack", slug: "zap"),
+                                                SupportedBank(id: 871, code: "044",
+                                                              name: "Access Bank", slug: "access-bank")
+                                              ])
 
         XCTAssertEqual(result, expectedResult)
     }
