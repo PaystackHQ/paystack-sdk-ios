@@ -8,6 +8,7 @@ public protocol URLRequestBuilderHelper {
     func get() -> URLRequestBuilder
     func get(_ path: String) -> URLRequestBuilder
     func post<T: Encodable>(_ path: String, _ body: T) -> URLRequestBuilder
+    func postForm(_ path: String, _ fields: [String: String]) -> URLRequestBuilder
     func put<T: Encodable>(_ path: String, _ body: T) -> URLRequestBuilder
 }
 
@@ -28,6 +29,13 @@ public extension URLRequestBuilderHelper {
             .setMethod(.post)
             .setPath(path)
             .setBody(body)
+    }
+
+    func postForm(_ path: String, _ fields: [String: String]) -> URLRequestBuilder {
+        return builder
+            .setMethod(.post)
+            .setPath(path)
+            .setFormBody(fields)
     }
 
     func put<T: Encodable>(_ path: String, _ body: T) -> URLRequestBuilder {

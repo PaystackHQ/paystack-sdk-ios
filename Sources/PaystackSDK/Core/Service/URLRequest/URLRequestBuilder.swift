@@ -58,6 +58,18 @@ public class URLRequestBuilder {
         return self
     }
 
+    public func setFormBody(_ fields: [String: String]) -> Self {
+        let pairs = fields.map { key, value -> String in
+            let encodedKey = key.addingPercentEncoding(
+                withAllowedCharacters: .formURLEncodedAllowed) ?? key
+            let encodedValue = value.addingPercentEncoding(
+                withAllowedCharacters: .formURLEncodedAllowed) ?? value
+            return "\(encodedKey)=\(encodedValue)"
+        }
+        self.body = pairs.joined(separator: "&").data(using: .utf8)
+        return addHeader("Content-Type", "application/x-www-form-urlencoded")
+    }
+
     public func build() throws -> URLRequest {
         guard let method = method else {
             throw URLRequestBuilderError.invalidMethod
@@ -114,5 +126,15 @@ public extension URLRequestBuilder {
     func asService<T: Decodable>() -> Service<T> {
         return Service(self)
     }
+
+}
+
+private extension CharacterSet {
+
+    static let formURLEncodedAllowed: CharacterSet = {
+        var allowed = CharacterSet.alphanumerics
+        allowed.insert(charactersIn: "-._~")
+        return allowed
+    }()
 
 }

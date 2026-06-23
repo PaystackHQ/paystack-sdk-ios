@@ -34,4 +34,23 @@ class TransactionsTests: PSTestCase {
         _ = try await serviceUnderTest.checkPendingCharge(forAccessCode: "access_code_test").async()
     }
 
+    func testVerifyAccessCodeDecodesSupportedBanksFromResponse() async throws {
+        mockServiceExecutor
+            .expectURL("https://api.paystack.co/transaction/verify_code/access_code_test")
+            .expectMethod(.get)
+            .expectHeader("Authorization", "Bearer \(apiKey)")
+            .andReturn(json: "VerifyAccessCode")
+
+        let result = try await serviceUnderTest
+            .verifyAccessCode("access_code_test").async()
+
+        let supportedBanks = try XCTUnwrap(result.data.supportedBanks)
+        XCTAssertEqual(supportedBanks.count, 2)
+        XCTAssertEqual(supportedBanks[0].id, 870)
+        XCTAssertEqual(supportedBanks[0].code, "00zap")
+        XCTAssertEqual(supportedBanks[0].name, "Zap by Paystack")
+        XCTAssertEqual(supportedBanks[0].slug, "zap")
+        XCTAssertEqual(supportedBanks[1].code, "044")
+    }
+
 }

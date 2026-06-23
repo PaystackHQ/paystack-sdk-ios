@@ -3,12 +3,17 @@ import Foundation
 public protocol PaystackService: URLRequestBuilderHelper {
     var config: PaystackConfig { get set }
     var parentPath: String { get }
+    var baseURL: String { get }
 }
 
 public extension PaystackService {
 
+    var baseURL: String {
+        return "https://api.paystack.co"
+    }
+
     var endpoint: String {
-         return "https://api.paystack.co/\(parentPath)"
+         return "\(baseURL)/\(parentPath)"
     }
 
     var bearerToken: String {
