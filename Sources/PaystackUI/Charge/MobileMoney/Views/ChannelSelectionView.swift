@@ -61,6 +61,9 @@ class ChannelSelectionViewModel: ObservableObject {
         case .bankTransfer(let config):
             state = .payment(type: .bankTransfer(transactionInformation: self.information,
                                                  config: config))
+        case .zap(let config):
+            state = .payment(type: .zap(transactionInformation: self.information,
+                                        config: config))
         }
     }
 }
@@ -70,12 +73,18 @@ struct ChannelView: View {
     let channelTitle: String
     let image: Image
 
+    private let imageSlotSize: CGFloat = 20
+
     var body: some View {
 
         HStack(spacing: .singlePadding) {
 
             VStack(alignment: .leading, spacing: .singlePadding) {
-                image.frame(width: 20, height: 20)
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: imageSlotSize, height: imageSlotSize)
+
                 Text(channelTitle)
                     .font(.body14M)
                     .foregroundColor(.navy02)

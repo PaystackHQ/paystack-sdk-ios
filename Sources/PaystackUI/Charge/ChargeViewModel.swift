@@ -66,6 +66,16 @@ class ChargeViewModel: ObservableObject {
             result.append(.bankTransfer(config))
         }
 
+        if response.paymentChannels.contains(.bank),
+           let banks = response.supportedBanks,
+           let zap = banks.first(where: { Self.promotedSupportedBankCodes.contains($0.code) }),
+           let transactionId = response.transactionId {
+            let config = ZapConfig(supportedBankId: zap.id,
+                                   transactionId: transactionId,
+                                   walletEmail: response.email)
+            result.append(.zap(config))
+        }
+
         return result
     }
 
@@ -96,6 +106,13 @@ class ChargeViewModel: ObservableObject {
                                                 config: config))
         }
 
+        if !channels.contains(.card),
+           channels.count == 1,
+           case .zap(let config) = channels[0] {
+            return .payment(type: .zap(transactionInformation: response,
+                                       config: config))
+        }
+
         return .channelSelection(transactionInformation: response,
                                  supportedChannels: channels)
     }
@@ -107,6 +124,8 @@ extension ChargeViewModel {
     static var supportedMobileMoneyProviders: Set<String>? = [
         "MPESA", "ATL_KE", "MTN", "ATL", "VOD", "WAVE_CI", "ORANGE_CI", "MTN_CI"
     ]
+
+    static var promotedSupportedBankCodes: Set<String> = ["00zap"]
 }
 
 extension ChargeViewModel: ChargeContainer {

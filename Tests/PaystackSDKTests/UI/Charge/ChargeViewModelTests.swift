@@ -263,6 +263,113 @@ final class ChargeViewModelTests: PSTestCase {
                        .error(.init(message: expectedMessage)))
     }
 
+    func testAutoRoutesToZapWhenItIsTheOnlyChannel() async {
+        let response = VerifyAccessCode.with(
+            channels: [.bank],
+            transactionId: 6222375579,
+            supportedBanks: [.zapFixture])
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        let expectedConfig = ZapConfig(supportedBankId: 870,
+                                       transactionId: 6222375579,
+                                       walletEmail: "customer@example.com")
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .payment(type: .zap(transactionInformation: response,
+                                           config: expectedConfig)))
+    }
+
+    func testZapDoesNotPromoteWhenBankChannelAbsent() async {
+        let response = VerifyAccessCode.with(
+            channels: [.card],
+            transactionId: 6222375579,
+            supportedBanks: [.zapFixture])
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .payment(type: .card(transactionInformation: response)))
+    }
+
+    func testZapDoesNotPromoteWhen00zapCodeMissingFromSupportedBanks() async {
+        let response = VerifyAccessCode.with(
+            channels: [.bank, .card],
+            transactionId: 6222375579,
+            supportedBanks: [.accessBankFixture])
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .payment(type: .card(transactionInformation: response)))
+    }
+
+    func testZapDoesNotPromoteWhenSupportedBanksIsNil() async {
+        let response = VerifyAccessCode.with(
+            channels: [.bank, .card],
+            transactionId: 6222375579,
+            supportedBanks: nil)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .payment(type: .card(transactionInformation: response)))
+    }
+
+    func testZapDoesNotPromoteWhenTransactionIdMissing() async {
+        let response = VerifyAccessCode.with(
+            channels: [.bank],
+            transactionId: nil,
+            supportedBanks: [.zapFixture])
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        let expectedMessage = "No supported payment methods. " +
+        "Please reach out to your merchant for further information"
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .error(.init(message: expectedMessage)))
+    }
+
+    func testShowsChannelSelectionWhenZapAndCardBothSupported() async {
+        let response = VerifyAccessCode.with(
+            channels: [.bank, .card],
+            transactionId: 6222375579,
+            supportedBanks: [.zapFixture, .accessBankFixture])
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        let expectedConfig = ZapConfig(supportedBankId: 870,
+                                       transactionId: 6222375579,
+                                       walletEmail: "customer@example.com")
+
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .channelSelection(transactionInformation: response,
+                                         supportedChannels: [.card,
+                                                             .zap(expectedConfig)]))
+    }
+
+    func testZapConfigCarriesEmailFromVerifyAccessCode() async {
+        let response = VerifyAccessCode.with(
+            channels: [.bank],
+            email: "alice@example.com",
+            transactionId: 6222375579,
+            supportedBanks: [.zapFixture])
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        if case .payment(.zap(_, let config)) = serviceUnderTest.transactionState {
+            XCTAssertEqual(config.walletEmail, "alice@example.com")
+        } else {
+            XCTFail("Expected .payment(.zap(_, _)) state, got \(serviceUnderTest.transactionState)")
+        }
+    }
+
     func testRestartFromChannelSelectionRebuildsChannelSelectionFromCachedDetails() async {
         let response = VerifyAccessCode.with(
             channels: [.card, .bankTransfer],
@@ -384,10 +491,12 @@ private extension MobileMoneyChannel {
 
 private extension VerifyAccessCode {
     static func with(channels: [PaystackCore.Channel],
+                     email: String = "customer@example.com",
                      mobileMoney: [MobileMoneyChannel]? = nil,
                      bankTransferProviders: [String]? = nil,
                      fulfilLateNotification: Bool? = nil,
-                     transactionId: Int? = 1234) -> Self {
+                     transactionId: Int? = 1234,
+                     supportedBanks: [SupportedBank]? = nil) -> Self {
         let channelOptions: PaystackUI.ChannelOptions? = {
             if mobileMoney == nil && bankTransferProviders == nil { return nil }
             return PaystackUI.ChannelOptions(mobileMoney: mobileMoney,
@@ -397,7 +506,8 @@ private extension VerifyAccessCode {
             MerchantChannelSettings(
                 bankTransfer: BankTransferMerchantSettings(fulfilLateNotification: $0))
         }
-        return VerifyAccessCode(amount: 10000,
+        return VerifyAccessCode(email: email,
+                                amount: 10000,
                                 currency: "USD",
                                 accessCode: "test_access",
                                 paymentChannels: channels,
@@ -407,6 +517,14 @@ private extension VerifyAccessCode {
                                 reference: "test_reference",
                                 transactionId: transactionId,
                                 channelOptions: channelOptions,
-                                merchantChannelSettings: settings)
+                                merchantChannelSettings: settings,
+                                supportedBanks: supportedBanks)
     }
+}
+
+extension SupportedBank {
+    static let zapFixture = SupportedBank(id: 870, code: "00zap",
+                                          name: "Zap by Paystack", slug: "zap")
+    static let accessBankFixture = SupportedBank(id: 871, code: "044",
+                                                 name: "Access Bank", slug: "access-bank")
 }

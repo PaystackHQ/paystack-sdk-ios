@@ -66,6 +66,10 @@ struct ChargeView: View {
             BankTransferView(chargeContainer: viewModel,
                              transactionDetails: transactionInformation,
                              config: config)
+        case .zap(let transactionInformation, let config):
+            ZapView(chargeContainer: viewModel,
+                    transactionDetails: transactionInformation,
+                    config: config)
         }
     }
 
