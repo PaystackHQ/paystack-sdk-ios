@@ -6,7 +6,7 @@ enum SupportedChannel: Equatable, Identifiable {
     case mobileMoney(MobileMoneyChannel)
     case bankTransfer(BankTransferConfig)
     case zap(ZapConfig)
-
+    
     var id: String {
         switch self {
         case .card:
@@ -19,7 +19,7 @@ enum SupportedChannel: Equatable, Identifiable {
             return "zap"
         }
     }
-
+    
     var displayTitle: String {
         switch self {
         case .card:
@@ -27,12 +27,12 @@ enum SupportedChannel: Equatable, Identifiable {
         case .mobileMoney(let channel):
             return channel.value
         case .bankTransfer:
-            return "Transfer"
+            return "Bank Transfer"
         case .zap:
             return "Zap"
         }
     }
-
+    
     var image: Image {
         switch self {
         case .card:
@@ -40,20 +40,24 @@ enum SupportedChannel: Equatable, Identifiable {
         case .mobileMoney(let channel):
             return Self.image(forMobileMoneyKey: channel.key)
         case .bankTransfer:
-            return Image(systemName: "building.columns")
+            return Image("bankTransferLogo", bundle: .current)
         case .zap:
             return Image("zapSingleLogo", bundle: .current)
         }
     }
-
+    
     private static func image(forMobileMoneyKey key: String) -> Image {
         switch key.uppercased() {
-        case "MPESA", "ATL_KE":
-            return Image("kenyaSHLogo", bundle: .current)
-        case "MTN", "ATL", "VOD":
-            return Image("kenyaSHLogo", bundle: .current)
+        case "MPESA":
+            return Image("mpesaLogo", bundle: .current)
+        case "ATL_KE", "ATL":
+            return Image("atlLogo", bundle: .current)
+        case "MTN":
+            return Image("mtnLogo", bundle: .current)
+            case "VOD":
+            return Image("vodLogo", bundle: .current)
         default:
-            return Image(systemName: "creditcard")
+            return Image(systemName: "kenyaSHLogo")
         }
     }
 }

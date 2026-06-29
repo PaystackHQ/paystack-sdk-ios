@@ -1,5 +1,6 @@
 import SwiftUI
 import PaystackCore
+
 @available(iOS 14.0, *)
 struct ChannelSelectionView: View {
 
@@ -8,7 +9,6 @@ struct ChannelSelectionView: View {
     @StateObject
     var viewModel: ChannelSelectionViewModel
     let supportedChannels: [SupportedChannel]
-    let columns = [GridItem(.flexible()), GridItem(.flexible())]
 
     init(state: Binding<ChargeState>,
          supportedChannels: [SupportedChannel],
@@ -25,19 +25,18 @@ struct ChannelSelectionView: View {
                     .font(.body16M)
                     .foregroundColor(.stackBlue)
                     .multilineTextAlignment(.center)
-                GeometryReader { geo in
-                    LazyVGrid(columns: columns) {
-                        ForEach(supportedChannels) { channel in
-                            ChannelView(channelTitle: channel.displayTitle, image: channel.image)
-                                .padding(.singlePadding)
-                                .onTapGesture {
-                                    viewModel.choose(channel)
-                                }
-                                .frame(width: (geo.size.width / CGFloat(supportedChannels.count)).rounded())
+
+                VStack(spacing: .singlePadding) {
+                    ForEach(supportedChannels) { channel in
+                        Button(action: { viewModel.choose(channel) }) {
+                            ChannelView(channelTitle: channel.displayTitle,
+                                        image: channel.image)
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
             }
+            .padding(.horizontal, .doublePadding)
         }
     }
 }
@@ -77,21 +76,23 @@ struct ChannelView: View {
 
     var body: some View {
 
-        HStack(spacing: .singlePadding) {
+        HStack(spacing: .doublePadding) {
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: imageSlotSize, height: imageSlotSize)
 
-            VStack(alignment: .leading, spacing: .singlePadding) {
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: imageSlotSize, height: imageSlotSize)
+            Text(channelTitle)
+                .font(.body16M)
+                .foregroundColor(.stackBlue)
+                .lineLimit(1)
+                .minimumScaleFactor(0.85)
 
-                Text(channelTitle)
-                    .font(.body14M)
-                    .foregroundColor(.navy02)
-            }
             Spacer()
         }
         .padding(.doublePadding)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
         .cornerRadius(.cornerRadius)
         .overlay(
             RoundedRectangle(cornerRadius: .cornerRadius)
