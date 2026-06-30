@@ -321,10 +321,11 @@ final class BankTransferViewModelTests: XCTestCase {
                        .takingLongerThanExpected(expectedDetails))
     }
 
-    @MainActor func testUserTappedCloseFromDelayedConfirmationRestartsChannelSelection() {
+    @MainActor
+    func testUserTappedChangePaymentMethodFromDelayedConfirmationRestartsChannelSelection() {
         serviceUnderTest.state = .delayedConfirmation(.example)
 
-        serviceUnderTest.userTappedCloseFromDelayedConfirmation()
+        serviceUnderTest.userTappedChangePaymentMethod()
 
         XCTAssertTrue(mockChargeContainer.channelSelectionRestarted)
     }

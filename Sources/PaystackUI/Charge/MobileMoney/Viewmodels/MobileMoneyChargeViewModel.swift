@@ -85,8 +85,9 @@ class MobileMoneyChargeViewModel: ObservableObject, @MainActor MobileMoneyContai
         transactionState = .error(error)
     }
 
-    func cancelTransaction() {
-       restartMobileMoneyPayment()
+    @MainActor
+    func userTappedChangePaymentMethod() {
+        chargeCardContainer.restartFromChannelSelection()
     }
 }
 

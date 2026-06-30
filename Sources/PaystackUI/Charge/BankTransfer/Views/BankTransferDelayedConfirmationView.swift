@@ -4,7 +4,7 @@ import SwiftUI
 struct BankTransferDelayedConfirmationView: View {
 
     let supportEmail: String
-    let onClose: () -> Void
+    let onChangePaymentMethod: () -> Void
     let onKeepWaiting: () -> Void
 
     var body: some View {
@@ -29,7 +29,7 @@ struct BankTransferDelayedConfirmationView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, .doublePadding)
 
-            Button("Close", action: onClose)
+            Button("Change payment method", action: onChangePaymentMethod)
                 .buttonStyle(SecondaryButtonStyle())
 
             Button("Keep waiting", action: onKeepWaiting)

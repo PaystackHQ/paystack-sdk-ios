@@ -6,6 +6,7 @@ struct BankTransferTakingLongerView: View {
     let details: BankTransferDetails
     let onGetHelp: () -> Void
     let onBackToAccountNumber: () -> Void
+    let onChangePaymentMethod: () -> Void
 
     var body: some View {
         VStack(spacing: .triplePadding) {
@@ -22,6 +23,10 @@ struct BankTransferTakingLongerView: View {
                 .buttonStyle(PrimaryButtonStyle(showLoading: false))
 
             Button("Back to account number", action: onBackToAccountNumber)
+                .foregroundColor(.navy02)
+                .font(.body14M)
+
+            Button("Change payment method", action: onChangePaymentMethod)
                 .foregroundColor(.navy02)
                 .font(.body14M)
         }

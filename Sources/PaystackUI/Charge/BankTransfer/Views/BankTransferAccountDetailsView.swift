@@ -7,6 +7,7 @@ struct BankTransferAccountDetailsView: View {
     let amount: AmountCurrency
     let provider: BankTransferProvider
     let onIveSentTheMoney: () async -> Void
+    let onChangePaymentMethod: () -> Void
 
     @State private var provisionedAt: Date = Date()
     @State private var now: Date = Date()
@@ -16,11 +17,13 @@ struct BankTransferAccountDetailsView: View {
     init(details: BankTransferDetails,
          amount: AmountCurrency,
          provider: BankTransferProvider,
-         onIveSentTheMoney: @escaping () async -> Void) {
+         onIveSentTheMoney: @escaping () async -> Void,
+         onChangePaymentMethod: @escaping () -> Void) {
         self.details = details
         self.amount = amount
         self.provider = provider
         self.onIveSentTheMoney = onIveSentTheMoney
+        self.onChangePaymentMethod = onChangePaymentMethod
     }
 
     var body: some View {
@@ -38,6 +41,10 @@ struct BankTransferAccountDetailsView: View {
             Button("I've sent the money", action: { Task { await onIveSentTheMoney() } })
                 .buttonStyle(PrimaryButtonStyle(showLoading: false))
 
+            Button("Change payment method", action: onChangePaymentMethod)
+                .foregroundColor(.navy02)
+                .font(.body14M)
+                .padding(.top, .singlePadding)
         }
         .padding(.doublePadding)
         .onReceive(tick) { newNow in
