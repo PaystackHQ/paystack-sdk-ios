@@ -6,8 +6,6 @@ struct BankTransferView: View {
     @StateObject
     var viewModel: BankTransferViewModel
 
-    @State private var showBankPicker = false
-
     init(chargeContainer: ChargeContainer,
          transactionDetails: VerifyAccessCode,
          config: BankTransferConfig) {
@@ -26,9 +24,7 @@ struct BankTransferView: View {
                 BankTransferAccountDetailsView(
                     details: details,
                     amount: viewModel.transactionDetails.amountCurrency,
-                    onChangeBank: viewModel.availableBankSlugs.isEmpty
-                        ? nil
-                        : { showBankPicker = true },
+                    provider: viewModel.config.provider,
                     onIveSentTheMoney: { await viewModel.userTappedIveSentTheMoney() })
                     .id(details.transactionReference)
             case .confirmingPayment(let details, let phase):
@@ -70,18 +66,6 @@ struct BankTransferView: View {
             }
         }
         .task(viewModel.provisionVirtualAccount)
-        .sheet(isPresented: $showBankPicker) {
-            BankPickerSheet(
-                availableSlugs: viewModel.availableBankSlugs,
-                currentSlug: viewModel.currentBankSlug,
-                onSelect: { slug in
-                    Task { @MainActor [viewModel] in
-                        await viewModel.userSelectedBank(slug: slug)
-                    }
-                    showBankPicker = false
-                },
-                onCancel: { showBankPicker = false })
-        }
     }
 
     private var showsChangePaymentMethodFooter: Bool {

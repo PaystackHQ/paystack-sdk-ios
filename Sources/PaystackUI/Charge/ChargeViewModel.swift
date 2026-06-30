@@ -58,11 +58,15 @@ class ChargeViewModel: ObservableObject {
 
         if response.paymentChannels.contains(.bankTransfer),
            let transactionId = response.transactionId {
+            let provider: BankTransferProvider =
+                Self.pesalinkCurrencyCodes.contains(response.currency)
+                ? .pesalink : .standard
             let config = BankTransferConfig(
                 fulfilLateNotification: response
                     .merchantChannelSettings?.bankTransfer?.fulfilLateNotification ?? false,
                 transactionId: transactionId,
-                availableProviders: response.channelOptions?.bankTransfer ?? [])
+                availableProviders: response.channelOptions?.bankTransfer ?? [],
+                provider: provider)
             result.append(.bankTransfer(config))
         }
 
@@ -126,6 +130,7 @@ extension ChargeViewModel {
     ]
 
     static var promotedSupportedBankCodes: Set<String> = ["00zap"]
+    static var pesalinkCurrencyCodes: Set<String> = ["KES"]
 }
 
 extension ChargeViewModel: ChargeContainer {

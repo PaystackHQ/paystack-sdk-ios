@@ -120,8 +120,6 @@ class BankTransferViewModel: ObservableObject {
         await provisionVirtualAccount()
     }
 
-    // MARK: - Bank picker
-
     var availableBankSlugs: [String] {
         config.availableProviders
     }

@@ -5,7 +5,7 @@ struct BankTransferAccountDetailsView: View {
 
     let details: BankTransferDetails
     let amount: AmountCurrency
-    let onChangeBank: (() -> Void)?
+    let provider: BankTransferProvider
     let onIveSentTheMoney: () async -> Void
 
     @State private var provisionedAt: Date = Date()
@@ -15,11 +15,11 @@ struct BankTransferAccountDetailsView: View {
 
     init(details: BankTransferDetails,
          amount: AmountCurrency,
-         onChangeBank: (() -> Void)? = nil,
+         provider: BankTransferProvider,
          onIveSentTheMoney: @escaping () async -> Void) {
         self.details = details
         self.amount = amount
-        self.onChangeBank = onChangeBank
+        self.provider = provider
         self.onIveSentTheMoney = onIveSentTheMoney
     }
 
@@ -48,8 +48,7 @@ struct BankTransferAccountDetailsView: View {
     private var accountCard: some View {
         VStack(spacing: 0) {
             AccountDetailRow(label: "BANK NAME",
-                             value: details.bankName,
-                             trailing: bankNameTrailing)
+                             value: details.bankName)
             divider
             AccountDetailRow(label: "ACCOUNT NUMBER",
                              value: details.accountNumber,
@@ -58,18 +57,18 @@ struct BankTransferAccountDetailsView: View {
             AccountDetailRow(label: "AMOUNT",
                              value: amount.description,
                              trailing: .copy)
+
+            if provider == .pesalink {
+                divider
+                AccountDetailRow(label: "NARRATION / REASON",
+                                 value: details.transactionReference,
+                                 trailing: .copy)
+            }
         }
         .overlay(
             RoundedRectangle(cornerRadius: .cornerRadius)
                 .stroke(Color.navy05, lineWidth: 1)
         )
-    }
-
-    private var bankNameTrailing: AccountDetailRow.Trailing {
-        if let handler = onChangeBank {
-            return .text("Change bank", handler)
-        }
-        return .none
     }
 
     private var divider: some View {

@@ -233,6 +233,108 @@ final class ChargeViewModelTests: PSTestCase {
                                                     config: expectedConfig)))
     }
 
+    // MARK: - Pesalink branding (PR K-B)
+
+    /// KES currency → bank-transfer config resolves with `.pesalink`
+    /// provider, which drives the Pesalink tile + Narration row.
+    func testBankTransferResolvesToPesalinkProviderForKES() async {
+        let response = VerifyAccessCode.with(
+            channels: [.bankTransfer],
+            currency: "KES",
+            fulfilLateNotification: false,
+            transactionId: 5678)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        if case .payment(.bankTransfer(_, let config)) = serviceUnderTest.transactionState {
+            XCTAssertEqual(config.provider, .pesalink)
+        } else {
+            XCTFail("Expected .payment(.bankTransfer(_, _)) state, got \(serviceUnderTest.transactionState)")
+        }
+    }
+
+    /// NGN currency → standard PWT provider, not Pesalink.
+    func testBankTransferResolvesToStandardProviderForNGN() async {
+        let response = VerifyAccessCode.with(
+            channels: [.bankTransfer],
+            currency: "NGN",
+            bankTransferProviders: ["wema-bank"],
+            fulfilLateNotification: true,
+            transactionId: 1234)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        if case .payment(.bankTransfer(_, let config)) = serviceUnderTest.transactionState {
+            XCTAssertEqual(config.provider, .standard)
+        } else {
+            XCTFail("Expected .payment(.bankTransfer(_, _)) state, got \(serviceUnderTest.transactionState)")
+        }
+    }
+
+    /// Regression guard: USD (or any other non-KES currency) → standard.
+    /// Catches accidental over-broadening of the Pesalink gate.
+    func testBankTransferResolvesToStandardProviderForUSD() async {
+        let response = VerifyAccessCode.with(
+            channels: [.bankTransfer],
+            currency: "USD",
+            fulfilLateNotification: false,
+            transactionId: 1234)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        if case .payment(.bankTransfer(_, let config)) = serviceUnderTest.transactionState {
+            XCTAssertEqual(config.provider, .standard)
+        } else {
+            XCTFail("Expected .payment(.bankTransfer(_, _)) state, got \(serviceUnderTest.transactionState)")
+        }
+    }
+
+    /// The `pesalinkCurrencyCodes` static is runtime-mutable so the
+    /// gate can be widened to a new currency without an SDK release.
+    func testPesalinkCurrencyCodesStaticIsConfigurable() async {
+        let originalCodes = ChargeViewModel.pesalinkCurrencyCodes
+        defer { ChargeViewModel.pesalinkCurrencyCodes = originalCodes }
+        ChargeViewModel.pesalinkCurrencyCodes = ["KES", "UGX"]
+
+        let response = VerifyAccessCode.with(
+            channels: [.bankTransfer],
+            currency: "UGX",
+            fulfilLateNotification: false,
+            transactionId: 1234)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        if case .payment(.bankTransfer(_, let config)) = serviceUnderTest.transactionState {
+            XCTAssertEqual(config.provider, .pesalink)
+        } else {
+            XCTFail("Expected .payment(.bankTransfer(_, _)) state, got \(serviceUnderTest.transactionState)")
+        }
+    }
+
+    /// Confirms `SupportedChannel.bankTransfer(.pesalink)` produces the
+    /// Pesalink-branded display title.
+    func testPesalinkProviderProducesPesalinkDisplayTitle() {
+        let pesalinkConfig = BankTransferConfig(
+            fulfilLateNotification: false,
+            transactionId: 1234,
+            availableProviders: [],
+            provider: .pesalink)
+        let standardConfig = BankTransferConfig(
+            fulfilLateNotification: false,
+            transactionId: 1234,
+            availableProviders: [],
+            provider: .standard)
+
+        XCTAssertEqual(SupportedChannel.bankTransfer(pesalinkConfig).displayTitle,
+                       "Pesalink")
+        XCTAssertEqual(SupportedChannel.bankTransfer(standardConfig).displayTitle,
+                       "Bank Transfer")
+    }
+
     func testBankTransferDoesNotAppearWhenChannelArrayOmitsIt() async {
         let response = VerifyAccessCode.with(
             channels: [.card],
@@ -492,6 +594,7 @@ private extension MobileMoneyChannel {
 private extension VerifyAccessCode {
     static func with(channels: [PaystackCore.Channel],
                      email: String = "customer@example.com",
+                     currency: String = "USD",
                      mobileMoney: [MobileMoneyChannel]? = nil,
                      bankTransferProviders: [String]? = nil,
                      fulfilLateNotification: Bool? = nil,
@@ -508,7 +611,7 @@ private extension VerifyAccessCode {
         }
         return VerifyAccessCode(email: email,
                                 amount: 10000,
-                                currency: "USD",
+                                currency: currency,
                                 accessCode: "test_access",
                                 paymentChannels: channels,
                                 domain: .test,
