@@ -6,7 +6,7 @@ enum SupportedChannel: Equatable, Identifiable {
     case mobileMoney(MobileMoneyChannel)
     case bankTransfer(BankTransferConfig)
     case zap(ZapConfig)
-    
+
     var id: String {
         switch self {
         case .card:
@@ -19,7 +19,7 @@ enum SupportedChannel: Equatable, Identifiable {
             return "zap"
         }
     }
-    
+
     var displayTitle: String {
         switch self {
         case .card:
@@ -47,7 +47,7 @@ enum SupportedChannel: Equatable, Identifiable {
             return Image("zapSingleLogo", bundle: .current)
         }
     }
-    
+
     private static func image(forMobileMoneyKey key: String) -> Image {
         switch key.uppercased() {
         case "MPESA":
