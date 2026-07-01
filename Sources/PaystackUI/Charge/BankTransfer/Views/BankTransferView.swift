@@ -25,7 +25,8 @@ struct BankTransferView: View {
                     details: details,
                     amount: viewModel.transactionDetails.amountCurrency,
                     provider: viewModel.config.provider,
-                    onIveSentTheMoney: { await viewModel.userTappedIveSentTheMoney() })
+                    onIveSentTheMoney: { await viewModel.userTappedIveSentTheMoney() },
+                    onChangePaymentMethod: viewModel.userTappedChangePaymentMethod)
                     .id(details.transactionReference)
             case .confirmingPayment(let details, let phase):
                 BankTransferConfirmingView(
@@ -33,16 +34,18 @@ struct BankTransferView: View {
                     phase: phase,
                     confirmationWindowSeconds: viewModel.confirmationWindowSeconds,
                     elapsedSeconds: viewModel.confirmationElapsedSeconds,
-                    onBackToAccountNumber: viewModel.userTappedBackToAccountNumber)
+                    onBackToAccountNumber: viewModel.userTappedBackToAccountNumber,
+                    onChangePaymentMethod: viewModel.userTappedChangePaymentMethod)
             case .takingLongerThanExpected(let details):
                 BankTransferTakingLongerView(
                     details: details,
                     onGetHelp: viewModel.userTappedGetHelp,
-                    onBackToAccountNumber: viewModel.userTappedBackToAccountNumber)
+                    onBackToAccountNumber: viewModel.userTappedBackToAccountNumber,
+                    onChangePaymentMethod: viewModel.userTappedChangePaymentMethod)
             case .delayedConfirmation:
                 BankTransferDelayedConfirmationView(
                     supportEmail: "support@paystack.com",
-                    onClose: viewModel.userTappedCloseFromDelayedConfirmation,
+                    onChangePaymentMethod: viewModel.userTappedChangePaymentMethod,
                     onKeepWaiting: viewModel.userTappedKeepWaiting)
             case .refundInitiated(_, let message):
                 BankTransferRefundInitiatedView(
@@ -60,21 +63,7 @@ struct BankTransferView: View {
                             error: error,
                             transactionReference: viewModel.transactionDetails.reference))
             }
-
-            if showsChangePaymentMethodFooter {
-                ChangePaymentMethodFooter(action: viewModel.userTappedChangePaymentMethod)
-            }
         }
         .task(viewModel.provisionVirtualAccount)
-    }
-
-    private var showsChangePaymentMethodFooter: Bool {
-        switch viewModel.state {
-        case .awaitingPayment, .confirmingPayment,
-             .takingLongerThanExpected, .delayedConfirmation:
-            return true
-        case .loading, .error, .fatalError, .refundInitiated:
-            return false
-        }
     }
 }

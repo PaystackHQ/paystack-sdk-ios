@@ -84,7 +84,9 @@ struct ZapPaymentView: View {
             }
 
             Button("Change payment method", action: onChangePaymentMethod)
-                .buttonStyle(SecondaryButtonStyle())
+                .foregroundColor(.navy02)
+                .font(.body14M)
+                .padding(.top, .singlePadding)
         }
     }
 

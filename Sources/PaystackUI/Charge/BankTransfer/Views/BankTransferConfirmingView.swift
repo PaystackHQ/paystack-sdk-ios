@@ -13,6 +13,7 @@ struct BankTransferConfirmingView: View {
     let confirmationWindowSeconds: Int
     let elapsedSeconds: Int
     let onBackToAccountNumber: () -> Void
+    let onChangePaymentMethod: () -> Void
 
     private var receivedByBackend: Bool {
         phase == .transferOnTheWay
@@ -53,6 +54,10 @@ struct BankTransferConfirmingView: View {
                 .disabled(true)
 
             Button("Back to account number", action: onBackToAccountNumber)
+                .foregroundColor(.navy02)
+                .font(.body14M)
+
+            Button("Change payment method", action: onChangePaymentMethod)
                 .foregroundColor(.navy02)
                 .font(.body14M)
         }

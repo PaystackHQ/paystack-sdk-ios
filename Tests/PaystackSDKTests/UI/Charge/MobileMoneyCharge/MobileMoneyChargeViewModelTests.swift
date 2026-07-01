@@ -232,10 +232,10 @@ final class MobileMoneyChargeViewModelTests: XCTestCase {
         XCTAssertEqual(serviceUnderTest.transactionState, .countdown)
     }
 
-    func testCancelTransactionRestartsPayment() {
-        serviceUnderTest.transactionState = .error(.generic)
-        serviceUnderTest.cancelTransaction()
-        XCTAssertEqual(serviceUnderTest.transactionState, .countdown)
+    @MainActor
+    func testUserTappedChangePaymentMethodRestartsChannelSelection() {
+        serviceUnderTest.userTappedChangePaymentMethod()
+        XCTAssertTrue(mockChargeContainer.channelSelectionRestarted)
     }
 }
 

@@ -45,7 +45,8 @@ struct MobileMoneyChargeView: View {
                 FormInput(title: "Pay  \(viewModel.transactionDetails.amountCurrency.description)",
                           enabled: viewModel.isValid,
                           action: viewModel.submitPhoneNumber,
-                          secondaryAction: viewModel.cancelTransaction) {
+                          secondaryButtonText: "Change payment method",
+                          secondaryAction: viewModel.userTappedChangePaymentMethod) {
                     phoneNumber
                 }
             }
