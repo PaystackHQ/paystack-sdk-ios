@@ -180,12 +180,11 @@ final class ZapViewModelTests: XCTestCase {
         XCTAssertEqual(serviceUnderTest.state, .error(error))
     }
 
-    // MARK: - processTransactionUpdate — success + failed are the only
-    // statuses Zap emits ; everything else is logged + state unchanged.
+    // MARK: - processTransactionUpdate — success + failed only.
 
     func testProcessUpdateWithSuccessCallsContainerProcessSuccessfulTransaction() async {
         await serviceUnderTest.processTransactionUpdate(
-            .init(status: .success, message: nil, reference: nil, transactionId: nil))
+            ChargeCardTransaction(status: .success))
         XCTAssertTrue(mockChargeContainer.transactionSuccessful)
     }
 
@@ -194,9 +193,7 @@ final class ZapViewModelTests: XCTestCase {
         await serviceUnderTest.initiateMandate()
 
         await serviceUnderTest.processTransactionUpdate(
-            .init(status: .failed,
-                  message: "Bank declined",
-                  reference: nil, transactionId: nil))
+            ChargeCardTransaction(status: .failed, message: "Bank declined"))
 
         XCTAssertEqual(serviceUnderTest.state,
                        .error(ChargeError(message: "Bank declined")))
@@ -204,45 +201,27 @@ final class ZapViewModelTests: XCTestCase {
 
     func testProcessUpdateWithFailedFallsBackToDefaultMessageWhenNil() async {
         await serviceUnderTest.processTransactionUpdate(
-            .init(status: .failed, message: nil,
-                  reference: nil, transactionId: nil))
+            ChargeCardTransaction(status: .failed))
 
         XCTAssertEqual(serviceUnderTest.state,
                        .error(ChargeError(message: ZapViewModel.failedFallbackMessage)))
     }
 
-    /// Zap doesn't emit any of the PWT-shared status cases beyond
-    /// `success` / `failed` ; if one ever arrives (forward compat with
-    /// shared types) the SDK logs + leaves state unchanged. Regression
-    /// guard against accidentally wiring a state change for these cases
-    /// in the future.
-    func testProcessUpdateWithUnexpectedStatusesDoesNotChangeState() async {
-        let unexpectedStatuses: [BankTransferStatus] = [
-            .creditRequestPending,
-            .creditRequestReceived,
-            .creditRequestRejected,
-            .incorrectAmountSent,
-            .pending,
-            .requery,
-            .unknown("brand-new")
-        ]
+    func testProcessUpdateWithNonTerminalStatusDoesNotChangeState() async {
         mockRepository.expectedMandateResponse = .example
         await serviceUnderTest.initiateMandate()
 
         let stateBefore = serviceUnderTest.state
 
-        for status in unexpectedStatuses {
-            await serviceUnderTest.processTransactionUpdate(
-                .init(status: status, message: nil,
-                      reference: nil, transactionId: nil))
-            XCTAssertEqual(serviceUnderTest.state, stateBefore,
-                           "Status \(status) unexpectedly changed state")
-        }
+        await serviceUnderTest.processTransactionUpdate(
+            ChargeCardTransaction(status: .pending))
+
+        XCTAssertEqual(serviceUnderTest.state, stateBefore)
     }
 
-    // MARK: - Listen loop
+    // MARK: - Listen loop (single-shot)
 
-    func testProvisioningStartsListenLoopOnReturnedChannel() async {
+    func testProvisioningStartsListenOnReturnedChannel() async {
         mockRepository.expectedMandateResponse = .example
 
         await serviceUnderTest.initiateMandate()
@@ -252,11 +231,10 @@ final class ZapViewModelTests: XCTestCase {
         XCTAssertEqual(mockRepository.lastListenedChannel, "DBMAN_6222375579")
     }
 
-    func testListenLoopExitsOnSuccessAndRoutesToContainer() async {
+    func testListenResolvesOnSuccessAndRoutesToContainer() async {
         mockRepository.expectedMandateResponse = .example
         mockRepository.expectedListenForZapResponses = [
-            .init(status: .success, message: nil,
-                  reference: nil, transactionId: nil)
+            ChargeCardTransaction(status: .success)
         ]
 
         let expectation = expectation(description: "container receives success")
@@ -269,11 +247,10 @@ final class ZapViewModelTests: XCTestCase {
         XCTAssertTrue(mockChargeContainer.transactionSuccessful)
     }
 
-    func testListenLoopExitsOnFailedStatusToErrorState() async {
+    func testListenResolvesOnFailedStatusToErrorState() async {
         mockRepository.expectedMandateResponse = .example
         mockRepository.expectedListenForZapResponses = [
-            .init(status: .failed, message: "Bank declined",
-                  reference: nil, transactionId: nil)
+            ChargeCardTransaction(status: .failed, message: "Bank declined")
         ]
 
         await serviceUnderTest.initiateMandate()
@@ -284,7 +261,7 @@ final class ZapViewModelTests: XCTestCase {
                        .error(ChargeError(message: "Bank declined")))
     }
 
-    func testListenLoopExitsOnRepositoryErrorWithoutCrashing() async {
+    func testListenExitsOnRepositoryErrorWithoutCrashing() async {
         mockRepository.expectedMandateResponse = .example
         mockRepository.expectedListenForZapError = PaystackError.technical
 

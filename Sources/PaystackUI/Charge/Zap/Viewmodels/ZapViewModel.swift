@@ -97,33 +97,26 @@ class ZapViewModel: ObservableObject {
         }
     }
 
-    // MARK: - Pusher listen loop
+    // MARK: - Pusher (single-shot)
 
     private func startListeningForPusher(on details: ZapDetails) {
         pusherTask?.cancel()
         let channel = details.pusherChannel
         pusherTask = Task { [weak self] in
-            await self?.listenLoop(on: channel)
-        }
-    }
-
-    private func listenLoop(on channel: String) async {
-        while !Task.isCancelled {
+            guard let self else { return }
             do {
-                let update = try await repository
+                let update = try await self.repository
                     .listenForZapResponse(onChannel: channel)
-                await processTransactionUpdate(update)
-                if update.status.isTerminal { return }
+                await self.processTransactionUpdate(update)
             } catch {
-                Logger.error("Zap Pusher iteration failed: %@",
+                Logger.error("Zap Pusher await failed: %@",
                              arguments: error.localizedDescription)
-                return
             }
         }
     }
 
     @MainActor
-    func processTransactionUpdate(_ update: BankTransferTransactionUpdate) async {
+    func processTransactionUpdate(_ update: ChargeCardTransaction) async {
         switch update.status {
 
         case .success:
@@ -136,7 +129,7 @@ class ZapViewModel: ObservableObject {
             state = .error(ChargeError(message: message))
 
         default:
-            Logger.info("Zap: unexpected Pusher status %@",
+            Logger.info("Zap: non-terminal transaction status %@",
                         arguments: String(describing: update.status))
         }
     }

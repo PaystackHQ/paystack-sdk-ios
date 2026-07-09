@@ -7,7 +7,7 @@ class MockZapRepository: ZapRepository {
     var expectedMandateResponse: ZapMandateResponse?
     var expectedErrorResponse: Error?
 
-    var expectedListenForZapResponses: [BankTransferTransactionUpdate] = []
+    var expectedListenForZapResponses: [ChargeCardTransaction] = []
     var expectedListenForZapError: Error?
 
     var initiateZapMandateSubmitted: (supportedBankId: Int,
@@ -30,7 +30,7 @@ class MockZapRepository: ZapRepository {
     }
 
     func listenForZapResponse(onChannel channelName: String)
-        async throws -> BankTransferTransactionUpdate {
+        async throws -> ChargeCardTransaction {
         listenForZapResponseCallCount += 1
         lastListenedChannel = channelName
 

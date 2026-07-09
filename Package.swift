@@ -50,7 +50,15 @@ let package = Package(
                 .copy("API/Charge/Resources/PayWithTransferPusherCreditPending.json"),
                 .copy("API/Charge/Resources/PayWithTransferPusherCreditRejected.json"),
                 .copy("API/Charge/Resources/PayWithTransferPusherIncorrectAmount.json"),
-                .copy("API/Charge/Resources/ZapMandateResponse.json")
+                .copy("API/Charge/Resources/ZapMandateResponse.json"),
+                .copy("API/Charge/Resources/CapitecPayAuthenticateResponse.json"),
+                .copy("API/Charge/Resources/QRGenerateResponse.json"),
+                .copy("API/Charge/Resources/ZapPusherSuccess.json"),
+                .copy("API/Charge/Resources/ZapPusherFailed.json"),
+                .copy("API/Charge/Resources/CapitecPayPusherSuccess.json"),
+                .copy("API/Charge/Resources/CapitecPayPusherFailed.json"),
+                .copy("API/Charge/Resources/QRPusherSuccess.json"),
+                .copy("API/Charge/Resources/QRPusherFailed.json")
 
             ])
     ]

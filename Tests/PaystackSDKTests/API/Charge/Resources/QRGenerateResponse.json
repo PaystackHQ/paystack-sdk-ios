@@ -1,0 +1,11 @@
+{
+    "status": true,
+    "message": "QR successfully generated",
+    "data": {
+        "errors": false,
+        "url": "https://s3.eu-west-1.amazonaws.com/files.paystack.co/qr/mpass_olti/518262/1783510266603.png?X-Amz-Signature=abc",
+        "qr_code": "1490884538",
+        "status": "success",
+        "channel": "api_mpass_olti_qr_51826223921246"
+    }
+}

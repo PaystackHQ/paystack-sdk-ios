@@ -23,21 +23,21 @@ public extension Paystack {
     }
 
     /// Listens for Zap status updates on the Pusher channel returned by
-    /// ``initiateZapMandate(_:)``. The status taxonomy is shared with
-    /// Pay-with-Transfer, so this
-    /// helper returns the existing `PayWithTransferPusherResponse` shape.
+    /// ``initiateZapMandate(_:)``. The server publishes only terminal
+    /// events (`success` / `failed`) on the Zap channel, so this helper
+    /// returns the narrow ``Charge3DSResponse`` shape shared with card
+    /// 3-D Secure and mobile money authorization.
     ///
     /// The underlying listener is single-shot per the existing
-    /// `PusherSubscriptionListener` contract ; callers that need to keep
-    /// listening through transient statuses must re-subscribe after each
-    /// event.
+    /// `PusherSubscriptionListener` contract — one event resolves the
+    /// listener.
     ///
     /// - Parameter channelName: The `pusherChannel` value returned from
     ///   `initiateZapMandate` (e.g. `DBMAN_6222375579`).
-    /// - Returns: A ``Service`` carrying a ``PayWithTransferPusherResponse``
-    ///   on the first event the channel emits.
+    /// - Returns: A ``Service`` carrying a ``Charge3DSResponse`` on the
+    ///   first event the channel emits.
     func listenForZapResponse(onChannel channelName: String)
-        -> Service<PayWithTransferPusherResponse> {
+        -> Service<Charge3DSResponse> {
         let subscription: any Subscription = PusherSubscription(
             channelName: channelName, eventName: "response")
         return Service(subscription)

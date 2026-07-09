@@ -56,11 +56,24 @@ final class ZapTests: PSTestCase {
         let channelName = "DBMAN_6222375579"
         mockSubscriptionListener
             .expectSubscription(PusherSubscription(channelName: channelName, eventName: "response"))
-            .andReturnString(fromJson: "PayWithTransferPusherSuccess")
+            .andReturnString(fromJson: "ZapPusherSuccess")
 
         let result = try await serviceUnderTest
             .listenForZapResponse(onChannel: channelName).async()
 
-        XCTAssertEqual(result.status, "success")
+        XCTAssertEqual(result.status, .success)
+    }
+
+    func testListenForZapResponseDecodesFailedShape() async throws {
+        let channelName = "DBMAN_6222375579"
+        mockSubscriptionListener
+            .expectSubscription(PusherSubscription(channelName: channelName, eventName: "response"))
+            .andReturnString(fromJson: "ZapPusherFailed")
+
+        let result = try await serviceUnderTest
+            .listenForZapResponse(onChannel: channelName).async()
+
+        XCTAssertEqual(result.status, .failed)
+        XCTAssertEqual(result.message, "Bank declined the mandate")
     }
 }
