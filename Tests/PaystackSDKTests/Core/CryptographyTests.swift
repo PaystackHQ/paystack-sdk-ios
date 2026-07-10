@@ -30,6 +30,41 @@ final class CryptographyTests: XCTestCase {
         XCTAssertEqual(decryptedString, clearText)
     }
 
+    func testPKCS1EncryptionRoundTripsToOriginalText() throws {
+        let clearText = "Hello World"
+
+        let encryptedData = try serviceUnderTest.encryptPKCS1(text: clearText, publicKey: publicKey)
+        let decryptedString = try serviceUnderTest.decryptPKCS1(base64String: encryptedData,
+                                                                privateKey: privateKey)
+
+        XCTAssertEqual(decryptedString, clearText)
+    }
+
+    func testPKCS1EncryptionWithSpecialCharactersRoundTrips() throws {
+        let mockCardConcatenation = "1234567890123456*123*01*23"
+
+        let encryptedData = try serviceUnderTest.encryptPKCS1(text: mockCardConcatenation,
+                                                              publicKey: publicKey)
+        let decryptedString = try serviceUnderTest.decryptPKCS1(base64String: encryptedData,
+                                                                privateKey: privateKey)
+
+        XCTAssertEqual(decryptedString, mockCardConcatenation)
+    }
+
+    func testPKCS1EncryptionOfTextOverLengthLimitThrowsError() {
+        let clearText = [String](repeating: "a", count: 200).joined(separator: "")
+
+        XCTAssertThrowsError(try serviceUnderTest.encryptPKCS1(text: clearText, publicKey: publicKey)) { error in
+            XCTAssertEqual(error as? CryptographyError, CryptographyError.encryptionFailed)
+        }
+    }
+
+    func testPKCS1EncryptionWithNonBase64PublicKeyThrowsError() {
+        XCTAssertThrowsError(try serviceUnderTest.encryptPKCS1(text: "Hello World", publicKey: "ABC")) { error in
+            XCTAssertEqual(error as? CryptographyError, CryptographyError.invalidBase64String)
+        }
+    }
+
     func testEncryptionWithSpecialCharacters() {
         let mockCardConcatenation = "1234567890123456*123*01*23"
         guard let encryptedData = try? serviceUnderTest.encrypt(text: mockCardConcatenation,
@@ -178,6 +213,22 @@ extension Cryptography {
 
         var error: Unmanaged<CFError>?
         guard let decrypted = SecKeyCreateDecryptedData(key, .rsaEncryptionOAEPSHA1,
+                                                        data as CFData, &error),
+                let decryptedString = String(data: decrypted as Data, encoding: .utf8) else {
+            throw CryptographyError.decryptionFailed
+        }
+
+        return decryptedString
+    }
+
+    func decryptPKCS1(base64String: String, privateKey: String) throws -> String {
+        guard let data = Data(base64Encoded: base64String) else {
+            throw CryptographyError.invalidBase64String
+        }
+        let key = try createKey(from: privateKey, isPublic: false)
+
+        var error: Unmanaged<CFError>?
+        guard let decrypted = SecKeyCreateDecryptedData(key, .rsaEncryptionPKCS1,
                                                         data as CFData, &error),
                 let decryptedString = String(data: decrypted as Data, encoding: .utf8) else {
             throw CryptographyError.decryptionFailed

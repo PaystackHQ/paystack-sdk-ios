@@ -8,7 +8,7 @@ protocol ZapRepository {
                             walletEmail: String) async throws -> ZapMandateResponse
 
     func listenForZapResponse(onChannel channelName: String)
-        async throws -> BankTransferTransactionUpdate
+        async throws -> ChargeCardTransaction
 }
 
 struct ZapRepositoryImplementation: ZapRepository {
@@ -29,9 +29,9 @@ struct ZapRepositoryImplementation: ZapRepository {
     }
 
     func listenForZapResponse(onChannel channelName: String)
-        async throws -> BankTransferTransactionUpdate {
+        async throws -> ChargeCardTransaction {
         let response = try await paystack
             .listenForZapResponse(onChannel: channelName).async()
-        return BankTransferTransactionUpdate.from(response)
+        return ChargeCardTransaction.from(response)
     }
 }

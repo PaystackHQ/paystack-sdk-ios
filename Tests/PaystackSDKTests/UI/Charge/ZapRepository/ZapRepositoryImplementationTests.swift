@@ -102,47 +102,33 @@ final class ZapRepositoryImplementationTests: PSTestCase {
 
     // MARK: - listenForZapResponse
 
-    /// Subscribes to the Pusher channel with the same `eventName: "response"`
-    /// contract as Pay-with-Transfer, and the success payload maps cleanly
-    /// to a `BankTransferTransactionUpdate` (shared wire format).
     func testListenForZapResponseSubscribesToProvidedChannelAndMapsSuccess() async throws {
         let channel = "DBMAN_6222375579"
         mockSubscriptionListener
             .expectSubscription(PusherSubscription(channelName: channel, eventName: "response"))
-            .andReturnString(fromJson: "PayWithTransferPusherSuccess")
+            .andReturnString(fromJson: "ZapPusherSuccess")
 
         let result = try await serviceUnderTest.listenForZapResponse(onChannel: channel)
 
         XCTAssertEqual(result.status, .success)
-        XCTAssertEqual(result.message, "Payment Successful")
-        XCTAssertEqual(result.transactionId, "3818017015")
-        XCTAssertEqual(result.reference, "T3818017015I615243Sujjxh")
     }
 
-    /// `failed` is the second of the two statuses Zap is documented to
-    /// emit (the other being `success`). Reuses the existing PWT
-    /// "failed-shape" fixture since Zap shares the wire format.
-    func testListenForZapResponseMapsFailedStatusFromSharedWireFormat() async throws {
+    func testListenForZapResponseMapsFailedStatus() async throws {
         let channel = "DBMAN_6222375579"
         mockSubscriptionListener
             .expectSubscription(PusherSubscription(channelName: channel, eventName: "response"))
-            .andReturnString(fromJson: "PayWithTransferPusherIncorrectAmount")
+            .andReturnString(fromJson: "ZapPusherFailed")
 
         let result = try await serviceUnderTest.listenForZapResponse(onChannel: channel)
 
         XCTAssertEqual(result.status, .failed)
-        XCTAssertEqual(result.message, "incorrect amount sent")
     }
 
-    /// The channel name is passed through verbatim — the SDK doesn't
-    /// rewrite the `DBMAN_*` prefix or anything else. Mirror the PWT
-    /// repository's equivalent test so any future regression where the
-    /// channel name is mutated would fail loudly.
     func testListenForZapResponsePassesChannelNameThroughVerbatim() async throws {
         let channel = "DBMAN_arbitrary_123"
         mockSubscriptionListener
             .expectSubscription(PusherSubscription(channelName: channel, eventName: "response"))
-            .andReturnString(fromJson: "PayWithTransferPusherSuccess")
+            .andReturnString(fromJson: "ZapPusherSuccess")
 
         _ = try await serviceUnderTest.listenForZapResponse(onChannel: channel)
     }

@@ -1,0 +1,11 @@
+{
+    "status": true,
+    "type": "success",
+    "code": "ok",
+    "data": {
+        "status": "success",
+        "timeToLive": 120,
+        "expiryDate": "2026-07-07T12:29:20.000Z"
+    },
+    "message": "Charge pending"
+}
