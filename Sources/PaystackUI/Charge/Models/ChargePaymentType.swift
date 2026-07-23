@@ -8,4 +8,8 @@ enum ChargePaymentType: Equatable {
                       config: BankTransferConfig)
     case zap(transactionInformation: VerifyAccessCode,
              config: ZapConfig)
+    case capitecPay(transactionInformation: VerifyAccessCode,
+                    config: CapitecPayConfig)
+    case qr(transactionInformation: VerifyAccessCode,
+            config: QRConfig)
 }
