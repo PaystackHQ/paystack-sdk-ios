@@ -5,7 +5,7 @@ public struct QRGenerateRequest: Encodable, Equatable {
     public let reference: String
     public let channel: String
 
-    public init(source: String = "mobile-pos",
+    public init(source: String = "checkout",
                 reference: String,
                 channel: String) {
         self.source = source

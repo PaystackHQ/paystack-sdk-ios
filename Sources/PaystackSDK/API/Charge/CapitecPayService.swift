@@ -4,7 +4,7 @@ protocol CapitecPayService: PaystackService {
     func postAuthenticate(_ request: CapitecPayAuthenticateRequest)
         -> Service<CapitecPayAuthenticateResponse>
     func postRequery(transactionReference: String)
-        -> Service<ChargeResponse>
+        -> Service<CapitecResponse>
 }
 
 struct CapitecPayServiceImplementation: CapitecPayService {
@@ -20,8 +20,8 @@ struct CapitecPayServiceImplementation: CapitecPayService {
     }
 
     func postRequery(transactionReference: String)
-        -> Service<ChargeResponse> {
-        return post("/requery/\(transactionReference)", EmptyRequest())
+        -> Service<CapitecResponse> {
+        return get("/requery/\(transactionReference)")
             .asService()
     }
 }

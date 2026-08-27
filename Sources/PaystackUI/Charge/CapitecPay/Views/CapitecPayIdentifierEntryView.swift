@@ -132,8 +132,8 @@ private struct PreviewCapitecPayRepository: CapitecPayRepository {
                       publicEncryptionKey: String) async throws -> CapitecPayDetails {
         .example
     }
-    func requery(transactionReference: String) async throws -> ChargeCardTransaction {
-        ChargeCardTransaction(status: .pending)
+    func requery(transactionReference: String) async throws -> ChargeCapitecTransaction {
+        ChargeCapitecTransaction(status: "success")
     }
     func listenForCapitecPayResponse(onChannel channelName: String)
         async throws -> ChargeCardTransaction {

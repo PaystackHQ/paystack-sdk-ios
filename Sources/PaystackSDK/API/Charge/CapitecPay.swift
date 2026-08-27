@@ -32,9 +32,9 @@ public extension Paystack {
     ///
     /// - Parameter transactionReference: The `reference` returned from
     ///   `verify_access_code`.
-    /// - Returns: A ``Service`` carrying a ``ChargeResponse``.
+    /// - Returns: A ``Service`` carrying a ``CapitecResponse``.
     func requeryCapitecPay(transactionReference: String)
-        -> Service<ChargeResponse> {
+        -> Service<CapitecResponse> {
         return capitecPayService.postRequery(transactionReference: transactionReference)
     }
 

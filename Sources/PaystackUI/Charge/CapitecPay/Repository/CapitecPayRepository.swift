@@ -8,7 +8,7 @@ protocol CapitecPayRepository {
                       deviceId: String,
                       publicEncryptionKey: String) async throws -> CapitecPayDetails
 
-    func requery(transactionReference: String) async throws -> ChargeCardTransaction
+    func requery(transactionReference: String) async throws -> ChargeCapitecTransaction
 
     func listenForCapitecPayResponse(onChannel channelName: String)
         async throws -> ChargeCardTransaction
@@ -31,7 +31,7 @@ struct CapitecPayRepositoryImplementation: CapitecPayRepository {
                       publicEncryptionKey: String) async throws -> CapitecPayDetails {
         
         let plaintext = "\(identifier.rawValue)*\(value)"
-        let clientdata = try cryptography.encryptPKCS1(
+        let clientdata = try cryptography.encrypt(
             text: plaintext, publicKey: publicEncryptionKey)
         let request = CapitecPayAuthenticateRequest(
             clientdata: clientdata,
@@ -41,10 +41,10 @@ struct CapitecPayRepositoryImplementation: CapitecPayRepository {
         return CapitecPayDetails.from(response, transactionId: transactionId)
     }
 
-    func requery(transactionReference: String) async throws -> ChargeCardTransaction {
+    func requery(transactionReference: String) async throws -> ChargeCapitecTransaction {
         let response = try await paystack
             .requeryCapitecPay(transactionReference: transactionReference).async()
-        return ChargeCardTransaction.from(response)
+        return ChargeCapitecTransaction.from(response)
     }
 
     func listenForCapitecPayResponse(onChannel channelName: String)

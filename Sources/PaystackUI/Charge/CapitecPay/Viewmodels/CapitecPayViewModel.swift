@@ -71,8 +71,7 @@ class CapitecPayViewModel: ObservableObject {
                 identifier: identifier,
                 value: value,
                 transactionId: config.transactionId,
-                //deviceId: deviceFingerprint(),
-                deviceId: "E403F2353A734C9A871BD0276BF92312",
+                deviceId: deviceFingerprint(),
                 publicEncryptionKey: config.publicEncryptionKey)
             state = .awaitingApproval(details)
             remainingSeconds = details.timeToLive
@@ -208,15 +207,15 @@ class CapitecPayViewModel: ObservableObject {
 
     @MainActor
     @discardableResult
-    private func reactToPollResult(_ result: ChargeCardTransaction) -> Bool {
+    private func reactToPollResult(_ result: ChargeCapitecTransaction) -> Bool {
         switch result.status {
-        case .success:
+        case "success":
             cancelAllTasks()
             chargeContainer.processSuccessfulTransaction(details: transactionDetails)
             return true
-        case .failed:
+        case "failed":
             cancelAllTasks()
-            let message = result.message ?? result.displayText ?? Self.failedFallbackMessage
+            let message = Self.failedFallbackMessage
             state = .error(ChargeError(message: message))
             return true
         default:
