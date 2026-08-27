@@ -14,7 +14,7 @@ struct BankTransferTakingLongerView: View {
             Text("It's taking longer than expected to confirm your transfer. "
                  + "You don't have to wait here till we confirm it.")
                 .font(.body16M)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
                 .multilineTextAlignment(.center)
 
             timeline
@@ -23,11 +23,11 @@ struct BankTransferTakingLongerView: View {
                 .buttonStyle(PrimaryButtonStyle(showLoading: false))
 
             Button("Back to account number", action: onBackToAccountNumber)
-                .foregroundColor(.navy02)
+                .foregroundColor(.contentSecondary)
                 .font(.body14M)
 
             Button("Change payment method", action: onChangePaymentMethod)
-                .foregroundColor(.navy02)
+                .foregroundColor(.contentSecondary)
                 .font(.body14M)
         }
         .padding(.doublePadding)
@@ -37,7 +37,7 @@ struct BankTransferTakingLongerView: View {
         HStack(spacing: 0) {
             TimelineNode(label: "Sent", state: .complete)
             Rectangle()
-                .fill(Color.gray01)
+                .fill(Color.trackInactive)
                 .frame(height: 1)
                 .padding(.horizontal, .singlePadding)
             TimelineNode(label: "Received", state: .pending)

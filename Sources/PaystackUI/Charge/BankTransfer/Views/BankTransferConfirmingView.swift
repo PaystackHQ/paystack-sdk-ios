@@ -43,7 +43,7 @@ struct BankTransferConfirmingView: View {
 
             Text(bodyCopy)
                 .font(.body16M)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
                 .multilineTextAlignment(.center)
                 .animation(.easeInOut(duration: 0.25), value: phase)
 
@@ -54,11 +54,11 @@ struct BankTransferConfirmingView: View {
                 .disabled(true)
 
             Button("Back to account number", action: onBackToAccountNumber)
-                .foregroundColor(.navy02)
+                .foregroundColor(.contentSecondary)
                 .font(.body14M)
 
             Button("Change payment method", action: onChangePaymentMethod)
-                .foregroundColor(.navy02)
+                .foregroundColor(.contentSecondary)
                 .font(.body14M)
         }
         .padding(.doublePadding)
@@ -92,10 +92,10 @@ struct BankTransferConfirmingView: View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
                 Rectangle()
-                    .fill(Color.gray01)
+                    .fill(Color.trackInactive)
                     .frame(height: 1)
                 Rectangle()
-                    .fill(Color.stackGreen)
+                    .fill(Color.accentPrimary)
                     .frame(width: receivedByBackend ? geo.size.width : 0,
                            height: 1)
                     .animation(.easeInOut(duration: 0.45), value: receivedByBackend)

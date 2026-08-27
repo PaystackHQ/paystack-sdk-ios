@@ -94,13 +94,13 @@ extension Image {
 
     static var dropDownIndicator: some View {
         Image(systemName: "arrowtriangle.down.circle.fill")
-            .foregroundColor(.gray01)
+            .foregroundColor(.iconMuted)
     }
 
     static var errorIcon: some View {
         Image(systemName: "exclamationmark.triangle.fill")
             .resizable()
-            .foregroundColor(.warning02)
+            .foregroundColor(.contentWarning)
             .aspectRatio(contentMode: .fit)
             .frame(width: .quadPadding)
     }
@@ -108,7 +108,7 @@ extension Image {
     static var radioButtonUnselected: some View {
         Image(systemName: "circle")
             .resizable()
-            .foregroundColor(.black)
+            .foregroundColor(.contentTertiary)
             .aspectRatio(contentMode: .fit)
             .frame(width: .doublePadding)
     }
@@ -116,7 +116,7 @@ extension Image {
     static var radioButtonSelected: some View {
         Image(systemName: "checkmark.circle.fill")
             .resizable()
-            .foregroundColor(.stackGreen)
+            .foregroundColor(.accentPrimary)
             .aspectRatio(contentMode: .fit)
             .frame(width: .doublePadding)
     }

@@ -20,12 +20,12 @@ struct MobileMoneyProcessingView: View {
             Image.otpIcon
             Text(viewModel.mobileMoneyTransaction.phone)
                 .font(.body16M)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
                 .multilineTextAlignment(.center)
 
             Text(viewModel.authorizationPromptText)
                 .font(.body16M)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
                 .multilineTextAlignment(.center)
 
             CountdownView(counter: $viewModel.counter,
@@ -63,7 +63,7 @@ struct ProgressTrack: View {
             .fill(Color.clear)
             .frame(width: 35, height: 35)
             .overlay(
-                Circle().stroke(Color.gray01, lineWidth: 5)
+                Circle().stroke(Color.trackInactive, lineWidth: 5)
             )
     }
 }
@@ -86,7 +86,7 @@ struct ProgressBar: View {
                         )
                     )
                     .foregroundColor(
-                        (completed() ? Color.stackGreen : Color.stackGreen)
+                        (completed() ? Color.accentPrimary : Color.accentPrimary)
                     ).animation(
                         .easeInOut(duration: 0.2)
                     )
@@ -115,7 +115,7 @@ struct CountdownView: View {
             }
             Text("Payment is valid for \(counterToMinutes())")
                 .font(.body16M)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
                 .multilineTextAlignment(.center)
         }.onReceive(timer) { _ in
             if self.counter < self.countTo {

@@ -26,11 +26,11 @@ struct AccountDetailRow: View {
             VStack(alignment: .leading, spacing: .quarterPadding) {
                 Text(label)
                     .font(.body12M)
-                    .foregroundColor(.navy03)
+                    .foregroundColor(.contentTertiary)
                     .padding(.bottom, .singlePadding)
                 Text(value)
                     .font(.body16M)
-                    .foregroundColor(.stackBlue)
+                    .foregroundColor(.contentPrimary)
             }
             Spacer()
             trailingView
@@ -47,7 +47,7 @@ struct AccountDetailRow: View {
             #if os(iOS)
             Button(action: copy) {
                 Image(systemName: justCopied ? "checkmark" : "doc.on.doc")
-                    .foregroundColor(justCopied ? .stackGreen : .navy02)
+                    .foregroundColor(justCopied ? .accentPrimary : .contentSecondary)
             }
             #else
             EmptyView()
@@ -55,7 +55,7 @@ struct AccountDetailRow: View {
         case .text(let title, let action):
             Button(title, action: action)
                 .font(.body14M)
-                .foregroundColor(.stackGreen)
+                .foregroundColor(.accentPrimary)
         }
     }
 

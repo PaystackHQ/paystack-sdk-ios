@@ -38,7 +38,7 @@ struct PickerFormInputView<Item: Hashable & CustomStringConvertible>: FormInputI
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: .cornerRadius, style: .continuous)
-                .stroke(Color.navy04, lineWidth: 1)
+                .stroke(Color.borderStrong, lineWidth: 1)
         )
         .form(title)
     }
@@ -47,10 +47,10 @@ struct PickerFormInputView<Item: Hashable & CustomStringConvertible>: FormInputI
         HStack {
             if let selectedItem = selectedItem {
                 Text(selectedItem.description)
-                    .foregroundColor(.stackBlue)
+                    .foregroundColor(.contentPrimary)
             } else {
                 Text(placeholder)
-                    .foregroundColor(.navy04)
+                    .foregroundColor(.contentPlaceholder)
             }
 
             Spacer()

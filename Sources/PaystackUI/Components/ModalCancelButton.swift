@@ -35,7 +35,7 @@ struct ModalCancelButton: ViewModifier {
         Button(action: closeButtonTapped) {
             Image(systemName: "xmark")
                 .font(.system(size: 20, weight: .medium))
-                .foregroundColor(.gray01)
+                .foregroundColor(.iconMuted)
         }
     }
 

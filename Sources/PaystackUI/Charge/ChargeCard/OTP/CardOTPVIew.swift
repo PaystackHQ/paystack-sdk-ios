@@ -23,7 +23,7 @@ struct CardOTPVIew: View {
 
                 Text(displayMessage)
                     .font(.body16M)
-                    .foregroundColor(.stackBlue)
+                    .foregroundColor(.contentPrimary)
                     .multilineTextAlignment(.center)
 
                 FormInput(title: "Authorize",

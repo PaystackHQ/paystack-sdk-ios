@@ -17,9 +17,9 @@ struct LoadingView: View {
         VStack(spacing: .quadPadding) {
             Text(message)
                 .font(.body16M)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
 
-            LoadingIndicator(tintColor: .navy04)
+            LoadingIndicator(tintColor: .spinnerTint)
                 .scaleEffect(2)
                 .padding(.bottom, .triplePadding)
         }

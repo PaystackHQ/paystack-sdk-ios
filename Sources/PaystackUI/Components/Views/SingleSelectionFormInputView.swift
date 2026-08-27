@@ -40,7 +40,7 @@ struct SingleSelectionFormInputView<Item: Hashable,
         .background(
             RoundedRectangle(cornerRadius: .cornerRadius,
                              style: .continuous)
-                .stroke(.gray, lineWidth: 1)
+                .stroke(Color.borderStrong, lineWidth: 1)
         )
     }
 

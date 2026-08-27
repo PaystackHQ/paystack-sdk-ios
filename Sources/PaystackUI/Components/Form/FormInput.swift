@@ -66,7 +66,7 @@ struct FormInput<Content: View,
             if let secondaryAction = secondaryAction,
                !viewModel.showLoading {
                 Button(secondaryButtonText, action: secondaryAction)
-                    .foregroundColor(.navy02)
+                    .foregroundColor(.contentSecondary)
                     .font(.body14M)
                     .padding(.top, .singlePadding)
             }
