@@ -18,7 +18,7 @@ struct CapitecPayAwaitingApprovalView: View {
     }
 
     private var countdownValueColor: Color {
-        remainingSeconds <= 60 ? .warning02 : .stackGreen
+        remainingSeconds <= 60 ? .contentWarning : .accentPrimary
     }
 
     var body: some View {
@@ -27,7 +27,7 @@ struct CapitecPayAwaitingApprovalView: View {
 
                 Text("Complete your payment")
                     .font(.heading2)
-                    .foregroundColor(.stackBlue)
+                    .foregroundColor(.contentPrimary)
                     .multilineTextAlignment(.center)
 
                 stepsCard
@@ -38,7 +38,7 @@ struct CapitecPayAwaitingApprovalView: View {
                     .buttonStyle(SecondaryButtonStyle())
 
                 Button("Change payment method", action: onChangePaymentMethod)
-                    .foregroundColor(.navy02)
+                    .foregroundColor(.contentSecondary)
                     .font(.body14M)
                     .padding(.top, .singlePadding)
             }
@@ -55,7 +55,7 @@ struct CapitecPayAwaitingApprovalView: View {
         }
         .padding(.doublePadding)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.gray01.opacity(0.4))
+        .background(Color.surfaceInsetTranslucent)
         .cornerRadius(.cornerRadius)
     }
 
@@ -63,12 +63,12 @@ struct CapitecPayAwaitingApprovalView: View {
     private func step(_ prefix: String, bold: String, trailing: String = "") -> some View {
         HStack(alignment: .top, spacing: .singlePadding) {
             Circle()
-                .fill(Color.stackGreen)
+                .fill(Color.accentPrimary)
                 .frame(width: 6, height: 6)
                 .padding(.top, 8)
-            (Text(prefix).foregroundColor(.stackBlue)
-             + Text(bold).foregroundColor(.stackBlue).bold()
-             + Text(trailing).foregroundColor(.stackBlue))
+            (Text(prefix).foregroundColor(.contentPrimary)
+             + Text(bold).foregroundColor(.contentPrimary).bold()
+             + Text(trailing).foregroundColor(.contentPrimary))
                 .font(.body14R)
                 .fixedSize(horizontal: false, vertical: true)
             Spacer(minLength: 0)
@@ -83,20 +83,14 @@ struct CapitecPayAwaitingApprovalView: View {
                     .progressViewStyle(.circular)
                 Text("Confirming payment…")
                     .font(.body14M)
-                    .foregroundColor(.navy02)
+                    .foregroundColor(.contentSecondary)
             }
             .padding(.vertical, .doublePadding)
         } else {
             VStack(spacing: .singlePadding) {
-                ZStack {
-                    Circle()
-                        .stroke(Color.gray01, lineWidth: 5)
-                        .frame(width: 60, height: 60)
-                    Image.messageBubbleLogo
-                }
                 HStack(spacing: 4) {
                     Text("Approve payment in")
-                        .foregroundColor(.navy03)
+                        .foregroundColor(.contentTertiary)
                     Text(formattedRemaining)
                         .foregroundColor(countdownValueColor)
                         .animation(.easeInOut(duration: 0.2), value: countdownValueColor)

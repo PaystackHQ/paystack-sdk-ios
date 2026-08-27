@@ -22,7 +22,7 @@ struct CapitecPayIdentifierEntryView: View {
 
                 Text(viewModel.identifier.prompt)
                     .font(.body16M)
-                    .foregroundColor(.stackBlue)
+                    .foregroundColor(.contentPrimary)
                     .multilineTextAlignment(.center)
                     .animation(.easeInOut(duration: 0.2), value: viewModel.identifier)
 

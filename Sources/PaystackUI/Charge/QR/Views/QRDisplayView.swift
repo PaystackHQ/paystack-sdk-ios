@@ -23,14 +23,14 @@ struct QRDisplayView: View {
 
                 Text(variant.instructionCopy)
                     .font(.body16M)
-                    .foregroundColor(.stackBlue)
+                    .foregroundColor(.contentPrimary)
                     .multilineTextAlignment(.center)
 
                 qrCodeBlock
 
                 Text(amount.description)
                     .font(.body16M)
-                    .foregroundColor(.stackBlue)
+                    .foregroundColor(.contentPrimary)
 
                 if variant.showsQRReferenceRow, let reference = details.qrReference {
                     qrReferenceRow(reference: reference)
@@ -58,10 +58,10 @@ struct QRDisplayView: View {
         QRCodeImage(url: details.qrImageURL)
             .frame(width: 220, height: 220)
             .padding(.singlePadding)
-            .background(Color.white)
+            .background(Color.qrPlate)
             .overlay(
                 RoundedRectangle(cornerRadius: .cornerRadius)
-                    .stroke(Color.navy05, lineWidth: 1))
+                    .stroke(Color.borderPrimary, lineWidth: 1))
     }
 
     private func qrReferenceRow(reference: String) -> some View {
@@ -69,9 +69,9 @@ struct QRDisplayView: View {
             HStack(spacing: .singlePadding) {
                 Text(reference)
                     .font(.body16M)
-                    .foregroundColor(.stackBlue)
+                    .foregroundColor(.contentPrimary)
                 Image(systemName: "doc.on.doc")
-                    .foregroundColor(.navy02)
+                    .foregroundColor(.contentSecondary)
                     .imageScale(.medium)
             }
         }
@@ -81,11 +81,11 @@ struct QRDisplayView: View {
     private func inlineBannerView(_ text: String) -> some View {
         Text(text)
             .font(.body14M)
-            .foregroundColor(.warning02)
+            .foregroundColor(.contentWarning)
             .multilineTextAlignment(.center)
             .padding(.singlePadding)
             .frame(maxWidth: .infinity)
-            .background(Color.warning02.opacity(0.08))
+            .background(Color.warningSurface)
             .cornerRadius(.cornerRadius)
     }
 
@@ -95,7 +95,7 @@ struct QRDisplayView: View {
                 .buttonStyle(PrimaryButtonStyle(showLoading: false))
 
             Button("Change payment method", action: onChangePaymentMethod)
-                .foregroundColor(.navy02)
+                .foregroundColor(.contentSecondary)
                 .font(.body14M)
                 .padding(.top, .singlePadding)
         }
