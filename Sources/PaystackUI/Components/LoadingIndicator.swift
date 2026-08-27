@@ -5,7 +5,7 @@ struct LoadingIndicator: View {
 
     var tintColor: Color
 
-    init(tintColor: Color = .white) {
+    init(tintColor: Color = .contentOnAccent) {
         self.tintColor = tintColor
     }
 

@@ -20,7 +20,7 @@ struct ZapPaymentView: View {
     }
 
     private var countdownValueColor: Color {
-        remainingSeconds <= 60 ? .warning02 : .stackGreen
+        remainingSeconds <= 60 ? .contentWarning : .accentPrimary
     }
 
     var body: some View {
@@ -31,7 +31,7 @@ struct ZapPaymentView: View {
 
                 Text("Open Zap or scan this QR code to complete this payment")
                     .font(.body16M)
-                    .foregroundColor(.stackBlue)
+                    .foregroundColor(.contentPrimary)
                     .multilineTextAlignment(.center)
 
                 qrCodeBlock
@@ -58,17 +58,17 @@ struct ZapPaymentView: View {
         QRCodeImage(url: details.qrImageURL)
             .frame(width: 220, height: 220)
             .padding(.singlePadding)
-            .background(Color.white)
+            .background(Color.qrPlate)
             .overlay(
                 RoundedRectangle(cornerRadius: .cornerRadius)
-                    .stroke(Color.navy05, lineWidth: 1))
+                    .stroke(Color.borderPrimary, lineWidth: 1))
     }
 
     private var expiresInRow: some View {
         HStack(spacing: 4) {
             Text("Expires in")
                 .font(.body14M)
-                .foregroundColor(.navy03)
+                .foregroundColor(.contentTertiary)
             Text(formattedRemaining)
                 .font(.body14M)
                 .foregroundColor(countdownValueColor)
@@ -84,7 +84,7 @@ struct ZapPaymentView: View {
             }
 
             Button("Change payment method", action: onChangePaymentMethod)
-                .foregroundColor(.navy02)
+                .foregroundColor(.contentSecondary)
                 .font(.body14M)
                 .padding(.top, .singlePadding)
         }

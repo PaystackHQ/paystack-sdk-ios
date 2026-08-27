@@ -25,7 +25,7 @@ struct QRCodeImage: View {
                     .transition(.opacity)
             } else if loadFailed {
                 Image(systemName: "exclamationmark.triangle")
-                    .foregroundColor(.warning02)
+                    .foregroundColor(.contentWarning)
             } else {
                 ShimmerPlaceholder()
             }
@@ -66,12 +66,12 @@ struct ShimmerPlaceholder: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                Color.gray01
+                Color.shimmerBase
                 LinearGradient(
                     gradient: Gradient(stops: [
-                        .init(color: Color.white.opacity(0.0), location: 0.0),
-                        .init(color: Color.white.opacity(0.5), location: 0.5),
-                        .init(color: Color.white.opacity(0.0), location: 1.0)
+                        .init(color: Color.shimmerHighlight.opacity(0.0), location: 0.0),
+                        .init(color: Color.shimmerHighlight.opacity(0.5), location: 0.5),
+                        .init(color: Color.shimmerHighlight.opacity(0.0), location: 1.0)
                     ]),
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing)

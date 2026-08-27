@@ -31,7 +31,7 @@ struct BankTransferAccountDetailsView: View {
 
             Text("Transfer exactly \(amount.description) to")
                 .font(.heading3)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
                 .multilineTextAlignment(.center)
 
             accountCard
@@ -42,7 +42,7 @@ struct BankTransferAccountDetailsView: View {
                 .buttonStyle(PrimaryButtonStyle(showLoading: false))
 
             Button("Change payment method", action: onChangePaymentMethod)
-                .foregroundColor(.navy02)
+                .foregroundColor(.contentSecondary)
                 .font(.body14M)
                 .padding(.top, .singlePadding)
         }
@@ -74,13 +74,13 @@ struct BankTransferAccountDetailsView: View {
         }
         .overlay(
             RoundedRectangle(cornerRadius: .cornerRadius)
-                .stroke(Color.navy05, lineWidth: 1)
+                .stroke(Color.borderPrimary, lineWidth: 1)
         )
     }
 
     private var divider: some View {
         Rectangle()
-            .fill(Color.navy05)
+            .fill(Color.surfaceSecondary)
             .frame(height: 1)
     }
 
@@ -88,15 +88,15 @@ struct BankTransferAccountDetailsView: View {
         VStack(spacing: .singlePadding) {
                 Text("This account is for one-time use only and expires in")
                     .font(.body14R)
-                    .foregroundColor(.navy03)
+                    .foregroundColor(.contentTertiary)
                     .multilineTextAlignment(.center)
                 Text(formattedRemaining)
                     .font(.body14M)
-                    .foregroundColor(.stackGreen)
+                    .foregroundColor(.accentPrimary)
 
             ProgressView(value: progress)
                 .progressViewStyle(.linear)
-                .accentColor(.stackGreen)
+                .accentColor(.accentPrimary)
         }
     }
 

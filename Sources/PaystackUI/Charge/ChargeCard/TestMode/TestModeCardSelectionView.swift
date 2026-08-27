@@ -21,7 +21,7 @@ struct TestModeCardSelectionView: View {
             VStack(spacing: .triplePadding) {
                 Text("Use any of the options below to test the payment flow")
                     .font(.body16M)
-                    .foregroundColor(.stackBlue)
+                    .foregroundColor(.contentPrimary)
                     .multilineTextAlignment(.center)
 
                 FormInput(title: viewModel.buttonTitle,
@@ -42,7 +42,7 @@ struct TestModeCardSelectionView: View {
             selectedItem: $viewModel.testCard) { item in
                 HStack {
                     Text(item.description)
-                        .foregroundColor(.stackBlue)
+                        .foregroundColor(.contentPrimary)
                         .font(.body14R)
 
                     Spacer()

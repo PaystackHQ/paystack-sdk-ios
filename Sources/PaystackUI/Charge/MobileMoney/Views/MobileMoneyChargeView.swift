@@ -39,7 +39,7 @@ struct MobileMoneyChargeView: View {
 
                 Text("Please enter the mobile money number to begin this payment")
                     .font(.body16M)
-                    .foregroundColor(.stackBlue)
+                    .foregroundColor(.contentPrimary)
                     .multilineTextAlignment(.center)
 
                 FormInput(title: "Pay  \(viewModel.transactionDetails.amountCurrency.description)",

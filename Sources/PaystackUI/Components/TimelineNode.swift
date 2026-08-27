@@ -22,7 +22,7 @@ struct TimelineNode: View {
         VStack(spacing: .singlePadding) {
             ZStack {
                 Circle()
-                    .stroke(Color.stackGreen, lineWidth: 2)
+                    .stroke(Color.accentPrimary, lineWidth: 2)
                     .frame(width: diameter, height: diameter)
                     .scaleEffect(rippleScale)
                     .opacity(rippleOpacity)
@@ -30,23 +30,23 @@ struct TimelineNode: View {
                 switch state {
                 case .complete:
                     Circle()
-                        .fill(Color.stackGreen)
+                        .fill(Color.accentPrimary)
                         .frame(width: diameter, height: diameter)
                         .scaleEffect(nodeScale)
                     Image(systemName: "checkmark")
-                        .foregroundColor(.white)
+                        .foregroundColor(.contentOnAccent)
                         .font(.system(size: 14, weight: .bold))
                         .scaleEffect(checkmarkScale)
                 case .pending:
                     Circle()
                         .stroke(style: StrokeStyle(lineWidth: 2, dash: [3, 3]))
-                        .foregroundColor(.gray01)
+                        .foregroundColor(.iconMuted)
                         .frame(width: diameter, height: diameter)
                 }
             }
             Text(label)
                 .font(.body12M)
-                .foregroundColor(state == .complete ? .stackGreen : .navy03)
+                .foregroundColor(state == .complete ? .accentPrimary : .contentTertiary)
                 .animation(.easeInOut(duration: 0.2), value: state)
         }
         .onChange(of: state) { newState in

@@ -14,7 +14,7 @@ struct BankPickerSheet: View {
             header
 
             Divider()
-                .background(Color.navy05)
+                .background(Color.borderPrimary)
 
             ScrollView {
                 LazyVStack(spacing: 0) {
@@ -24,24 +24,26 @@ struct BankPickerSheet: View {
                             isSelected: slug == currentSlug,
                             onTap: { onSelect(slug) })
                         Divider()
-                            .background(Color.navy05)
+                            .background(Color.borderPrimary)
                     }
                 }
             }
 
             Spacer(minLength: 0)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.surfacePrimary.ignoresSafeArea())
     }
 
     private var header: some View {
         HStack {
             Text("Change bank")
                 .font(.heading3)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
             Spacer()
             Button(action: onCancel) {
                 Image(systemName: "xmark")
-                    .foregroundColor(.navy02)
+                    .foregroundColor(.contentSecondary)
             }
         }
         .padding(.doublePadding)
@@ -60,11 +62,11 @@ private struct BankPickerRow: View {
             HStack {
                 Text(displayName)
                     .font(.body16M)
-                    .foregroundColor(.stackBlue)
+                    .foregroundColor(.contentPrimary)
                 Spacer()
                 if isSelected {
                     Image(systemName: "checkmark")
-                        .foregroundColor(.stackGreen)
+                        .foregroundColor(.accentPrimary)
                 }
             }
             .padding(.doublePadding)

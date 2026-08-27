@@ -6,7 +6,7 @@ struct FormTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
             .padding(.doublePadding)
-            .foregroundColor(.stackBlue)
+            .foregroundColor(.contentPrimary)
             .font(.body16R)
     }
 }

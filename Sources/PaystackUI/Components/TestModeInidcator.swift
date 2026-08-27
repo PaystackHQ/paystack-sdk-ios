@@ -4,14 +4,14 @@ struct TestModeInidcator: View {
 
     var body: some View {
         Text("TEST")
-            .foregroundColor(.warning01)
+            .foregroundColor(.testModeContent)
             .font(.smallTextM)
             .padding(.horizontal, .singlePadding + .halfPadding)
             .padding(.vertical, .halfPadding)
-            .background(Color.warning05)
+            .background(Color.testModeSurface)
             .overlay(
                 RoundedRectangle(cornerRadius: 3)
-                    .stroke(Color.warning04, lineWidth: 1)
+                    .stroke(Color.testModeBorder, lineWidth: 1)
             )
     }
 

@@ -3,3 +3,23 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - "*/*/GeneratedMocks.swift"
   - "*/*/*.generated.swift"
   - ".build/"
+
+custom_rules:
+  paystack_ui_no_literal_colour:
+    name: "PaystackUI literal colour"
+    regex: "(Color\\.(white|black|gray|red|blue|green)\\b|Color\\(red:\\s|UIColor\\(red:\\s)"
+    message: "Use a semantic token from Design/Colors.swift instead of a literal colour. Fixed exceptions (e.g. the QR quiet-zone plate) must carry a `// swiftlint:disable:next paystack_ui_no_literal_colour` comment explaining why."
+    included: "Sources/PaystackUI/.*\\.swift"
+    excluded:
+      - "Sources/PaystackUI/Design/Colors.swift"
+      - "Sources/PaystackUI/Design/DarkModePreviews.swift"
+    severity: warning
+  paystack_ui_no_hue_token:
+    name: "PaystackUI legacy hue token"
+    regex: "Color\\.(stackBlue|navy0[2-5]|stackGreen|green02|gray01|error0[12]|warning0[1245])\\b"
+    message: "Use the semantic token layer (contentPrimary, borderSubtle, accentPrimary, …) instead of the underlying hue token. Hue tokens are kept as internal primitives per Q8 in DARK_MODE_IMPLEMENTATION_PLAN.md and should not be called directly by view code."
+    included: "Sources/PaystackUI/.*\\.swift"
+    excluded:
+      - "Sources/PaystackUI/Design/Colors.swift"
+      - "Sources/PaystackUI/Design/DarkModePreviews.swift"
+    severity: warning

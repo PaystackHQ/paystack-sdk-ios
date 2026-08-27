@@ -47,6 +47,8 @@ struct ChargeView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 140)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.surfacePrimary.ignoresSafeArea())
         .task(viewModel.verifyAccessCodeAndProceed)
         .modalCancelButton(showConfirmation: viewModel.displayCloseButtonConfirmation,
                            onCancelled: chargeCancelled)

@@ -27,7 +27,7 @@ struct ErrorView: View {
 
             Text(message)
                 .font(.body16M)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
                 .padding(.bottom, .singlePadding)
 
             if let buttonText, let buttonAction {

@@ -10,7 +10,7 @@ struct TitleFormInputView<Content: View>: FormInputItemViewModifier {
     var body: some View {
         VStack(alignment: .leading, spacing: .halfPadding) {
             Text(title)
-                .foregroundColor(.navy02)
+                .foregroundColor(.contentSecondary)
                 .font(.body14R)
 
             content

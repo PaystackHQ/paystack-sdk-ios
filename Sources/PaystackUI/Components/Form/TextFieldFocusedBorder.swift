@@ -13,7 +13,7 @@ struct TextFieldFocusedBorder: ViewModifier {
             .focused($isFocused)
             .background(
                 RoundedRectangle(cornerRadius: .cornerRadius, style: .continuous)
-                    .stroke(isFocused ?  Color.stackGreen : defaultColor, lineWidth: 1)
+                    .stroke(isFocused ?  Color.accentPrimary : defaultColor, lineWidth: 1)
             )
     }
 }
@@ -21,7 +21,7 @@ struct TextFieldFocusedBorder: ViewModifier {
 extension View {
 
     @ViewBuilder
-    func focusedBorderColor(defaultColor: Color = .navy04) -> some View {
+    func focusedBorderColor(defaultColor: Color = .borderStrong) -> some View {
         if #available(iOS 15, macOS 12.0, *) {
             self.modifier(TextFieldFocusedBorder(defaultColor: defaultColor))
         } else {

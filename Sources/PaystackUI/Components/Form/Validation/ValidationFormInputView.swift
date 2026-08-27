@@ -37,7 +37,7 @@ struct ValidationFormInputView<Content: FormInputItemView>: FormInputItemViewMod
                     if !validatorStates[index] {
                         Text(validator.errorMessage)
                             .font(.body12R)
-                            .foregroundColor(.error01)
+                            .foregroundColor(.contentError)
                     }
                 }
             }
