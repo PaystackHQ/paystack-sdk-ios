@@ -8,10 +8,10 @@ struct CopiedToast: View {
     var body: some View {
         Text(text)
             .font(.body14M)
-            .foregroundColor(.white)
+            .foregroundColor(.contentOnAccent)
             .padding(.horizontal, .doublePadding)
             .padding(.vertical, .singlePadding)
-            .background(Color.stackBlue.opacity(0.9))
+            .background(Color.toastSurface)
             .cornerRadius(.cornerRadius)
     }
 }
