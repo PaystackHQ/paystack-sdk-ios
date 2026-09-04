@@ -33,7 +33,7 @@ struct CardRedirectView: View {
                     isLoading: $webviewLoading)
 
             if webviewLoading {
-                LoadingIndicator(tintColor: .navy04)
+                LoadingIndicator(tintColor: .spinnerTint)
                     .scaleEffect(2)
             }
         }
@@ -52,7 +52,7 @@ struct CardRedirectView: View {
     var titleText: some View {
         Text("Please click the button below to authenticate with your bank")
             .font(.body16M)
-            .foregroundColor(.stackBlue)
+            .foregroundColor(.contentPrimary)
             .multilineTextAlignment(.center)
     }
 
@@ -65,7 +65,7 @@ struct CardRedirectView: View {
 
     var cancelButton: some View {
         Button("Cancel", action: viewModel.cancelTransaction)
-            .foregroundColor(.navy02)
+            .foregroundColor(.contentSecondary)
             .font(.body14M)
     }
 

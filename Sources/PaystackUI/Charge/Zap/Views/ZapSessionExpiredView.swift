@@ -13,12 +13,12 @@ struct ZapSessionExpiredView: View {
 
             Text("Session expired")
                 .font(.heading2)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
                 .multilineTextAlignment(.center)
 
             Text(message)
                 .font(.body14R)
-                .foregroundColor(.navy02)
+                .foregroundColor(.contentSecondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, .singlePadding)
 

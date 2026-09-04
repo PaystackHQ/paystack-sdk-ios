@@ -9,21 +9,21 @@ class PinTextField: UITextField {
     /// The default character placed in the text field slots
     var otpDefaultCharacter = ""
     /// The default background color of the text field slots before entering a character
-    var otpBackgroundColor: UIColor = UIColor(red: 0.949, green: 0.949, blue: 0.949, alpha: 1)
+    var otpBackgroundColor: UIColor = .pinSlotSurface
     /// The default background color of the text field slots after entering a character
-    var otpFilledBackgroundColor: UIColor = UIColor(red: 0.949, green: 0.949, blue: 0.949, alpha: 1)
+    var otpFilledBackgroundColor: UIColor = .pinSlotSurface
     /// The default corner raduis of the text field slots
     var otpCornerRaduis: CGFloat = 3
     /// The default border color of the text field slots before entering a character
-    var otpDefaultBorderColor: UIColor = .gray
+    var otpDefaultBorderColor: UIColor = .pinSlotBorder
     /// The border color of the text field slots after entering a character
-    var otpFilledBorderColor: UIColor = .green
+    var otpFilledBorderColor: UIColor = .accentPrimary
     /// The default border width of the text field slots before entering a character
     var otpDefaultBorderWidth: CGFloat = 1
     /// The border width of the text field slots after entering a character
     var otpFilledBorderWidth: CGFloat = 1
     /// The default text color of the text
-    var otpTextColor: UIColor = .black
+    var otpTextColor: UIColor = .contentPrimary
     /// The default font size of the text
     var otpFontSize: CGFloat = 18
     /// The default font of the text

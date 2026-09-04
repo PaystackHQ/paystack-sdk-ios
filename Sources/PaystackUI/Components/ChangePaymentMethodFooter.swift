@@ -12,11 +12,11 @@ struct ChangePaymentMethodFooter: View {
                 Text("Change payment method")
             }
             .font(.body14M)
-            .foregroundColor(.navy02)
+            .foregroundColor(.contentSecondary)
             .padding(.horizontal, .doublePadding)
             .padding(.vertical, .singlePadding)
             .overlay(
-                Capsule().stroke(Color.navy05, lineWidth: 1)
+                Capsule().stroke(Color.borderPrimary, lineWidth: 1)
             )
         }
         .padding(.bottom, .doublePadding)

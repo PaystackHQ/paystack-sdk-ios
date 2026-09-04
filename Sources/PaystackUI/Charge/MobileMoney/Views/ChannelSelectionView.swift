@@ -23,7 +23,7 @@ struct ChannelSelectionView: View {
 
                 Text("Choose a payment method to continue")
                     .font(.body16M)
-                    .foregroundColor(.stackBlue)
+                    .foregroundColor(.contentPrimary)
                     .multilineTextAlignment(.center)
 
                 VStack(spacing: .singlePadding) {
@@ -90,7 +90,7 @@ struct ChannelView: View {
 
             Text(channelTitle)
                 .font(.body16M)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.85)
 
@@ -102,7 +102,7 @@ struct ChannelView: View {
         .cornerRadius(.cornerRadius)
         .overlay(
             RoundedRectangle(cornerRadius: .cornerRadius)
-                .stroke(Color.navy05, lineWidth: 1)
+                .stroke(Color.borderPrimary, lineWidth: 1)
         )
     }
 }

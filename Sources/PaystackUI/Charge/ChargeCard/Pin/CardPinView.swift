@@ -24,7 +24,7 @@ struct CardPinView: View {
                             onCommit: viewModel.submitPin)
 
                 Button("Cancel", action: viewModel.cancelTransaction)
-                    .foregroundColor(.navy02)
+                    .foregroundColor(.contentSecondary)
                     .font(.body14M)
             }
             #endif
@@ -36,12 +36,12 @@ struct CardPinView: View {
     var titleText: some View {
         Text("Please enter your 4-digit card pin to authorize this payment")
             .font(.body16M)
-            .foregroundColor(.stackBlue)
+            .foregroundColor(.contentPrimary)
             .multilineTextAlignment(.center)
     }
 
     var loadingView: some View {
-        LoadingIndicator(tintColor: .navy04)
+        LoadingIndicator(tintColor: .spinnerTint)
             .scaleEffect(2)
             .padding(.doublePadding)
     }

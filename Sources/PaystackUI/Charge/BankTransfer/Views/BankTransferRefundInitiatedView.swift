@@ -17,12 +17,12 @@ struct BankTransferRefundInitiatedView: View {
 
             Text("Refund initiated")
                 .font(.heading2)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
                 .multilineTextAlignment(.center)
 
             Text(message)
                 .font(.body14R)
-                .foregroundColor(.navy02)
+                .foregroundColor(.contentSecondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, .singlePadding)
 
@@ -31,7 +31,7 @@ struct BankTransferRefundInitiatedView: View {
                 .buttonStyle(PrimaryButtonStyle(showLoading: false))
 
             Button("Close", action: dismissWithError)
-                .foregroundColor(.navy02)
+                .foregroundColor(.contentSecondary)
                 .font(.body14M)
         }
         .padding(.doublePadding)

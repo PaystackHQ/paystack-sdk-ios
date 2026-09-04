@@ -36,19 +36,19 @@ struct PrimaryButtonStyle: ButtonStyle {
 extension PrimaryButtonStyle {
 
     var background: Color {
-        isEnabled ? .stackGreen : .stackGreen.opacity(0.6)
+        isEnabled ? .accentPrimary : .accentPrimaryDisabled
     }
 
     var pressedBackground: Color {
-        .stackGreen.opacity(0.75)
+        .accentPrimaryPressed
     }
 
     var foreground: Color {
-        .white
+        .contentOnAccent
     }
 
     var pressedForeground: Color {
-        .white.opacity(0.75)
+        .contentOnAccentPressed
     }
 
 }
@@ -85,7 +85,7 @@ struct PaymentChannelSelectionButton: ButtonStyle {
         .padding()
         .frame(height: .buttonHeight)
         .frame(maxWidth: .infinity)
-        .focusedBorderColor(defaultColor: .gray01)
+        .focusedBorderColor(defaultColor: .borderSubtle)
         .font(.body16M)
         .background(configuration.isPressed ? pressedBackground : background)
         .foregroundColor(configuration.isPressed ? pressedForeground : foreground)
@@ -99,19 +99,19 @@ struct PaymentChannelSelectionButton: ButtonStyle {
 extension PaymentChannelSelectionButton {
 
     var background: Color {
-        isEnabled ? .stackGreen : .stackGreen.opacity(0.6)
+        isEnabled ? .accentPrimary : .accentPrimaryDisabled
     }
 
     var pressedBackground: Color {
-        .stackGreen.opacity(0.75)
+        .accentPrimaryPressed
     }
 
     var foreground: Color {
-        .white
+        .contentOnAccent
     }
 
     var pressedForeground: Color {
-        .white.opacity(0.75)
+        .contentOnAccentPressed
     }
 
 }

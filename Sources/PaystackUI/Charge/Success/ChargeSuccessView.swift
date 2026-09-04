@@ -16,11 +16,11 @@ struct ChargeSuccessView: View {
 
             Text("Payment Successful")
                 .font(.heading3)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
 
             Text("You paid \(amount.description) to \(merchant)")
                 .font(.body16R)
-                .foregroundColor(.navy03)
+                .foregroundColor(.contentTertiary)
         }
         .task(dismissAutomatically)
     }

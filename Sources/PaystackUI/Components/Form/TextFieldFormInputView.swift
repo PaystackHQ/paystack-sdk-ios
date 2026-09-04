@@ -62,7 +62,7 @@ struct TextFieldFormInputView<Accessory: View>: FormInputItemView {
             }
         }
         .textFieldStyle(.form)
-        .focusedBorderColor(defaultColor: inErrorState ? .error02 : .navy04)
+        .focusedBorderColor(defaultColor: inErrorState ? .borderError : .borderStrong)
         .setDefaultFocus(defaultFocused)
         .keyboardType(keyboardType)
         .onReceive(Just(text)) { value in

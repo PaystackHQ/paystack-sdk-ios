@@ -12,12 +12,12 @@ struct BankTransferDelayedConfirmationView: View {
 
             Text("We'll complete this transaction automatically once we confirm your transfer.")
                 .font(.body16M)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
                 .multilineTextAlignment(.center)
 
             Text("If you have any issues with this transfer, please contact us via \(supportEmail) with the following details:")
                 .font(.body14R)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
                 .multilineTextAlignment(.center)
 
             VStack(alignment: .leading, spacing: .singlePadding) {
@@ -33,7 +33,7 @@ struct BankTransferDelayedConfirmationView: View {
                 .buttonStyle(SecondaryButtonStyle())
 
             Button("Keep waiting", action: onKeepWaiting)
-                .foregroundColor(.navy02)
+                .foregroundColor(.contentSecondary)
                 .font(.body14M)
         }
         .padding(.doublePadding)
@@ -49,10 +49,10 @@ private struct NumberedListRow: View {
         HStack(spacing: .singlePadding) {
             Text("\(index).")
                 .font(.body14R)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
             Text(text)
                 .font(.body14R)
-                .foregroundColor(.stackBlue)
+                .foregroundColor(.contentPrimary)
         }
     }
 }

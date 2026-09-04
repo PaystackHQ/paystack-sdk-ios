@@ -38,19 +38,19 @@ struct SecondaryButtonStyle: ButtonStyle {
 extension SecondaryButtonStyle {
 
     var border: Color {
-        .green02
+        .accentSecondary
     }
 
     var pressedBorder: Color {
-        .green02
+        .accentSecondary
     }
 
     var foreground: Color {
-        .green02
+        .accentSecondary
     }
 
     var pressedForeground: Color {
-        .green02
+        .accentSecondary
     }
 
 }
