@@ -63,6 +63,12 @@ class ChannelSelectionViewModel: ObservableObject {
         case .zap(let config):
             state = .payment(type: .zap(transactionInformation: self.information,
                                         config: config))
+        case .capitecPay(let config):
+            state = .payment(type: .capitecPay(transactionInformation: self.information,
+                                               config: config))
+        case .scanToPay(let config), .snapScan(let config):
+            state = .payment(type: .qr(transactionInformation: self.information,
+                                       config: config))
         }
     }
 }

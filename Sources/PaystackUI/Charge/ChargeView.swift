@@ -72,6 +72,14 @@ struct ChargeView: View {
             ZapView(chargeContainer: viewModel,
                     transactionDetails: transactionInformation,
                     config: config)
+        case .capitecPay(let transactionInformation, let config):
+            CapitecPayView(chargeContainer: viewModel,
+                           transactionDetails: transactionInformation,
+                           config: config)
+        case .qr(let transactionInformation, let config):
+            QRView(chargeContainer: viewModel,
+                   transactionDetails: transactionInformation,
+                   config: config)
         }
     }
 
