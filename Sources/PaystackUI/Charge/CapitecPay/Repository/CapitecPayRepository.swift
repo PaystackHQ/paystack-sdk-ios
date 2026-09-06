@@ -11,7 +11,7 @@ protocol CapitecPayRepository {
     func requery(transactionReference: String) async throws -> ChargeCapitecTransaction
 
     func listenForCapitecPayResponse(onChannel channelName: String)
-        async throws -> ChargeCardTransaction
+        async throws -> ChargeCapitecTransaction
 }
 
 struct CapitecPayRepositoryImplementation: CapitecPayRepository {
@@ -48,9 +48,9 @@ struct CapitecPayRepositoryImplementation: CapitecPayRepository {
     }
 
     func listenForCapitecPayResponse(onChannel channelName: String)
-        async throws -> ChargeCardTransaction {
+        async throws -> ChargeCapitecTransaction {
         let response = try await paystack
             .listenForCapitecPayResponse(onChannel: channelName).async()
-        return ChargeCardTransaction.from(response)
+        return ChargeCapitecTransaction.from(response)
     }
 }

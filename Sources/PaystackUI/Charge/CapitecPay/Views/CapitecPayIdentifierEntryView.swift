@@ -133,10 +133,10 @@ private struct PreviewCapitecPayRepository: CapitecPayRepository {
         .example
     }
     func requery(transactionReference: String) async throws -> ChargeCapitecTransaction {
-        ChargeCapitecTransaction(status: "success")
+        ChargeCapitecTransaction(status: "success", message: nil)
     }
     func listenForCapitecPayResponse(onChannel channelName: String)
-        async throws -> ChargeCardTransaction {
-        ChargeCardTransaction(status: .success)
+        async throws -> ChargeCapitecTransaction {
+        ChargeCapitecTransaction(status: "success", message: nil)
     }
 }

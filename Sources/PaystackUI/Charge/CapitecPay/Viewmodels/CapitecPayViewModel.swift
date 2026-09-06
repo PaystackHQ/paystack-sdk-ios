@@ -154,31 +154,35 @@ class CapitecPayViewModel: ObservableObject {
         do {
             let update = try await repository
                 .listenForCapitecPayResponse(onChannel: channel)
-            await processTransactionUpdate(update)
+            await reactToPollResult(update)
         } catch {
-            Logger.error("Capitec Pay Pusher await failed: %@",
+            // The listener is single-shot: a decode failure or a socket error
+            // burns the subscription, so no second event will arrive. Start
+            // polling now rather than waiting out the approval countdown.
+            Logger.error("Capitec Pay Pusher await failed, falling back to requery: %@",
                          arguments: error.localizedDescription)
+            await beginPusherFallbackRequery()
         }
     }
 
+    /// Starts the requery loop underneath the approval screen after the Pusher
+    /// subscription has been lost. Deliberately leaves `state` alone — the
+    /// customer still needs the countdown and the in-app approval steps on
+    /// screen; the countdown expiring moves them to `.requerying` as usual.
     @MainActor
-    func processTransactionUpdate(_ update: ChargeCardTransaction) async {
-        switch update.status {
-        case .success:
-            cancelAllTasks()
-            chargeContainer.processSuccessfulTransaction(details: transactionDetails)
-        case .failed:
-            cancelAllTasks()
-            let message = update.message ?? Self.failedFallbackMessage
-            state = .error(ChargeError(message: message))
+    private func beginPusherFallbackRequery() {
+        switch state {
+        case .awaitingApproval, .requerying:
+            startRequeryLoop()
         default:
-            Logger.info("Capitec Pay: non-terminal transaction status %@",
-                        arguments: String(describing: update.status))
+            return
         }
     }
 
     private func startRequeryLoop() {
-        requeryLoopTask?.cancel()
+        // Two entry points (countdown expiry and the Pusher fallback) can both
+        // reach here — the first one to start owns the loop.
+        guard requeryLoopTask == nil else { return }
         requeryLoopTask = Task { [weak self] in
             guard let self else { return }
             let maxIterations = Self.requeryMaxIterations
@@ -205,20 +209,26 @@ class CapitecPayViewModel: ObservableObject {
         }
     }
 
+    /// The single place a Capitec Pay terminal status is interpreted — both the
+    /// Pusher event and the requery response arrive here.
+    ///
+    /// - Returns: `true` when the transaction reached a terminal state.
     @MainActor
     @discardableResult
-    private func reactToPollResult(_ result: ChargeCapitecTransaction) -> Bool {
+    func reactToPollResult(_ result: ChargeCapitecTransaction) -> Bool {
         switch result.status {
-        case "success":
+        case CapitecTransactionStatus.success:
             cancelAllTasks()
             chargeContainer.processSuccessfulTransaction(details: transactionDetails)
             return true
-        case "failed":
+        case CapitecTransactionStatus.failed:
             cancelAllTasks()
-            let message = Self.failedFallbackMessage
+            let message = result.message ?? Self.failedFallbackMessage
             state = .error(ChargeError(message: message))
             return true
         default:
+            Logger.info("Capitec Pay: non-terminal transaction status %@",
+                        arguments: result.status)
             return false
         }
     }

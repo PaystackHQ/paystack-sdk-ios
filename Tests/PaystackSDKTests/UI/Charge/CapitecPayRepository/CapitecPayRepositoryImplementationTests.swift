@@ -51,25 +51,28 @@ final class CapitecPayRepositoryImplementationTests: PSTestCase {
     func testRequeryHitsCorrectURLWithTransactionReferenceInPath() async throws {
         mockServiceExecutor
             .expectURL("https://api.paystack.co/capitec-pay/requery/T_ref_5900549926")
-            .expectMethod(.post)
+            .expectMethod(.get)
             .expectHeader("Authorization", "Bearer \(apiKey)")
-            .andReturn(json: "ChargeAuthenticationResponse")
+            .andReturn(json: "CapitecRequeryResponse")
 
         _ = try await serviceUnderTest.requery(
             transactionReference: "T_ref_5900549926")
     }
 
-    func testRequeryMapsResponseIntoChargeCardTransaction() async throws {
+    func testRequeryMapsResponseIntoChargeCapitecTransaction() async throws {
         mockServiceExecutor
             .expectURL("https://api.paystack.co/capitec-pay/requery/T_ref_5900549926")
-            .expectMethod(.post)
-            .andReturn(json: "ChargeAuthenticationResponse")
+            .expectMethod(.get)
+            .andReturn(json: "CapitecRequeryResponse")
 
         let result = try await serviceUnderTest.requery(
             transactionReference: "T_ref_5900549926")
 
-        XCTAssertEqual(result.status, .success)
+        XCTAssertEqual(result, ChargeCapitecTransaction(status: "success",
+                                                        message: "Charge successful"))
     }
+
+    // MARK: - Pusher
 
     func testListenForCapitecPayResponseSubscribesToProvidedChannel() async throws {
         let channel = "CAPITECPAY_5900549926"
@@ -80,12 +83,53 @@ final class CapitecPayRepositoryImplementationTests: PSTestCase {
         let result = try await serviceUnderTest
             .listenForCapitecPayResponse(onChannel: channel)
 
-        XCTAssertEqual(result.status, .success)
+        XCTAssertEqual(result, ChargeCapitecTransaction(status: "success",
+                                                        message: "Charge successful"))
+    }
+
+    func testListenForCapitecPayResponseMapsFailedEnvelopeWithoutData() async throws {
+        let channel = "CAPITECPAY_5900549926"
+        mockSubscriptionListener
+            .expectSubscription(PusherSubscription(channelName: channel, eventName: "response"))
+            .andReturnString(fromJson: "CapitecPayPusherFailed")
+
+        let result = try await serviceUnderTest
+            .listenForCapitecPayResponse(onChannel: channel)
+
+        XCTAssertEqual(result, ChargeCapitecTransaction(status: "failed",
+                                                        message: "Bank declined"))
+    }
+
+    func testListenForCapitecPayResponseMapsMissingDataToNonTerminalStatus() async throws {
+        let channel = "CAPITECPAY_5900549926"
+        mockSubscriptionListener
+            .expectSubscription(PusherSubscription(channelName: channel, eventName: "response"))
+            .andReturnString(fromJson: "CapitecPayPusherPending")
+
+        let result = try await serviceUnderTest
+            .listenForCapitecPayResponse(onChannel: channel)
+
+        XCTAssertEqual(result.status, "")
+    }
+
+    func testListenForCapitecPayResponseThrowsOnUndecodablePayload() async {
+        let channel = "CAPITECPAY_5900549926"
+        mockSubscriptionListener
+            .expectSubscription(PusherSubscription(channelName: channel, eventName: "response"))
+            .andReturnString("not json at all")
+
+        do {
+            _ = try await serviceUnderTest
+                .listenForCapitecPayResponse(onChannel: channel)
+            XCTFail("Expected a decoding error")
+        } catch {
+            // expected — the view model degrades to requery polling from here
+        }
     }
 }
 
 private struct FakeCryptography: CryptographyProtocol {
-    func encryptPKCS1(text: String, publicKey: String) throws -> String {
+    func encrypt(text: String, publicKey: String) throws -> String {
         return "fake-encrypted:\(text)"
     }
 }

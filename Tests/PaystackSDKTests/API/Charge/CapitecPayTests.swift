@@ -55,29 +55,32 @@ final class CapitecPayTests: PSTestCase {
     func testRequeryCapitecPayHitsCorrectURLWithTransactionReferenceInPath() async throws {
         mockServiceExecutor
             .expectURL("https://api.paystack.co/capitec-pay/requery/T_ref_5900549926")
-            .expectMethod(.post)
+            .expectMethod(.get)
             .expectHeader("Authorization", "Bearer \(apiKey)")
-            .andReturn(json: "ChargeAuthenticationResponse")
+            .andReturn(json: "CapitecRequeryResponse")
 
         _ = try await serviceUnderTest
             .requeryCapitecPay(transactionReference: "T_ref_5900549926")
             .async()
     }
 
-    func testRequeryCapitecPayDecodesChargeResponseShape() async throws {
+    func testRequeryCapitecPayDecodesCapitecResponseShape() async throws {
         mockServiceExecutor
             .expectURL("https://api.paystack.co/capitec-pay/requery/T_ref_5900549926")
-            .expectMethod(.post)
+            .expectMethod(.get)
             .expectHeader("Authorization", "Bearer \(apiKey)")
-            .andReturn(json: "ChargeAuthenticationResponse")
+            .andReturn(json: "CapitecRequeryResponse")
 
         let result = try await serviceUnderTest
             .requeryCapitecPay(transactionReference: "T_ref_5900549926")
             .async()
 
         XCTAssertEqual(result.status, true)
-        XCTAssertEqual(result.data.reference, "36xz3b9rie9ppvz")
+        XCTAssertEqual(result.message, "Charge successful")
+        XCTAssertEqual(result.data.status, "success")
     }
+
+    // MARK: - Pusher envelope
 
     func testListenForCapitecPayResponseSubscribesToProvidedChannel() async throws {
         let channelName = "CAPITECPAY_5900549926"
@@ -88,10 +91,14 @@ final class CapitecPayTests: PSTestCase {
         let result = try await serviceUnderTest
             .listenForCapitecPayResponse(onChannel: channelName).async()
 
-        XCTAssertEqual(result.status, .success)
+        XCTAssertEqual(result.status, true)
+        XCTAssertEqual(result.type, "success")
+        XCTAssertEqual(result.code, "ok")
+        XCTAssertEqual(result.message, "Charge successful")
+        XCTAssertEqual(result.data?.status, "success")
     }
 
-    func testListenForCapitecPayResponseDecodesFailedShape() async throws {
+    func testListenForCapitecPayResponseDecodesFailedShapeWithoutData() async throws {
         let channelName = "CAPITECPAY_5900549926"
         mockSubscriptionListener
             .expectSubscription(PusherSubscription(channelName: channelName, eventName: "response"))
@@ -100,7 +107,37 @@ final class CapitecPayTests: PSTestCase {
         let result = try await serviceUnderTest
             .listenForCapitecPayResponse(onChannel: channelName).async()
 
-        XCTAssertEqual(result.status, .failed)
+        XCTAssertEqual(result.status, false)
         XCTAssertEqual(result.message, "Bank declined")
+        XCTAssertNil(result.data)
+    }
+
+    func testListenForCapitecPayResponseDecodesEnvelopeWithMissingData() async throws {
+        let channelName = "CAPITECPAY_5900549926"
+        mockSubscriptionListener
+            .expectSubscription(PusherSubscription(channelName: channelName, eventName: "response"))
+            .andReturnString(fromJson: "CapitecPayPusherPending")
+
+        let result = try await serviceUnderTest
+            .listenForCapitecPayResponse(onChannel: channelName).async()
+
+        XCTAssertEqual(result.status, true)
+        XCTAssertNil(result.data)
+    }
+
+    func testListenForCapitecPayResponseDecodesMinimalEnvelope() async throws {
+        let channelName = "CAPITECPAY_5900549926"
+        mockSubscriptionListener
+            .expectSubscription(PusherSubscription(channelName: channelName, eventName: "response"))
+            .andReturnString("{ \"status\": true }")
+
+        let result = try await serviceUnderTest
+            .listenForCapitecPayResponse(onChannel: channelName).async()
+
+        XCTAssertEqual(result.status, true)
+        XCTAssertNil(result.type)
+        XCTAssertNil(result.code)
+        XCTAssertNil(result.message)
+        XCTAssertNil(result.data)
     }
 }

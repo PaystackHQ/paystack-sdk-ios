@@ -120,38 +120,64 @@ final class CapitecPayViewModelTests: XCTestCase {
                        .error(ChargeError(error: expectedError)))
     }
 
-    func testProcessTransactionUpdateWithSuccessRoutesToContainer() async {
-        await serviceUnderTest.processTransactionUpdate(
-            ChargeCardTransaction(status: .success))
+    // MARK: - Terminal status handling
+
+    @MainActor
+    func testReactToPollResultWithSuccessRoutesToContainer() {
+        let resolved = serviceUnderTest.reactToPollResult(
+            ChargeCapitecTransaction(status: "success", message: "Charge successful"))
+
+        XCTAssertTrue(resolved)
         XCTAssertTrue(mockChargeContainer.transactionSuccessful)
     }
 
-    func testProcessTransactionUpdateWithFailedTransitionsToError() async {
-        await serviceUnderTest.processTransactionUpdate(
-            ChargeCardTransaction(status: .failed, message: "Bank declined"))
+    @MainActor
+    func testReactToPollResultWithFailedTransitionsToErrorWithServerMessage() {
+        let resolved = serviceUnderTest.reactToPollResult(
+            ChargeCapitecTransaction(status: "failed", message: "Bank declined"))
 
+        XCTAssertTrue(resolved)
         XCTAssertEqual(serviceUnderTest.state,
                        .error(ChargeError(message: "Bank declined")))
     }
 
-    func testProcessTransactionUpdateWithFailedFallsBackToDefaultMessage() async {
-        await serviceUnderTest.processTransactionUpdate(
-            ChargeCardTransaction(status: .failed))
+    @MainActor
+    func testReactToPollResultWithFailedFallsBackToDefaultMessage() {
+        let resolved = serviceUnderTest.reactToPollResult(
+            ChargeCapitecTransaction(status: "failed", message: nil))
 
+        XCTAssertTrue(resolved)
         XCTAssertEqual(serviceUnderTest.state,
                        .error(ChargeError(message: CapitecPayViewModel.failedFallbackMessage)))
     }
 
-    func testProcessTransactionUpdateWithNonTerminalStatusDoesNotChangeState() async {
+    @MainActor
+    func testReactToPollResultWithNonTerminalStatusDoesNotChangeState() {
         let stateBefore = serviceUnderTest.state
-        await serviceUnderTest.processTransactionUpdate(
-            ChargeCardTransaction(status: .pending))
+
+        let resolved = serviceUnderTest.reactToPollResult(
+            ChargeCapitecTransaction(status: "pending", message: nil))
+
+        XCTAssertFalse(resolved)
+        XCTAssertEqual(serviceUnderTest.state, stateBefore)
+    }
+
+    /// A Pusher envelope with `status: true` and no `data` maps to an empty
+    /// status — nothing terminal to act on, requery resolves it instead.
+    @MainActor
+    func testReactToPollResultWithEmptyStatusDoesNotChangeState() {
+        let stateBefore = serviceUnderTest.state
+
+        let resolved = serviceUnderTest.reactToPollResult(
+            ChargeCapitecTransaction(status: "", message: "Charge pending"))
+
+        XCTAssertFalse(resolved)
         XCTAssertEqual(serviceUnderTest.state, stateBefore)
     }
 
     func testUserTappedIveApprovedThePaymentFiresOneRequery() async {
         mockRepository.expectedRequeryResults = [
-            ChargeCardTransaction(status: .pending)
+            ChargeCapitecTransaction(status: "pending", message: nil)
         ]
 
         await MainActor.run {
@@ -166,7 +192,7 @@ final class CapitecPayViewModelTests: XCTestCase {
 
     func testUserTappedIveApprovedWithSuccessRoutesToContainer() async {
         mockRepository.expectedRequeryResults = [
-            ChargeCardTransaction(status: .success)
+            ChargeCapitecTransaction(status: "success", message: nil)
         ]
 
         await MainActor.run {
@@ -207,7 +233,7 @@ final class CapitecPayViewModelTests: XCTestCase {
     func testListenResolvesOnSuccessAndRoutesToContainer() async {
         mockRepository.expectedDetails = .example
         mockRepository.expectedListenResponses = [
-            ChargeCardTransaction(status: .success)
+            ChargeCapitecTransaction(status: "success", message: nil)
         ]
         let expectation = expectation(description: "container receives success")
         mockChargeContainer.onProcessSuccessfulTransaction = { expectation.fulfill() }
@@ -223,7 +249,7 @@ final class CapitecPayViewModelTests: XCTestCase {
     func testListenResolvesOnFailedStatusToErrorState() async {
         mockRepository.expectedDetails = .example
         mockRepository.expectedListenResponses = [
-            ChargeCardTransaction(status: .failed, message: "Bank declined")
+            ChargeCapitecTransaction(status: "failed", message: "Bank declined")
         ]
         serviceUnderTest.identifier = .cellphone
         serviceUnderTest.value = "0609603632"
@@ -235,6 +261,76 @@ final class CapitecPayViewModelTests: XCTestCase {
                        .error(ChargeError(message: "Bank declined")))
     }
 
+    // MARK: - Pusher failure degrades to requery polling
+
+    func testListenFailureStartsRequeryPollingWithoutChangingState() async throws {
+        mockRepository.expectedDetails = .example
+        mockRepository.expectedListenError = MockError.stubNotProvided
+        mockRepository.expectedRequeryResults = [
+            ChargeCapitecTransaction(status: "pending", message: nil)
+        ]
+        CapitecPayViewModel.requeryPollIntervalSeconds = 1
+        CapitecPayViewModel.requeryMaxIterations = 5
+        serviceUnderTest.identifier = .cellphone
+        serviceUnderTest.value = "0609603632"
+
+        await serviceUnderTest.submitIdentifier()
+        try await Task.sleep(nanoseconds: 1_600_000_000)
+
+        XCTAssertGreaterThanOrEqual(mockRepository.requeryCallCount, 1)
+        // The customer keeps the countdown + in-app approval steps on screen.
+        if case .awaitingApproval = serviceUnderTest.state {
+            // ok
+        } else {
+            XCTFail("Expected .awaitingApproval, got \(serviceUnderTest.state)")
+        }
+    }
+
+    func testListenFailureFallbackRequeryResolvesSuccess() async throws {
+        mockRepository.expectedDetails = .example
+        mockRepository.expectedListenError = MockError.stubNotProvided
+        mockRepository.expectedRequeryResults = [
+            ChargeCapitecTransaction(status: "success", message: nil)
+        ]
+        CapitecPayViewModel.requeryPollIntervalSeconds = 1
+        CapitecPayViewModel.requeryMaxIterations = 5
+        let expectation = expectation(description: "container receives success")
+        mockChargeContainer.onProcessSuccessfulTransaction = { expectation.fulfill() }
+        serviceUnderTest.identifier = .cellphone
+        serviceUnderTest.value = "0609603632"
+
+        await serviceUnderTest.submitIdentifier()
+        await fulfillment(of: [expectation], timeout: 3.0)
+
+        XCTAssertTrue(mockChargeContainer.transactionSuccessful)
+    }
+
+    /// The countdown expiring must not start a second, overlapping loop on top
+    /// of the one the Pusher fallback already started.
+    func testFallbackAndCountdownDoNotStartOverlappingRequeryLoops() async throws {
+        mockRepository.expectedDetails = CapitecPayDetails(
+            timeToLive: 1,
+            expiryDate: Date().addingTimeInterval(1),
+            pusherChannel: "CAPITECPAY_5900549926")
+        mockRepository.expectedListenError = MockError.stubNotProvided
+        mockRepository.expectedRequeryResults = [
+            ChargeCapitecTransaction(status: "pending", message: nil),
+            ChargeCapitecTransaction(status: "pending", message: nil),
+            ChargeCapitecTransaction(status: "pending", message: nil)
+        ]
+        CapitecPayViewModel.requeryPollIntervalSeconds = 1
+        CapitecPayViewModel.requeryMaxIterations = 5
+        serviceUnderTest.identifier = .cellphone
+        serviceUnderTest.value = "0609603632"
+
+        await serviceUnderTest.submitIdentifier()
+        try await Task.sleep(nanoseconds: 2_600_000_000)
+
+        // One loop at ~1s intervals over ~2.6s — two or three polls, not double.
+        XCTAssertLessThanOrEqual(mockRepository.requeryCallCount, 3)
+        XCTAssertGreaterThanOrEqual(mockRepository.requeryCallCount, 1)
+    }
+
     // MARK: - Countdown + requery loop (PR CP-E / CP-F)
 
     func testCountdownExpiryTransitionsToRequerying() async throws {
@@ -242,8 +338,14 @@ final class CapitecPayViewModelTests: XCTestCase {
             timeToLive: 1,
             expiryDate: Date().addingTimeInterval(1),
             pusherChannel: "CAPITECPAY_5900549926")
+        // Non-terminal Pusher event: resolves the single-shot listener without
+        // erroring, so the countdown — not the failure fallback — is what
+        // starts the requery loop here.
+        mockRepository.expectedListenResponses = [
+            ChargeCapitecTransaction(status: "pending", message: nil)
+        ]
         CapitecPayViewModel.requeryPollIntervalSeconds = 100
-        CapitecPayViewModel.requeryMaxIterations = 0
+        CapitecPayViewModel.requeryMaxIterations = 5
         serviceUnderTest.identifier = .cellphone
         serviceUnderTest.value = "0609603632"
 
@@ -252,11 +354,8 @@ final class CapitecPayViewModelTests: XCTestCase {
 
         if case .requerying = serviceUnderTest.state {
             // ok
-        } else if case .fatalError = serviceUnderTest.state {
-            // ok — 0 iterations tips immediately to fatal, still confirms
-            // the requerying-loop path fired.
         } else {
-            XCTFail("Expected .requerying or .fatalError, got \(serviceUnderTest.state)")
+            XCTFail("Expected .requerying, got \(serviceUnderTest.state)")
         }
     }
 
@@ -265,8 +364,11 @@ final class CapitecPayViewModelTests: XCTestCase {
             timeToLive: 1,
             expiryDate: Date().addingTimeInterval(1),
             pusherChannel: "CAPITECPAY_5900549926")
+        mockRepository.expectedListenResponses = [
+            ChargeCapitecTransaction(status: "pending", message: nil)
+        ]
         mockRepository.expectedRequeryResults = [
-            ChargeCardTransaction(status: .success)
+            ChargeCapitecTransaction(status: "success", message: nil)
         ]
         CapitecPayViewModel.requeryPollIntervalSeconds = 1
         CapitecPayViewModel.requeryMaxIterations = 5
@@ -284,8 +386,11 @@ final class CapitecPayViewModelTests: XCTestCase {
             timeToLive: 1,
             expiryDate: Date().addingTimeInterval(1),
             pusherChannel: "CAPITECPAY_5900549926")
+        mockRepository.expectedListenResponses = [
+            ChargeCapitecTransaction(status: "pending", message: nil)
+        ]
         mockRepository.expectedRequeryResults = [
-            ChargeCardTransaction(status: .failed, displayText: nil, message: "Bank declined")
+            ChargeCapitecTransaction(status: "failed", message: "Bank declined")
         ]
         CapitecPayViewModel.requeryPollIntervalSeconds = 1
         CapitecPayViewModel.requeryMaxIterations = 5
@@ -304,9 +409,12 @@ final class CapitecPayViewModelTests: XCTestCase {
             timeToLive: 1,
             expiryDate: Date().addingTimeInterval(1),
             pusherChannel: "CAPITECPAY_5900549926")
+        mockRepository.expectedListenResponses = [
+            ChargeCapitecTransaction(status: "pending", message: nil)
+        ]
         mockRepository.expectedRequeryResults = [
-            ChargeCardTransaction(status: .pending),
-            ChargeCardTransaction(status: .pending)
+            ChargeCapitecTransaction(status: "pending", message: nil),
+            ChargeCapitecTransaction(status: "pending", message: nil)
         ]
         CapitecPayViewModel.requeryPollIntervalSeconds = 1
         CapitecPayViewModel.requeryMaxIterations = 2

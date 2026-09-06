@@ -5,10 +5,10 @@ import Foundation
 class MockCapitecPayRepository: CapitecPayRepository {
 
     var expectedDetails: CapitecPayDetails?
-    var expectedRequeryResults: [ChargeCardTransaction] = []
+    var expectedRequeryResults: [ChargeCapitecTransaction] = []
     var expectedErrorResponse: Error?
 
-    var expectedListenResponses: [ChargeCardTransaction] = []
+    var expectedListenResponses: [ChargeCapitecTransaction] = []
     var expectedListenError: Error?
 
     var authenticateSubmitted: (identifier: CapitecPayIdentifier,
@@ -37,7 +37,7 @@ class MockCapitecPayRepository: CapitecPayRepository {
         return details
     }
 
-    func requery(transactionReference: String) async throws -> ChargeCardTransaction {
+    func requery(transactionReference: String) async throws -> ChargeCapitecTransaction {
         requeryCallCount += 1
         lastRequeryReference = transactionReference
         if !expectedRequeryResults.isEmpty {
@@ -47,7 +47,7 @@ class MockCapitecPayRepository: CapitecPayRepository {
     }
 
     func listenForCapitecPayResponse(onChannel channelName: String)
-        async throws -> ChargeCardTransaction {
+        async throws -> ChargeCapitecTransaction {
         listenCallCount += 1
         lastListenedChannel = channelName
         if !expectedListenResponses.isEmpty {

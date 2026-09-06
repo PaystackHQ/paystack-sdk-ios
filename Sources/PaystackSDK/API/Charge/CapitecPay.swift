@@ -39,21 +39,25 @@ public extension Paystack {
     }
 
     /// Listens for Capitec Pay status updates on the Pusher channel
-    /// returned by ``authenticateCapitecPay(_:)``. The server publishes
-    /// only terminal events (`success` / `failed`) on the Capitec Pay
-    /// channel, so this helper returns the narrow ``Charge3DSResponse``
-    /// shape shared with card 3-D Secure and mobile money authorization.
+    /// returned by ``authenticateCapitecPay(_:)``.
+    ///
+    /// Capitec Pay publishes its own envelope rather than the flat
+    /// ``Charge3DSResponse`` shape used by card 3-D Secure, mobile money,
+    /// Zap, QR and bank transfer — the top-level `status` is a `Bool` and
+    /// the transaction status is nested at `data.status`. See
+    /// ``CapitecPusherResponse``.
     ///
     /// The underlying listener is single-shot per the existing
     /// `PusherSubscriptionListener` contract — one event resolves the
-    /// listener.
+    /// listener. Non-terminal events are therefore not expected here; the
+    /// requery loop is what resolves anything this channel does not.
     ///
     /// - Parameter channelName: The `CAPITECPAY_{transactionId}` channel
     ///   for this transaction.
-    /// - Returns: A ``Service`` carrying a ``Charge3DSResponse`` on the
+    /// - Returns: A ``Service`` carrying a ``CapitecPusherResponse`` on the
     ///   first event the channel emits.
     func listenForCapitecPayResponse(onChannel channelName: String)
-        -> Service<Charge3DSResponse> {
+        -> Service<CapitecPusherResponse> {
         let subscription: any Subscription = PusherSubscription(
             channelName: channelName, eventName: "response")
         return Service(subscription)
