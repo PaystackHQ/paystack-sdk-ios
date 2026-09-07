@@ -22,7 +22,7 @@ jobs:
 
     - name: Build and Run tests
       run: |
-        xcodebuild clean build test -scheme PaystackSDK-Package -sdk iphonesimulator26.4 -destination "OS=26.4,name=iPhone 17 Pro" -enableCodeCoverage YES CODE_SIGNING_REQUIRED=NO
+        xcodebuild clean build test -scheme PaystackSDK-Package -destination "platform=iOS Simulator,name=iPhone 17 Pro" -enableCodeCoverage YES CODE_SIGNING_REQUIRED=NO
 
     - name: setup-cocoapods
       uses: maxim-lobanov/setup-cocoapods@8e97e1e98e6ccf42564fdf5622c8feec74199377 # v1.4.0
