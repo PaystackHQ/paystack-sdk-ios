@@ -48,11 +48,11 @@ final class QRTests: PSTestCase {
         XCTAssertTrue(result.data.url.hasPrefix("https://s3.eu-west-1.amazonaws.com/"))
     }
 
-    func testGenerateQRDefaultsSourceToMobilePos() {
+    func testGenerateQRDefaultsSourceToCheckout() {
         let request = QRGenerateRequest(
             reference: "T_ref_5900549926",
             channel: "MPASS_OLTI")
-        XCTAssertEqual(request.source, "mobile-pos")
+        XCTAssertEqual(request.source, "checkout")
     }
 
     func testListenForQRResponseSubscribesToProvidedChannel() async throws {

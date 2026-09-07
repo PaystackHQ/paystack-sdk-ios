@@ -1,7 +1,10 @@
 import XCTest
 @testable import PaystackCore
 
-final class CryptographyEncryptPKCS1Tests: XCTestCase {
+/// Covers `Cryptography.encrypt(text:publicKey:)` against a freshly generated
+/// 2048-bit key pair, using the identifier plaintext shapes Capitec Pay sends
+/// as `clientdata`.
+final class CryptographyEncryptIdentifierTests: XCTestCase {
 
     private var privateKey: SecKey!
     private var publicKeyBase64: String!
@@ -28,40 +31,40 @@ final class CryptographyEncryptPKCS1Tests: XCTestCase {
         publicKeyBase64 = publicKeyData.base64EncodedString()
     }
 
-    func testEncryptPKCS1RoundTripsCellphoneIdentifierPlaintext() throws {
+    func testEncryptRoundTripsCellphoneIdentifierPlaintext() throws {
         try assertRoundTrip("CELLPHONE*0609603632")
     }
 
-    func testEncryptPKCS1RoundTripsIDNumberIdentifierPlaintext() throws {
+    func testEncryptRoundTripsIDNumberIdentifierPlaintext() throws {
         try assertRoundTrip("IDNUMBER*8001015009087")
     }
 
-    func testEncryptPKCS1RoundTripsAccountNumberIdentifierPlaintext() throws {
+    func testEncryptRoundTripsAccountNumberIdentifierPlaintext() throws {
         try assertRoundTrip("ACCOUNTNUMBER*123456789")
     }
 
-    func testEncryptPKCS1ProducesNonDeterministicCiphertext() throws {
+    func testEncryptProducesNonDeterministicCiphertext() throws {
         let sut = Cryptography()
-        let first = try sut.encryptPKCS1(text: "CELLPHONE*0609603632",
-                                         publicKey: publicKeyBase64)
-        let second = try sut.encryptPKCS1(text: "CELLPHONE*0609603632",
-                                          publicKey: publicKeyBase64)
+        let first = try sut.encrypt(text: "CELLPHONE*0609603632",
+                                    publicKey: publicKeyBase64)
+        let second = try sut.encrypt(text: "CELLPHONE*0609603632",
+                                     publicKey: publicKeyBase64)
         XCTAssertNotEqual(first, second,
-                          "PKCS#1 v1.5 padding is random ; two encryptions of the same plaintext must not be byte-equal")
+                          "OAEP seeds each encryption randomly ; two encryptions of the same plaintext must not be byte-equal")
     }
 
     private func assertRoundTrip(_ plaintext: String,
                                  file: StaticString = #filePath,
                                  line: UInt = #line) throws {
         let sut = Cryptography()
-        let base64Ciphertext = try sut.encryptPKCS1(text: plaintext,
-                                                    publicKey: publicKeyBase64)
+        let base64Ciphertext = try sut.encrypt(text: plaintext,
+                                               publicKey: publicKeyBase64)
         let ciphertext = try XCTUnwrap(Data(base64Encoded: base64Ciphertext),
                                        file: file, line: line)
 
         var decryptError: Unmanaged<CFError>?
         guard let decryptedCF = SecKeyCreateDecryptedData(privateKey,
-                                                          .rsaEncryptionPKCS1,
+                                                          .rsaEncryptionOAEPSHA1,
                                                           ciphertext as CFData,
                                                           &decryptError) else {
             XCTFail("Decryption failed: \(decryptError.debugDescription)",
