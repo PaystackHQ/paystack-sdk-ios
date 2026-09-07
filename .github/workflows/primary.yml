@@ -21,7 +21,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   SwiftPackage:
-    runs-on: macos-15
+    runs-on: macos-26
     name: Build and Test Swift Package
 
     steps:
@@ -29,7 +29,7 @@ jobs:
     - name: Select Xcode Version
       uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1.7.0
       with:
-        xcode-version: '26.3'
+        xcode-version: '26.4'
 
     - name: Setup environment
       run: |
@@ -37,7 +37,7 @@ jobs:
 
     - name: Build and Run tests
       run: |
-        xcodebuild clean build test -scheme PaystackSDK-Package -sdk iphonesimulator26.2 -destination "OS=26.2,name=iPhone 17 Pro" -enableCodeCoverage YES CODE_SIGNING_REQUIRED=NO
+        xcodebuild clean build test -scheme PaystackSDK-Package -sdk iphonesimulator26.4 -destination "OS=26.4,name=iPhone 17 Pro" -enableCodeCoverage YES CODE_SIGNING_REQUIRED=NO
         brew install sonar-scanner
         bundle exec fastlane sonar_scan
       env:
@@ -46,7 +46,7 @@ jobs:
       
   PodLinting:
     if: ${{ false }}
-    runs-on: macos-15
+    runs-on: macos-26
     name: Lint Podspec
 
     steps:
