@@ -75,6 +75,11 @@ final class QRViewModelTests: XCTestCase {
 
     func testUserTappedICompletedPaymentTransitionsToVerifying() async {
         mockRepository.expectedDetails = .scanToPayExample
+        // Non-terminal Pusher event: resolves the single-shot listener without
+        // erroring, so the failure fallback stays out of this test's way.
+        mockRepository.expectedListenResponses = [
+            ChargeCardTransaction(status: .pending)
+        ]
         mockRepository.expectedCheckPendingResults = [
             ChargeCardTransaction(status: .pending)
         ]
@@ -96,6 +101,11 @@ final class QRViewModelTests: XCTestCase {
 
     func testUserTappedICompletedPaymentOnSuccessRoutesToContainer() async {
         mockRepository.expectedDetails = .scanToPayExample
+        // Non-terminal Pusher event: resolves the single-shot listener without
+        // erroring, so the failure fallback stays out of this test's way.
+        mockRepository.expectedListenResponses = [
+            ChargeCardTransaction(status: .pending)
+        ]
         mockRepository.expectedCheckPendingResults = [
             ChargeCardTransaction(status: .success)
         ]
@@ -113,6 +123,11 @@ final class QRViewModelTests: XCTestCase {
 
     func testUserTappedICompletedPaymentOnFailedTransitionsToError() async {
         mockRepository.expectedDetails = .scanToPayExample
+        // Non-terminal Pusher event: resolves the single-shot listener without
+        // erroring, so the failure fallback stays out of this test's way.
+        mockRepository.expectedListenResponses = [
+            ChargeCardTransaction(status: .pending)
+        ]
         mockRepository.expectedCheckPendingResults = [
             ChargeCardTransaction(status: .failed, message: "Bank declined")
         ]
@@ -129,6 +144,11 @@ final class QRViewModelTests: XCTestCase {
 
     func testUserTappedICompletedPaymentOnPendingReturnsToAwaitingScanWithBanner() async {
         mockRepository.expectedDetails = .scanToPayExample
+        // Non-terminal Pusher event: resolves the single-shot listener without
+        // erroring, so the failure fallback stays out of this test's way.
+        mockRepository.expectedListenResponses = [
+            ChargeCardTransaction(status: .pending)
+        ]
         mockRepository.expectedCheckPendingResults = [
             ChargeCardTransaction(status: .pending)
         ]
@@ -220,6 +240,117 @@ final class QRViewModelTests: XCTestCase {
 
         XCTAssertEqual(serviceUnderTest.state,
                        .error(ChargeError(message: "Bank declined")))
+    }
+
+    // MARK: - Pusher failure degrades to one checkPending
+
+    func testListenFailureRunsCheckPendingOnce() async throws {
+        mockRepository.expectedDetails = .scanToPayExample
+        mockRepository.expectedListenError = MockError.stubNotProvided
+        mockRepository.expectedCheckPendingResults = [
+            ChargeCardTransaction(status: .pending)
+        ]
+
+        await serviceUnderTest.onAppear()
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        XCTAssertEqual(mockRepository.checkPendingCallCount, 1)
+        XCTAssertEqual(mockRepository.lastCheckPendingAccessCode,
+                       serviceUnderTest.transactionDetails.accessCode)
+    }
+
+    /// A non-terminal answer is the expected case while the QR is unscanned:
+    /// stay put, stay silent, leave the manual button available.
+    func testListenFailureWithPendingLeavesQROnScreenWithNoBanner() async throws {
+        mockRepository.expectedDetails = .scanToPayExample
+        mockRepository.expectedListenError = MockError.stubNotProvided
+        mockRepository.expectedCheckPendingResults = [
+            ChargeCardTransaction(status: .pending)
+        ]
+
+        await serviceUnderTest.onAppear()
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        if case .awaitingScan = serviceUnderTest.state {
+            // ok
+        } else {
+            XCTFail("Expected .awaitingScan, got \(serviceUnderTest.state)")
+        }
+        XCTAssertNil(serviceUnderTest.inlineBanner)
+    }
+
+    func testListenFailureWithSuccessRoutesToContainer() async throws {
+        mockRepository.expectedDetails = .scanToPayExample
+        mockRepository.expectedListenError = MockError.stubNotProvided
+        mockRepository.expectedCheckPendingResults = [
+            ChargeCardTransaction(status: .success)
+        ]
+        let expectation = expectation(description: "container receives success")
+        mockChargeContainer.onProcessSuccessfulTransaction = { expectation.fulfill() }
+
+        await serviceUnderTest.onAppear()
+        await fulfillment(of: [expectation], timeout: 2.0)
+
+        XCTAssertTrue(mockChargeContainer.transactionSuccessful)
+    }
+
+    func testListenFailureWithFailedTransitionsToErrorWithServerMessage() async throws {
+        mockRepository.expectedDetails = .scanToPayExample
+        mockRepository.expectedListenError = MockError.stubNotProvided
+        mockRepository.expectedCheckPendingResults = [
+            ChargeCardTransaction(status: .failed, message: "Wallet declined the payment")
+        ]
+
+        await serviceUnderTest.onAppear()
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        XCTAssertEqual(serviceUnderTest.state,
+                       .error(ChargeError(message: "Wallet declined the payment")))
+    }
+
+    /// The manual button re-subscribes on a non-terminal answer, which can
+    /// fail again — the fallback must not fire a second time and loop.
+    func testFallbackCheckRunsAtMostOncePerQR() async throws {
+        mockRepository.expectedDetails = .scanToPayExample
+        mockRepository.expectedListenError = MockError.stubNotProvided
+        mockRepository.expectedCheckPendingResults = [
+            ChargeCardTransaction(status: .pending),
+            ChargeCardTransaction(status: .pending),
+            ChargeCardTransaction(status: .pending)
+        ]
+
+        await serviceUnderTest.onAppear()
+        try await Task.sleep(nanoseconds: 300_000_000)
+        let afterFallback = mockRepository.checkPendingCallCount
+
+        // Manual tap: returns to .awaitingScan with a banner and re-subscribes,
+        // and that fresh subscription fails too.
+        mockRepository.expectedListenError = MockError.stubNotProvided
+        await MainActor.run { serviceUnderTest.userTappedICompletedPayment() }
+        try await Task.sleep(nanoseconds: 400_000_000)
+
+        XCTAssertEqual(afterFallback, 1)
+        // One from the fallback, one from the manual tap — not a third.
+        XCTAssertEqual(mockRepository.checkPendingCallCount, 2)
+    }
+
+    func testRetryReArmsTheFallbackCheck() async throws {
+        mockRepository.expectedDetails = .scanToPayExample
+        mockRepository.expectedListenError = MockError.stubNotProvided
+        mockRepository.expectedCheckPendingResults = [
+            ChargeCardTransaction(status: .pending),
+            ChargeCardTransaction(status: .pending)
+        ]
+
+        await serviceUnderTest.onAppear()
+        try await Task.sleep(nanoseconds: 300_000_000)
+        XCTAssertEqual(mockRepository.checkPendingCallCount, 1)
+
+        mockRepository.expectedListenError = MockError.stubNotProvided
+        await serviceUnderTest.retry()
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        XCTAssertEqual(mockRepository.checkPendingCallCount, 2)
     }
 
     // MARK: - Retry (PR QR-D)

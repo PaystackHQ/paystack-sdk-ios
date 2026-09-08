@@ -55,6 +55,8 @@ final class QRTests: PSTestCase {
         XCTAssertEqual(request.source, "checkout")
     }
 
+    // MARK: - Pusher envelope (Scan to Pay / SnapScan)
+
     func testListenForQRResponseSubscribesToProvidedChannel() async throws {
         let channelName = "api_mpass_olti_qr_51826223921246"
         mockSubscriptionListener
@@ -64,7 +66,66 @@ final class QRTests: PSTestCase {
         let result = try await serviceUnderTest
             .listenForQRResponse(onChannel: channelName).async()
 
-        XCTAssertEqual(result.status, .success)
+        XCTAssertEqual(result.status, true)
+        XCTAssertEqual(result.message, "Payment Successful")
+        XCTAssertEqual(result.response, "Approved")
+        XCTAssertEqual(result.reference, "T195096317254637")
+        XCTAssertEqual(result.transactionReference, "T195096317254637")
+    }
+
+    /// `trans` arrives as a JSON number on this channel — the field that
+    /// broke the previous `Charge3DSResponse` decode.
+    func testListenForQRResponseDecodesNumericTransAsString() async throws {
+        let channelName = "api_mpass_olti_qr_51826223921246"
+        mockSubscriptionListener
+            .expectSubscription(PusherSubscription(channelName: channelName, eventName: "response"))
+            .andReturnString(fromJson: "QRPusherSuccess")
+
+        let result = try await serviceUnderTest
+            .listenForQRResponse(onChannel: channelName).async()
+
+        XCTAssertEqual(result.transaction, "6537606334")
+    }
+
+    func testListenForQRResponseDecodesStringTransToo() async throws {
+        let channelName = "api_mpass_olti_qr_51826223921246"
+        mockSubscriptionListener
+            .expectSubscription(PusherSubscription(channelName: channelName, eventName: "response"))
+            .andReturnString(fromJson: "QRPusherTransAsString")
+
+        let result = try await serviceUnderTest
+            .listenForQRResponse(onChannel: channelName).async()
+
+        XCTAssertEqual(result.transaction, "6537606334")
+        XCTAssertEqual(result.status, true)
+    }
+
+    /// `redirecturl` is all lowercase on the wire, so `.convertFromSnakeCase`
+    /// never maps it — it needs the explicit coding key.
+    func testListenForQRResponseDecodesLowercaseRedirecturlKey() async throws {
+        let channelName = "api_mpass_olti_qr_51826223921246"
+        mockSubscriptionListener
+            .expectSubscription(PusherSubscription(channelName: channelName, eventName: "response"))
+            .andReturnString(fromJson: "QRPusherSuccess")
+
+        let result = try await serviceUnderTest
+            .listenForQRResponse(onChannel: channelName).async()
+
+        XCTAssertEqual(
+            result.redirectUrl,
+            "https://rian.co.za/ptest/callback.php?trxref=T195096317254637&reference=T195096317254637")
+    }
+
+    func testListenForQRResponseDecodesPageWithNullMembers() async throws {
+        let channelName = "api_mpass_olti_qr_51826223921246"
+        mockSubscriptionListener
+            .expectSubscription(PusherSubscription(channelName: channelName, eventName: "response"))
+            .andReturnString(fromJson: "QRPusherSuccess")
+
+        let result = try await serviceUnderTest
+            .listenForQRResponse(onChannel: channelName).async()
+
+        XCTAssertEqual(result.page, QRPusherPage(redirectUrl: nil, successMessage: nil))
     }
 
     func testListenForQRResponseDecodesFailedShape() async throws {
@@ -76,7 +137,24 @@ final class QRTests: PSTestCase {
         let result = try await serviceUnderTest
             .listenForQRResponse(onChannel: channelName).async()
 
-        XCTAssertEqual(result.status, .failed)
+        XCTAssertEqual(result.status, false)
         XCTAssertEqual(result.message, "Wallet declined the payment")
+        XCTAssertEqual(result.response, "Declined")
+    }
+
+    func testListenForQRResponseDecodesMinimalEnvelope() async throws {
+        let channelName = "api_mpass_olti_qr_51826223921246"
+        mockSubscriptionListener
+            .expectSubscription(PusherSubscription(channelName: channelName, eventName: "response"))
+            .andReturnString("{ \"status\": true }")
+
+        let result = try await serviceUnderTest
+            .listenForQRResponse(onChannel: channelName).async()
+
+        XCTAssertEqual(result.status, true)
+        XCTAssertNil(result.message)
+        XCTAssertNil(result.transaction)
+        XCTAssertNil(result.redirectUrl)
+        XCTAssertNil(result.page)
     }
 }

@@ -68,6 +68,34 @@ final class QRRepositoryImplementationTests: PSTestCase {
             .listenForResponse(onChannel: channel)
 
         XCTAssertEqual(result.status, .success)
+        XCTAssertEqual(result.message, "Payment Successful")
+    }
+
+    func testListenForResponseMapsFalseStatusToFailedWithServerMessage() async throws {
+        let channel = "api_mpass_olti_qr_51826223921246"
+        mockSubscriptionListener
+            .expectSubscription(PusherSubscription(channelName: channel, eventName: "response"))
+            .andReturnString(fromJson: "QRPusherFailed")
+
+        let result = try await serviceUnderTest
+            .listenForResponse(onChannel: channel)
+
+        XCTAssertEqual(result.status, .failed)
+        XCTAssertEqual(result.message, "Wallet declined the payment")
+    }
+
+    func testListenForResponseThrowsOnUndecodablePayload() async {
+        let channel = "api_mpass_olti_qr_51826223921246"
+        mockSubscriptionListener
+            .expectSubscription(PusherSubscription(channelName: channel, eventName: "response"))
+            .andReturnString("not json at all")
+
+        do {
+            _ = try await serviceUnderTest.listenForResponse(onChannel: channel)
+            XCTFail("Expected a decoding error")
+        } catch {
+            // expected — the view model degrades to a single checkPending
+        }
     }
 
     func testCheckPendingHitsSharedSDKEndpointNotAQRSpecificOne() async throws {

@@ -1,7 +1,13 @@
 {
-    "status": "success",
-    "trans": "5900549926",
-    "trxref": "T_qr_5900549926",
-    "reference": "T_qr_5900549926",
-    "message": "Payment received"
+    "redirecturl": "https://rian.co.za/ptest/callback.php?trxref=T195096317254637&reference=T195096317254637",
+    "trans": 6537606334,
+    "trxref": "T195096317254637",
+    "reference": "T195096317254637",
+    "status": true,
+    "message": "Payment Successful",
+    "response": "Approved",
+    "page": {
+        "redirect_url": null,
+        "success_message": null
+    }
 }

@@ -20,6 +20,9 @@ class QRViewModel: ObservableObject {
 
     private var pusherTask: Task<Void, Never>?
     private var checkPendingTask: Task<Void, Never>?
+    private var fallbackCheckTask: Task<Void, Never>?
+
+    private var hasRunPusherFallbackCheck = false
 
     init(chargeContainer: ChargeContainer,
          transactionDetails: VerifyAccessCode,
@@ -34,6 +37,7 @@ class QRViewModel: ObservableObject {
     deinit {
         pusherTask?.cancel()
         checkPendingTask?.cancel()
+        fallbackCheckTask?.cancel()
     }
 
     var variant: QRVariant { config.variant }
@@ -48,6 +52,7 @@ class QRViewModel: ObservableObject {
     func retry() async {
         cancelAllTasks()
         inlineBanner = nil
+        hasRunPusherFallbackCheck = false
         state = .loadingQR
         await generate()
     }
@@ -128,8 +133,47 @@ class QRViewModel: ObservableObject {
             let update = try await repository.listenForResponse(onChannel: channel)
             await processTransactionUpdate(update)
         } catch {
-            Logger.error("QR Pusher await failed: %@",
+            Logger.error("QR Pusher await failed, falling back to checkPending: %@",
                          arguments: error.localizedDescription)
+            await runPusherFallbackCheck()
+        }
+    }
+
+    @MainActor
+    private func runPusherFallbackCheck() async {
+        guard case .awaitingScan(let details) = state else { return }
+        guard !hasRunPusherFallbackCheck else { return }
+        hasRunPusherFallbackCheck = true
+
+        fallbackCheckTask?.cancel()
+        fallbackCheckTask = Task { [weak self] in
+            guard let self else { return }
+            do {
+                let result = try await self.repository.checkPending(
+                    accessCode: self.transactionDetails.accessCode)
+                await self.reactToPusherFallbackResult(result, details: details)
+            } catch {
+                Logger.error("QR Pusher fallback checkPending failed: %@",
+                             arguments: error.localizedDescription)
+            }
+        }
+    }
+
+    @MainActor
+    private func reactToPusherFallbackResult(_ result: ChargeCardTransaction,
+                                             details: QRDetails) {
+        guard case .awaitingScan = state else { return }
+        switch result.status {
+        case .success:
+            cancelAllTasks()
+            chargeContainer.processSuccessfulTransaction(details: transactionDetails)
+        case .failed:
+            cancelAllTasks()
+            let message = result.message ?? result.displayText ?? Self.failedFallbackMessage
+            state = .error(ChargeError(message: message))
+        default:
+            Logger.info("QR Pusher fallback: non-terminal status %@",
+                        arguments: String(describing: result.status))
         }
     }
 
@@ -158,5 +202,7 @@ class QRViewModel: ObservableObject {
         cancelPusherTask()
         checkPendingTask?.cancel()
         checkPendingTask = nil
+        fallbackCheckTask?.cancel()
+        fallbackCheckTask = nil
     }
 }

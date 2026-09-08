@@ -29,10 +29,14 @@ public extension Paystack {
     }
 
     /// Listens for QR-payment status updates on the Pusher channel
-    /// returned by ``generateQR(_:)``. The server publishes only terminal
-    /// events (`success` / `failed`) on the QR channel, so this helper
-    /// returns the narrow ``Charge3DSResponse`` shape shared with card
-    /// 3-D Secure and mobile money authorization.
+    /// returned by ``generateQR(_:)`` — the same channel serves Scan to Pay
+    /// and SnapScan.
+    ///
+    /// The QR channel publishes its own envelope rather than the flat
+    /// ``Charge3DSResponse`` shape used by card 3-D Secure, mobile money,
+    /// Zap and bank transfer: the top-level `status` is a `Bool`, `trans`
+    /// is a JSON number, and the redirect key is spelled `redirecturl`.
+    /// See ``QRPusherResponse``.
     ///
     /// The underlying listener is single-shot per the existing
     /// `PusherSubscriptionListener` contract — one event resolves the
@@ -41,10 +45,10 @@ public extension Paystack {
     /// - Parameter channelName: The `data.channel` value returned by
     ///   ``generateQR(_:)`` (for example
     ///   `"api_mpass_olti_qr_51826223921246"`).
-    /// - Returns: A ``Service`` carrying a ``Charge3DSResponse`` on the
+    /// - Returns: A ``Service`` carrying a ``QRPusherResponse`` on the
     ///   first event the channel emits.
     func listenForQRResponse(onChannel channelName: String)
-        -> Service<Charge3DSResponse> {
+        -> Service<QRPusherResponse> {
         let subscription: any Subscription = PusherSubscription(
             channelName: channelName, eventName: "response")
         return Service(subscription)
