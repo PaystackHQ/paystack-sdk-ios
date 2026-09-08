@@ -6,6 +6,9 @@ enum SupportedChannel: Equatable, Identifiable {
     case mobileMoney(MobileMoneyChannel)
     case bankTransfer(BankTransferConfig)
     case zap(ZapConfig)
+    case capitecPay(CapitecPayConfig)
+    case scanToPay(QRConfig)
+    case snapScan(QRConfig)
 
     var id: String {
         switch self {
@@ -17,6 +20,12 @@ enum SupportedChannel: Equatable, Identifiable {
             return "bank_transfer"
         case .zap:
             return "zap"
+        case .capitecPay:
+            return "capitec_pay"
+        case .scanToPay:
+            return "scan_to_pay"
+        case .snapScan:
+            return "snap_scan"
         }
     }
 
@@ -30,6 +39,12 @@ enum SupportedChannel: Equatable, Identifiable {
             return config.provider == .pesalink ? "Pesalink" : "Bank Transfer"
         case .zap:
             return "Zap"
+        case .capitecPay:
+            return "Capitec Pay"
+        case .scanToPay:
+            return QRVariant.scanToPay.displayTitle
+        case .snapScan:
+            return QRVariant.snapScan.displayTitle
         }
     }
 
@@ -45,6 +60,12 @@ enum SupportedChannel: Equatable, Identifiable {
                 : Image("bankTransferLogo", bundle: .current)
         case .zap:
             return Image("zapSingleLogo", bundle: .current)
+        case .capitecPay:
+            return Image("capitecPayLogo", bundle: .current)
+        case .scanToPay:
+            return Image(QRVariant.scanToPay.logoAsset, bundle: .current)
+        case .snapScan:
+            return Image(QRVariant.snapScan.logoAsset, bundle: .current)
         }
     }
 

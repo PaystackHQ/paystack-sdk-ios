@@ -1,14 +1,14 @@
 import Foundation
 
 public protocol CryptographyProtocol {
-    func encryptPKCS1(text: String, publicKey: String) throws -> String
+    func encrypt(text: String, publicKey: String) throws -> String
 }
 
 public struct Cryptography: CryptographyProtocol {
 
     public init() {}
 
-    func encrypt(text: String, publicKey: String) throws -> String {
+    public func encrypt(text: String, publicKey: String) throws -> String {
         let key = try createKey(from: publicKey, isPublic: true)
 
         var encryptionError: Unmanaged<CFError>?
@@ -26,20 +26,6 @@ public struct Cryptography: CryptographyProtocol {
             throw CryptographyError.modelEncodingFailed
         }
         return try encrypt(text: jsonString, publicKey: publicKey)
-    }
-
-    /// RSA-encrypts `text` with PKCS#1 v1.5 padding and base64-encodes the result.
-    /// Mirrors Node's `crypto.publicEncrypt` with `constants.RSA_PKCS1_PADDING`.
-    public func encryptPKCS1(text: String, publicKey: String) throws -> String {
-        let key = try createKey(from: publicKey, isPublic: true)
-
-        var encryptionError: Unmanaged<CFError>?
-        guard let textData = text.data(using: .utf8),
-              let encryptedData = SecKeyCreateEncryptedData(key, .rsaEncryptionPKCS1,
-                                                            textData as CFData, &encryptionError) as Data? else {
-            throw CryptographyError.encryptionFailed
-        }
-        return encryptedData.base64EncodedString()
     }
 }
 

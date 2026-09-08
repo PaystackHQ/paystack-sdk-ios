@@ -472,6 +472,147 @@ final class ChargeViewModelTests: PSTestCase {
         }
     }
 
+    // MARK: - Capitec Pay resolver (PR CP-B)
+
+    func testCapitecPayPromotesWhenChannelPresentAndTransactionIdPresent() async {
+        let response = VerifyAccessCode.with(
+            channels: [.capitecPay],
+            transactionId: 5900549926)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        if case .payment(.capitecPay(_, let config)) = serviceUnderTest.transactionState {
+            XCTAssertEqual(config.transactionId, 5900549926)
+            XCTAssertEqual(config.transactionReference, response.reference)
+            XCTAssertEqual(config.publicEncryptionKey, response.publicEncryptionKey)
+        } else {
+            XCTFail("Expected .payment(.capitecPay(_, _)), got \(serviceUnderTest.transactionState)")
+        }
+    }
+
+    func testCapitecPayDoesNotPromoteWhenChannelAbsent() async {
+        let response = VerifyAccessCode.with(
+            channels: [.card],
+            transactionId: 5900549926)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .payment(type: .card(transactionInformation: response)))
+    }
+
+    func testCapitecPayDoesNotPromoteWhenTransactionIdMissing() async {
+        let response = VerifyAccessCode.with(
+            channels: [.capitecPay],
+            transactionId: nil)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        let expectedMessage = "No supported payment methods. " +
+        "Please reach out to your merchant for further information"
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .error(.init(message: expectedMessage)))
+    }
+
+    func testAutoRoutesToCapitecPayWhenItIsTheOnlyChannel() async {
+        let response = VerifyAccessCode.with(
+            channels: [.capitecPay],
+            transactionId: 5900549926)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        if case .payment(.capitecPay) = serviceUnderTest.transactionState {
+        } else {
+            XCTFail("Expected auto-route to .payment(.capitecPay), got \(serviceUnderTest.transactionState)")
+        }
+    }
+
+    // MARK: - QR resolver (PR QR-B)
+
+    func testQRSurfacesBothScanToPayAndSnapScanWhenMPASSOLTIPresent() async {
+        let response = VerifyAccessCode.with(
+            channels: [.card, .qr],
+            qrCode: ["MPASS_OLTI"])
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        if case .channelSelection(_, let channels) = serviceUnderTest.transactionState {
+            let ids = channels.map { $0.id }
+            XCTAssertTrue(ids.contains("scan_to_pay"),
+                          "Expected Scan to Pay in \(ids)")
+            XCTAssertTrue(ids.contains("snap_scan"),
+                          "Expected Snap Scan in \(ids)")
+            let scanToPayIndex = ids.firstIndex(of: "scan_to_pay")
+            let snapScanIndex = ids.firstIndex(of: "snap_scan")
+            XCTAssertNotNil(scanToPayIndex)
+            XCTAssertNotNil(snapScanIndex)
+            if let s = scanToPayIndex, let n = snapScanIndex {
+                XCTAssertLessThan(s, n,
+                                  "Scan to Pay should appear before Snap Scan")
+            }
+        } else {
+            XCTFail("Expected .channelSelection, got \(serviceUnderTest.transactionState)")
+        }
+    }
+
+    func testQRDoesNotSurfaceWhenChannelAbsent() async {
+        let response = VerifyAccessCode.with(
+            channels: [.card],
+            qrCode: ["MPASS_OLTI"])
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .payment(type: .card(transactionInformation: response)))
+    }
+
+    func testQRDoesNotSurfaceWhenChannelOptionsEmpty() async {
+        let response = VerifyAccessCode.with(
+            channels: [.card, .qr],
+            qrCode: [])
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .payment(type: .card(transactionInformation: response)))
+    }
+
+    func testQRDoesNotSurfaceForUnknownChannelOptionCode() async {
+        let response = VerifyAccessCode.with(
+            channels: [.qr],
+            qrCode: ["FUTURE_PROVIDER_XYZ"])
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        let expectedMessage = "No supported payment methods. " +
+        "Please reach out to your merchant for further information"
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .error(.init(message: expectedMessage)))
+    }
+
+    func testQRDoesNotSurfaceWhenTransactionIdMissing() async {
+        let response = VerifyAccessCode.with(
+            channels: [.qr],
+            qrCode: ["MPASS_OLTI"],
+            transactionId: nil)
+        mockRepo.expectedVerifyAccessCode = response
+
+        await serviceUnderTest.verifyAccessCodeAndProceed()
+
+        let expectedMessage = "No supported payment methods. " +
+        "Please reach out to your merchant for further information"
+        XCTAssertEqual(serviceUnderTest.transactionState,
+                       .error(.init(message: expectedMessage)))
+    }
+
     func testRestartFromChannelSelectionRebuildsChannelSelectionFromCachedDetails() async {
         let response = VerifyAccessCode.with(
             channels: [.card, .bankTransfer],
@@ -597,13 +738,15 @@ private extension VerifyAccessCode {
                      currency: String = "USD",
                      mobileMoney: [MobileMoneyChannel]? = nil,
                      bankTransferProviders: [String]? = nil,
+                     qrCode: [String]? = nil,
                      fulfilLateNotification: Bool? = nil,
                      transactionId: Int? = 1234,
                      supportedBanks: [SupportedBank]? = nil) -> Self {
         let channelOptions: PaystackUI.ChannelOptions? = {
-            if mobileMoney == nil && bankTransferProviders == nil { return nil }
+            if mobileMoney == nil && bankTransferProviders == nil && qrCode == nil { return nil }
             return PaystackUI.ChannelOptions(mobileMoney: mobileMoney,
-                                             bankTransfer: bankTransferProviders)
+                                             bankTransfer: bankTransferProviders,
+                                             qrCode: qrCode)
         }()
         let settings: MerchantChannelSettings? = fulfilLateNotification.map {
             MerchantChannelSettings(

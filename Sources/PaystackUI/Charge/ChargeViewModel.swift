@@ -80,6 +80,23 @@ class ChargeViewModel: ObservableObject {
             result.append(.zap(config))
         }
 
+        if response.paymentChannels.contains(.capitecPay),
+           let transactionId = response.transactionId {
+            let config = CapitecPayConfig(
+                transactionId: transactionId,
+                transactionReference: response.reference,
+                publicEncryptionKey: response.publicEncryptionKey)
+            result.append(.capitecPay(config))
+        }
+
+        if response.paymentChannels.contains(.qr),
+           let qrOptions = response.channelOptions?.qrCode, !qrOptions.isEmpty,
+           let transactionId = response.transactionId {
+            let entries = QRChannelDirectory.entries(for: qrOptions,
+                                                     transactionId: transactionId)
+            result.append(contentsOf: entries)
+        }
+
         return result
     }
 
@@ -115,6 +132,27 @@ class ChargeViewModel: ObservableObject {
            case .zap(let config) = channels[0] {
             return .payment(type: .zap(transactionInformation: response,
                                        config: config))
+        }
+
+        if !channels.contains(.card),
+           channels.count == 1,
+           case .capitecPay(let config) = channels[0] {
+            return .payment(type: .capitecPay(transactionInformation: response,
+                                              config: config))
+        }
+
+        if !channels.contains(.card),
+           channels.count == 1,
+           case .scanToPay(let config) = channels[0] {
+            return .payment(type: .qr(transactionInformation: response,
+                                      config: config))
+        }
+
+        if !channels.contains(.card),
+           channels.count == 1,
+           case .snapScan(let config) = channels[0] {
+            return .payment(type: .qr(transactionInformation: response,
+                                      config: config))
         }
 
         return .channelSelection(transactionInformation: response,

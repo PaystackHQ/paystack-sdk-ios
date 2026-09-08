@@ -1,6 +1,13 @@
 {
-    "status": "failed",
-    "trans": "5900549926",
-    "trxref": "T_qr_5900549926",
-    "message": "Wallet declined the payment"
+    "redirecturl": "https://rian.co.za/ptest/callback.php?trxref=T195096317254637&reference=T195096317254637",
+    "trans": 6537606334,
+    "trxref": "T195096317254637",
+    "reference": "T195096317254637",
+    "status": false,
+    "message": "Wallet declined the payment",
+    "response": "Declined",
+    "page": {
+        "redirect_url": null,
+        "success_message": null
+    }
 }

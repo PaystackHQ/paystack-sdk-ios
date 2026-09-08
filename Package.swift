@@ -57,8 +57,11 @@ let package = Package(
                 .copy("API/Charge/Resources/ZapPusherFailed.json"),
                 .copy("API/Charge/Resources/CapitecPayPusherSuccess.json"),
                 .copy("API/Charge/Resources/CapitecPayPusherFailed.json"),
+                .copy("API/Charge/Resources/CapitecPayPusherPending.json"),
+                .copy("API/Charge/Resources/CapitecRequeryResponse.json"),
                 .copy("API/Charge/Resources/QRPusherSuccess.json"),
-                .copy("API/Charge/Resources/QRPusherFailed.json")
+                .copy("API/Charge/Resources/QRPusherFailed.json"),
+                .copy("API/Charge/Resources/QRPusherTransAsString.json")
 
             ])
     ]

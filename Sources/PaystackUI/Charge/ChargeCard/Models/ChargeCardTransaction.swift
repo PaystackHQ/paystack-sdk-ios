@@ -25,6 +25,11 @@ extension ChargeCardTransaction {
         return ChargeCardTransaction(status: status)
     }
 
+    static func from(_ response: QRPusherResponse) -> Self {
+        ChargeCardTransaction(status: response.status ? .success : .failed,
+                              message: response.message)
+    }
+
 }
 
 // MARK: - Previews

@@ -14,6 +14,7 @@ public enum Channel: String, Codable {
     case mobileMoney = "mobile_money"
     case qr = "qr"
     case bankTransfer = "bank_transfer"
+    case capitecPay = "capitec_pay"
     case unsupportedChannel
 
     public init(from decoder: Decoder) throws {

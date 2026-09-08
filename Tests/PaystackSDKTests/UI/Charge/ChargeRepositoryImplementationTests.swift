@@ -29,7 +29,8 @@ final class ChargeRepositoryImplementationTests: PSTestCase {
                 .init(key: "MPESA", value: "M-PESA", isNew: true, phoneNumberRegex: phoneNumberRegex),
                 .init(key: "MPESA_OFF", value: "M-PESA", isNew: false, phoneNumberRegex: phoneNumberRegex)
             ],
-            bankTransfer: ["wema-bank", "titan-paystack", "paystack-mfb"])
+            bankTransfer: ["wema-bank", "titan-paystack", "paystack-mfb"],
+            qrCode: ["visa"])
         let expectedMerchantSettings = MerchantChannelSettings(
             bankTransfer: BankTransferMerchantSettings(fulfilLateNotification: true))
         let expectedResult = VerifyAccessCode(email: "test@email.com",

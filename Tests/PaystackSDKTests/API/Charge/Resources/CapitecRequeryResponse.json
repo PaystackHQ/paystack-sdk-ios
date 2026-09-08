@@ -1,0 +1,7 @@
+{
+    "status": true,
+    "message": "Charge successful",
+    "data": {
+        "status": "success"
+    }
+}
