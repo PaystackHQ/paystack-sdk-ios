@@ -34,7 +34,7 @@ enum QRVariant: String, Equatable {
     var showsQRReferenceRow: Bool {
         switch self {
         case .scanToPay:
-            return true
+            return false
         case .snapScan:
             return false
         }

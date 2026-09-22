@@ -13,12 +13,14 @@ struct FormInput<Content: View,
     var buttonEnabled: Bool
     var secondaryButtonText: String
     var secondaryAction: (() -> Void)?
+    var layout: FormInputLayout
 
     init(title: String = "Submit",
          enabled: Bool = true,
          action: @escaping () async -> Void,
          secondaryButtonText: String = "Cancel",
          secondaryAction: (() -> Void)? = nil,
+         layout: FormInputLayout = .standard,
          supplementaryContent: SupplementaryContent,
          @FormInputDataBuilder content: () -> FormInputData<Content>) {
         let content = content()
@@ -27,6 +29,7 @@ struct FormInput<Content: View,
         self.buttonEnabled = enabled
         self.secondaryButtonText = secondaryButtonText
         self.secondaryAction = secondaryAction
+        self.layout = layout
         self.supplementaryContent = supplementaryContent
         self._viewModel = StateObject(wrappedValue: FormInputViewModel(action: action))
     }
@@ -36,6 +39,7 @@ struct FormInput<Content: View,
          action: @escaping () async -> Void,
          secondaryButtonText: String = "Cancel",
          secondaryAction: (() -> Void)? = nil,
+         layout: FormInputLayout = .standard,
          @FormInputDataBuilder content: () -> FormInputData<Content>)
     where SupplementaryContent == EmptyView {
         let content = content()
@@ -44,19 +48,20 @@ struct FormInput<Content: View,
         self.buttonEnabled = enabled
         self.secondaryButtonText = secondaryButtonText
         self.secondaryAction = secondaryAction
+        self.layout = layout
         self.supplementaryContent = nil
         self._viewModel = StateObject(wrappedValue: FormInputViewModel(action: action))
     }
 
     var body: some View {
-        VStack(spacing: .doublePadding) {
+        VStack(spacing: layout.spacing) {
             formData.content
 
             Button(buttonTitle, action: submit)
                 .buttonStyle(PrimaryButtonStyle(showLoading: viewModel.showLoading))
                 .disabled(!buttonEnabled)
-                .padding(.horizontal, .doublePadding)
-                .padding(.top, .singlePadding)
+                .padding(.horizontal, layout.buttonHorizontalInset)
+                .padding(.top, layout.buttonTopSpacing)
 
             if let supplementaryContent = supplementaryContent,
                !viewModel.showLoading {
@@ -68,7 +73,7 @@ struct FormInput<Content: View,
                 Button(secondaryButtonText, action: secondaryAction)
                     .foregroundColor(.contentSecondary)
                     .font(.body14M)
-                    .padding(.top, .singlePadding)
+                    .padding(.top, layout.secondaryButtonTopSpacing)
             }
         }
         .disabled(viewModel.showLoading)

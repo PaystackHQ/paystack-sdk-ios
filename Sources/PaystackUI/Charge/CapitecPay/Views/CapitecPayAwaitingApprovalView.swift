@@ -53,23 +53,23 @@ struct CapitecPayAwaitingApprovalView: View {
             step("Tap on ", bold: "Capitec Pay")
             step("Tap on ", bold: "Pay", trailing: " to approve the payment")
         }
-        .padding(.doublePadding)
+        .padding(.horizontal,.doublePadding)
+        .padding(.vertical,.singlePadding)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.surfaceInsetTranslucent)
+        .background(Color.surfaceTertiary)
         .cornerRadius(.cornerRadius)
     }
 
     @ViewBuilder
     private func step(_ prefix: String, bold: String, trailing: String = "") -> some View {
-        HStack(alignment: .top, spacing: .singlePadding) {
+        HStack(alignment: .center, spacing: .singlePadding) {
             Circle()
                 .fill(Color.accentPrimary)
                 .frame(width: 6, height: 6)
-                .padding(.top, 8)
-            (Text(prefix).foregroundColor(.contentPrimary)
-             + Text(bold).foregroundColor(.contentPrimary).bold()
-             + Text(trailing).foregroundColor(.contentPrimary))
-                .font(.body14R)
+            (Text(prefix).font(.body14R)
+             + Text(bold).font(.body14M)
+             + Text(trailing).font(.body14R))
+                .foregroundColor(.contentPrimary)
                 .fixedSize(horizontal: false, vertical: true)
             Spacer(minLength: 0)
         }
@@ -85,7 +85,7 @@ struct CapitecPayAwaitingApprovalView: View {
                     .font(.body14M)
                     .foregroundColor(.contentSecondary)
             }
-            .padding(.vertical, .doublePadding)
+            .padding(.vertical, .singlePadding)
         } else {
             VStack(spacing: .singlePadding) {
                 HStack(spacing: 4) {
@@ -97,7 +97,7 @@ struct CapitecPayAwaitingApprovalView: View {
                 }
                 .font(.body14M)
             }
-            .padding(.vertical, .doublePadding)
+            .padding(.vertical, .singlePadding)
         }
     }
 }
