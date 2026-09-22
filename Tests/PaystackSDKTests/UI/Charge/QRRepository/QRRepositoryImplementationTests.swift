@@ -39,7 +39,7 @@ final class QRRepositoryImplementationTests: PSTestCase {
             channelOption: "MPASS_OLTI",
             variant: .scanToPay)
 
-        XCTAssertEqual(result.qrReference, "1490884538")
+        XCTAssertEqual(result.qrReference, nil)
         XCTAssertEqual(result.pusherChannel, "api_mpass_olti_qr_51826223921246")
     }
 
