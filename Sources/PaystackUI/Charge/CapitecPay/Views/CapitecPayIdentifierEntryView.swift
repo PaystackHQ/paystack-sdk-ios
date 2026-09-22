@@ -30,7 +30,8 @@ struct CapitecPayIdentifierEntryView: View {
                           enabled: viewModel.isValid,
                           action: viewModel.submitIdentifier,
                           secondaryButtonText: "Change payment method",
-                          secondaryAction: onChangePaymentMethod) {
+                          secondaryAction: onChangePaymentMethod,
+                          layout: .fullWidth) {
                     identifierPicker
                     identifierField
                 }

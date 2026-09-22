@@ -101,8 +101,8 @@ enum DarkModePalette {
     static let semanticSurfaces: [SwatchEntry] = [
         .init("surfacePrimary", .surfacePrimary, notes: "Sheet root"),
         .init("surfaceSecondary", .surfaceSecondary, notes: "Filled inset chip"),
-        .init("surfaceTertiary", .surfaceTertiary, notes: "Deepest surface (reserved)"),
-        .init("surfaceInsetTranslucent", .surfaceInsetTranslucent, notes: "Capitec stepsCard"),
+        .init("surfaceTertiary", .surfaceTertiary, notes: "Capitec stepsCard"),
+        .init("surfaceInsetTranslucent", .surfaceInsetTranslucent, notes: "Reserved — no current site"),
         .init("overlayScrim", .overlayScrim, notes: "Reserved — no current site")
     ]
 

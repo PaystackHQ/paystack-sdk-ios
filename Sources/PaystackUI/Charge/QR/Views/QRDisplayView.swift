@@ -56,7 +56,7 @@ struct QRDisplayView: View {
 
     private var qrCodeBlock: some View {
         QRCodeImage(url: details.qrImageURL)
-            .frame(width: 220, height: 220)
+            .frame(width: 180, height: 180)
             .padding(.singlePadding)
             .background(Color.qrPlate)
             .overlay(
