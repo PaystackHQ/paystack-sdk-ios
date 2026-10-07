@@ -84,6 +84,19 @@ func paymentDone(_ result: TransactionResult) {
 }
 ```
 
+### Display audience
+By default the payment UI assumes the customer is holding the device (`.customerFacing`). If your app runs on a device the merchant holds and shows to the customer, such as a point-of-sale or terminal app, set the display audience when you build the Paystack object:
+
+```swift
+let paystackObject = try? PaystackBuilder
+    .newInstance
+    .setKey("PUBLIC KEY GOES HERE")
+    .setDisplayAudience(.merchantFacing)
+    .build()
+```
+
+Some payment methods adapt to the audience. For example, Zap shows an "Open Zap" button when customer-facing and a QR code for the customer to scan when merchant-facing.
+
 ### Handling the Transaction Result
 There are 3 possibly results that can be returned
 

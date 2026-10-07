@@ -27,7 +27,8 @@ public extension Paystack {
             initializeSDK()
             return NavigationalButton(
                 onComplete: onComplete,
-                destination: ChargeView(accessCode: accessCode)) { button() }
+                destination: ChargeView(accessCode: accessCode)
+                    .environment(\.displayAudience, config.displayAudience)) { button() }
 
         }
 
@@ -51,6 +52,7 @@ public extension Paystack {
                                                               parentViewController: viewController)
             let chargeCardViewController = UIHostingController(
                 rootView: ChargeView(accessCode: accessCode)
+                    .environment(\.displayAudience, config.displayAudience)
                     .environmentObject(visibilityContainer))
             viewController.present(chargeCardViewController, animated: true)
         }

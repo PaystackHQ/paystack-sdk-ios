@@ -11,7 +11,8 @@ struct ZapPaymentView: View {
     let remainingSeconds: Int
     let onChangePaymentMethod: () -> Void
 
-    let showsOpenZapButton: Bool
+    @Environment(\.displayAudience)
+    private var displayAudience
 
     private var formattedRemaining: String {
         let minutes = max(0, remainingSeconds) / 60
@@ -29,12 +30,13 @@ struct ZapPaymentView: View {
 
                 zapHeader
 
-                Text("Open Zap or scan this QR code to complete this payment")
+                Text(displayAudience.text(.zapInstruction))
                     .font(.body16M)
                     .foregroundColor(.contentPrimary)
                     .multilineTextAlignment(.center)
 
                 qrCodeBlock
+                    .visible(for: .zapQRCode)
 
                 expiresInRow
 
@@ -78,10 +80,9 @@ struct ZapPaymentView: View {
 
     private var actionButtons: some View {
         VStack(spacing: .singlePadding) {
-            if showsOpenZapButton {
-                Button("Open Zap", action: openZap)
-                    .buttonStyle(PrimaryButtonStyle(showLoading: false))
-            }
+            Button("Open Zap", action: openZap)
+                .buttonStyle(PrimaryButtonStyle(showLoading: false))
+                .visible(for: .zapOpenAppButton)
 
             Button("Change payment method", action: onChangePaymentMethod)
                 .foregroundColor(.contentSecondary)
@@ -106,20 +107,20 @@ struct ZapPaymentView_Previews: PreviewProvider {
         Group {
             ZapPaymentView(details: .example,
                            remainingSeconds: 254,
-                           onChangePaymentMethod: {},
-                           showsOpenZapButton: true)
-                .previewDisplayName("Default — Open Zap + Change payment method")
+                           onChangePaymentMethod: {})
+                .environment(\.displayAudience, .customerFacing)
+                .previewDisplayName("Customer-facing — Open Zap, no QR")
 
             ZapPaymentView(details: .example,
                            remainingSeconds: 254,
-                           onChangePaymentMethod: {},
-                           showsOpenZapButton: false)
-                .previewDisplayName("QR-only (terminal mode)")
+                           onChangePaymentMethod: {})
+                .environment(\.displayAudience, .merchantFacing)
+                .previewDisplayName("Merchant-facing — QR only")
 
             ZapPaymentView(details: .example,
                            remainingSeconds: 42,
-                           onChangePaymentMethod: {},
-                           showsOpenZapButton: true)
+                           onChangePaymentMethod: {})
+                .environment(\.displayAudience, .merchantFacing)
                 .previewDisplayName("Final 60s — countdown warning colour")
         }
     }

@@ -4,7 +4,6 @@ import PaystackCore
 class ZapViewModel: ObservableObject {
 
     static var mandateWindowSeconds: Int = 5 * 60
-    public static var showsOpenZapButton = true
 
     static var failedFallbackMessage = "Something went wrong"
     static var sessionExpiredCopy =

@@ -25,4 +25,32 @@ class PaystackBuilderTests: XCTestCase {
         }
     }
 
+    func testDisplayAudienceDefaultsToCustomerFacing() throws {
+        let paystack = try builder
+            .setKey("testsk_exampleKey")
+            .build()
+        XCTAssertEqual(paystack.config.displayAudience, .customerFacing)
+    }
+
+    func testSetDisplayAudienceSetsMerchantFacingOnConfig() throws {
+        let paystack = try builder
+            .setKey("testsk_exampleKey")
+            .setDisplayAudience(.merchantFacing)
+            .build()
+        XCTAssertEqual(paystack.config.displayAudience, .merchantFacing)
+    }
+
+    func testSetDisplayAudienceLastCallWins() throws {
+        let paystack = try builder
+            .setKey("testsk_exampleKey")
+            .setDisplayAudience(.merchantFacing)
+            .setDisplayAudience(.customerFacing)
+            .build()
+        XCTAssertEqual(paystack.config.displayAudience, .customerFacing)
+    }
+
+    func testDisplayAudienceValuesAreDistinct() {
+        XCTAssertNotEqual(DisplayAudience.customerFacing, DisplayAudience.merchantFacing)
+    }
+
 }

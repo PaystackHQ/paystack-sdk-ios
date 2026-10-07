@@ -25,8 +25,7 @@ struct ZapView: View {
                 ZapPaymentView(
                     details: details,
                     remainingSeconds: viewModel.remainingSeconds,
-                    onChangePaymentMethod: viewModel.userTappedChangePaymentMethod,
-                    showsOpenZapButton: ZapViewModel.showsOpenZapButton)
+                    onChangePaymentMethod: viewModel.userTappedChangePaymentMethod)
             case .sessionExpired:
                 ZapSessionExpiredView(
                     message: ZapViewModel.sessionExpiredCopy,

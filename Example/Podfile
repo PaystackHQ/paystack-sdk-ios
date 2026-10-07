@@ -1,6 +1,6 @@
 use_frameworks!
 
-platform :ios, '13.0'
+platform :ios, '15.0'
 
 target 'paystack-sdk-ios' do
 
@@ -13,7 +13,8 @@ post_install do |installer|
     installer.generated_projects.each do |project|
           project.targets.each do |target|
               target.build_configurations.each do |config|
-                  config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+                  # Xcode 27 only supports deployment targets from iOS 15.0 upward.
+                  config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
 
                   # Expose TweetNacl's `CTweetNacl` C submodule to every pod target.
                   # Without this, Xcode 16+/Swift 6 explicit-module builds fail to
