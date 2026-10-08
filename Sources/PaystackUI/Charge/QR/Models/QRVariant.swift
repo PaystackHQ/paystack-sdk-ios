@@ -31,10 +31,10 @@ enum QRVariant: String, Equatable {
         }
     }
 
-    var showsQRReferenceRow: Bool {
+    var supportsAppDeeplinks: Bool {
         switch self {
         case .scanToPay:
-            return false
+            return true
         case .snapScan:
             return false
         }
