@@ -14,7 +14,7 @@ extension QRDetails {
         guard let url = URL(string: response.data.url) else { return nil }
         return QRDetails(
             qrImageURL: url,
-            qrReference: variant.showsQRReferenceRow ? response.data.qrCode : nil,
+            qrReference: variant.supportsAppDeeplinks ? response.data.qrCode : nil,
             pusherChannel: response.data.channel)
     }
 }

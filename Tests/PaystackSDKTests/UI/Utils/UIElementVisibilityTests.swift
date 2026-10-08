@@ -52,4 +52,75 @@ final class UIElementVisibilityTests: XCTestCase {
         XCTAssertEqual(futureAudience.text(.zapInstruction),
                        DisplayAudience.customerFacing.text(.zapInstruction))
     }
+
+    func testBankTransferCopyButtonsReturnsTrueWhenCustomerFacing() {
+        XCTAssertTrue(DisplayAudience.customerFacing.shows(.bankTransferCopyButtons))
+    }
+
+    func testBankTransferCopyButtonsReturnsFalseWhenMerchantFacing() {
+        XCTAssertFalse(DisplayAudience.merchantFacing.shows(.bankTransferCopyButtons))
+    }
+
+    func testBankTransferCopyButtonsFollowsCustomerFacingForUnknownAudience() {
+        XCTAssertTrue(futureAudience.shows(.bankTransferCopyButtons))
+    }
+
+    func testScanToPayQRCodeReturnsFalseWhenCustomerFacing() {
+        XCTAssertFalse(DisplayAudience.customerFacing.shows(.scanToPayQRCode))
+    }
+
+    func testScanToPayQRCodeReturnsTrueWhenMerchantFacing() {
+        XCTAssertTrue(DisplayAudience.merchantFacing.shows(.scanToPayQRCode))
+    }
+
+    func testScanToPayQRCodeFollowsCustomerFacingForUnknownAudience() {
+        XCTAssertFalse(futureAudience.shows(.scanToPayQRCode))
+    }
+
+    func testScanToPayQRNumberReturnsTrueWhenCustomerFacing() {
+        XCTAssertTrue(DisplayAudience.customerFacing.shows(.scanToPayQRNumber))
+    }
+
+    func testScanToPayQRNumberReturnsFalseWhenMerchantFacing() {
+        XCTAssertFalse(DisplayAudience.merchantFacing.shows(.scanToPayQRNumber))
+    }
+
+    func testScanToPayQRNumberFollowsCustomerFacingForUnknownAudience() {
+        XCTAssertTrue(futureAudience.shows(.scanToPayQRNumber))
+    }
+
+    func testScanToPaySeeAppsButtonReturnsTrueWhenCustomerFacing() {
+        XCTAssertTrue(DisplayAudience.customerFacing.shows(.scanToPaySeeAppsButton))
+    }
+
+    func testScanToPaySeeAppsButtonReturnsFalseWhenMerchantFacing() {
+        XCTAssertFalse(DisplayAudience.merchantFacing.shows(.scanToPaySeeAppsButton))
+    }
+
+    func testScanToPaySeeAppsButtonFollowsCustomerFacingForUnknownAudience() {
+        XCTAssertTrue(futureAudience.shows(.scanToPaySeeAppsButton))
+    }
+
+    func testScanToPayShowsExactlyOnePaymentEntryPointForEveryAudience() {
+        for audience in [DisplayAudience.customerFacing, .merchantFacing, futureAudience] {
+            let visible = [audience.shows(.scanToPayQRCode), audience.shows(.scanToPaySeeAppsButton)]
+                .filter { $0 }
+            XCTAssertEqual(visible.count, 1, "Audience \(audience.id) must show exactly one Scan to Pay entry point")
+        }
+    }
+
+    func testScanToPayInstructionTextForCustomerFacing() {
+        XCTAssertEqual(DisplayAudience.customerFacing.text(.scanToPayInstruction),
+                       "Open any Scan to Pay app to complete this payment")
+    }
+
+    func testScanToPayInstructionTextForMerchantFacing() {
+        XCTAssertEqual(DisplayAudience.merchantFacing.text(.scanToPayInstruction),
+                       "Open any Scan to Pay app on your phone to scan the QR code")
+    }
+
+    func testScanToPayInstructionTextFallsBackToCustomerWordingForUnknownAudience() {
+        XCTAssertEqual(futureAudience.text(.scanToPayInstruction),
+                       DisplayAudience.customerFacing.text(.scanToPayInstruction))
+    }
 }
