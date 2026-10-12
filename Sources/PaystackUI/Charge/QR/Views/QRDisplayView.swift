@@ -13,27 +13,45 @@ struct QRDisplayView: View {
     let onICompletedPayment: () -> Void
     let onChangePaymentMethod: () -> Void
 
+    @Environment(\.displayAudience)
+    private var displayAudience
+
     @State private var showCopiedToast = false
+    @State private var showsAppPicker = false
 
     var body: some View {
+        Group {
+            if showsAppPicker, let qrCode = deeplinkQRCode {
+                ScanToPayAppPickerView(qrCode: qrCode,
+                                       onBack: { showsAppPicker = false })
+            } else {
+                paymentDetails
+            }
+        }
+        .copiedToast(isPresented: $showCopiedToast)
+    }
+
+    private var paymentDetails: some View {
         ScrollView {
             VStack(spacing: .triplePadding) {
 
                 headerLogo
 
-                Text(variant.instructionCopy)
+                Text(instructionText)
                     .font(.body16M)
                     .foregroundColor(.contentPrimary)
                     .multilineTextAlignment(.center)
 
-                qrCodeBlock
+                if showsQRCode {
+                    qrCodeBlock
+                }
 
                 Text(amount.description)
                     .font(.body16M)
                     .foregroundColor(.contentPrimary)
 
-                if variant.showsQRReferenceRow, let reference = details.qrReference {
-                    qrReferenceRow(reference: reference)
+                if showsQRNumber, let qrCode = deeplinkQRCode {
+                    qrReferenceRow(reference: qrCode)
                 }
 
                 if let banner = inlineBanner {
@@ -44,7 +62,33 @@ struct QRDisplayView: View {
             }
             .padding(.doublePadding)
         }
-        .copiedToast(isPresented: $showCopiedToast)
+    }
+
+    private var deeplinkQRCode: String? {
+        guard variant.supportsAppDeeplinks,
+              let qrCode = details.qrReference,
+              !qrCode.isEmpty else { return nil }
+        return qrCode
+    }
+
+    private var deeplinksAvailable: Bool {
+        deeplinkQRCode != nil
+    }
+
+    private var instructionText: String {
+        deeplinksAvailable ? displayAudience.text(.scanToPayInstruction) : variant.instructionCopy
+    }
+
+    private var showsQRCode: Bool {
+        !deeplinksAvailable || displayAudience.shows(.scanToPayQRCode)
+    }
+
+    private var showsQRNumber: Bool {
+        deeplinksAvailable && displayAudience.shows(.scanToPayQRNumber)
+    }
+
+    private var showsSeeAppsButton: Bool {
+        deeplinksAvailable && displayAudience.shows(.scanToPaySeeAppsButton)
     }
 
     private var headerLogo: some View {
@@ -91,8 +135,16 @@ struct QRDisplayView: View {
 
     private var actionButtons: some View {
         VStack(spacing: .singlePadding) {
-            Button("I've completed payment", action: onICompletedPayment)
-                .buttonStyle(PrimaryButtonStyle(showLoading: false))
+            if showsSeeAppsButton {
+                Button("See Scan to Pay apps", action: { showsAppPicker = true })
+                    .buttonStyle(PrimaryButtonStyle(showLoading: false))
+
+                Button("I've completed payment", action: onICompletedPayment)
+                    .buttonStyle(SecondaryButtonStyle())
+            } else {
+                Button("I've completed payment", action: onICompletedPayment)
+                    .buttonStyle(PrimaryButtonStyle(showLoading: false))
+            }
 
             Button("Change payment method", action: onChangePaymentMethod)
                 .foregroundColor(.contentSecondary)
@@ -122,7 +174,18 @@ struct QRDisplayView_Previews: PreviewProvider {
                 inlineBanner: nil,
                 onICompletedPayment: {},
                 onChangePaymentMethod: {})
-                .previewDisplayName("Scan to Pay — awaiting scan")
+                .environment(\.displayAudience, .customerFacing)
+                .previewDisplayName("Scan to Pay — customer-facing (number + apps)")
+
+            QRDisplayView(
+                variant: .scanToPay,
+                details: .scanToPayExample,
+                amount: AmountCurrency(amount: 4500, currency: "ZAR"),
+                inlineBanner: nil,
+                onICompletedPayment: {},
+                onChangePaymentMethod: {})
+                .environment(\.displayAudience, .merchantFacing)
+                .previewDisplayName("Scan to Pay — merchant-facing (QR only)")
 
             QRDisplayView(
                 variant: .snapScan,

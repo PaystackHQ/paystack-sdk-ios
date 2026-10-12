@@ -4,10 +4,15 @@ import PaystackCore
 enum AudienceGatedElement: CaseIterable {
     case zapQRCode
     case zapOpenAppButton
+    case bankTransferCopyButtons
+    case scanToPayQRCode
+    case scanToPayQRNumber
+    case scanToPaySeeAppsButton
 }
 
 enum AudienceCopy: CaseIterable {
     case zapInstruction
+    case scanToPayInstruction
 }
 
 extension DisplayAudience {
@@ -18,6 +23,14 @@ extension DisplayAudience {
             return resolve(customerFacing: false, merchantFacing: true)
         case .zapOpenAppButton:
             return resolve(customerFacing: true, merchantFacing: false)
+        case .bankTransferCopyButtons:
+            return resolve(customerFacing: true, merchantFacing: false)
+        case .scanToPayQRCode:
+            return resolve(customerFacing: false, merchantFacing: true)
+        case .scanToPayQRNumber:
+            return resolve(customerFacing: true, merchantFacing: false)
+        case .scanToPaySeeAppsButton:
+            return resolve(customerFacing: true, merchantFacing: false)
         }
     }
 
@@ -26,6 +39,9 @@ extension DisplayAudience {
         case .zapInstruction:
             return resolve(customerFacing: "Open Zap to complete this payment",
                            merchantFacing: "Scan this QR code with Zap to complete this payment")
+        case .scanToPayInstruction:
+            return resolve(customerFacing: "Open any Scan to Pay app to complete this payment",
+                           merchantFacing: "Open any Scan to Pay app on your phone to scan the QR code")
         }
     }
 

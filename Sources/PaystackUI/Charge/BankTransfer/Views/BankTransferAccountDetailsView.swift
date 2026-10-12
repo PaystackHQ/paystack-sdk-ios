@@ -9,6 +9,9 @@ struct BankTransferAccountDetailsView: View {
     let onIveSentTheMoney: () async -> Void
     let onChangePaymentMethod: () -> Void
 
+    @Environment(\.displayAudience)
+    private var displayAudience
+
     @State private var provisionedAt: Date = Date()
     @State private var now: Date = Date()
 
@@ -52,6 +55,10 @@ struct BankTransferAccountDetailsView: View {
         }
     }
 
+    private var copyTrailing: AccountDetailRow.Trailing {
+        displayAudience.shows(.bankTransferCopyButtons) ? .copy : .none
+    }
+
     private var accountCard: some View {
         VStack(spacing: 0) {
             AccountDetailRow(label: "BANK NAME",
@@ -59,17 +66,17 @@ struct BankTransferAccountDetailsView: View {
             divider
             AccountDetailRow(label: "ACCOUNT NUMBER",
                              value: details.accountNumber,
-                             trailing: .copy)
+                             trailing: copyTrailing)
             divider
             AccountDetailRow(label: "AMOUNT",
                              value: amount.description,
-                             trailing: .copy)
+                             trailing: copyTrailing)
 
             if provider == .pesalink {
                 divider
                 AccountDetailRow(label: "NARRATION / REASON",
                                  value: details.transactionReference,
-                                 trailing: .copy)
+                                 trailing: copyTrailing)
             }
         }
         .overlay(
@@ -115,5 +122,30 @@ struct BankTransferAccountDetailsView: View {
         guard total > 0 else { return 0 }
         let elapsed = max(0, now.timeIntervalSince(provisionedAt))
         return min(1.0, elapsed / total)
+    }
+}
+
+@available(iOS 14.0, *)
+struct BankTransferAccountDetailsView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            BankTransferAccountDetailsView(
+                details: .example,
+                amount: AmountCurrency(amount: 1000000, currency: "NGN"),
+                provider: .standard,
+                onIveSentTheMoney: {},
+                onChangePaymentMethod: {})
+                .environment(\.displayAudience, .customerFacing)
+                .previewDisplayName("Customer-facing — copy buttons")
+
+            BankTransferAccountDetailsView(
+                details: .example,
+                amount: AmountCurrency(amount: 1000000, currency: "NGN"),
+                provider: .standard,
+                onIveSentTheMoney: {},
+                onChangePaymentMethod: {})
+                .environment(\.displayAudience, .merchantFacing)
+                .previewDisplayName("Merchant-facing — no copy buttons")
+        }
     }
 }
