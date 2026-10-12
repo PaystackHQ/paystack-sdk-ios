@@ -1,4 +1,7 @@
 import XCTest
+#if canImport(UIKit)
+import UIKit
+#endif
 @testable import PaystackUI
 
 final class ScanToPayAppDirectoryTests: XCTestCase {
@@ -35,6 +38,15 @@ final class ScanToPayAppDirectoryTests: XCTestCase {
             XCTAssertGreaterThan(app.iconAsset.count, "scanToPayApp".count)
         }
     }
+
+    #if canImport(UIKit)
+    func testEveryAppIconLoadsFromTheBundle() {
+        for app in ScanToPayAppDirectory.apps {
+            XCTAssertNotNil(UIImage(named: app.iconAsset, in: .current, compatibleWith: nil),
+                            "Missing icon image for \(app.name) (\(app.iconAsset))")
+        }
+    }
+    #endif
 
     func testFNBPayAndRMBUseFNBDeeplink() {
         XCTAssertEqual(styles(named: ["FNB Pay", "RMB"]), [.fnb, .fnb])
